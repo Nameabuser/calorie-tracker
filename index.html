@@ -339,6 +339,12 @@
         font-size: 14px;
         padding: 10px 5px;
       }
+      .r > span {min-width:0;overflow-wrap:anywhere;}
+      .r > div {flex-shrink:0;}
+      .r small {display:block;line-height:1.5;}
+      textarea {width:100%;min-height:120px;background:var(--in);color:var(--tx);border:0;border-radius:10px;padding:12px;font:inherit;}
+      a {color:#ff8a1f;}
+      .note {overflow-wrap:anywhere;}
       .note a {
         color: #ff8a1f;
       }
@@ -354,232 +360,8 @@
     </nav>
     <div id="toast" role="status"></div>
     <script>
-      var FOODS = [
-        ["Roti / chapati (1)", 100],
-        ["Plain paratha (1)", 260],
-        ["Aloo paratha (1)", 300],
-        ["Naan (1)", 260],
-        ["Steamed rice (1 bowl)", 200],
-        ["Jeera rice (1 bowl)", 230],
-        ["Dal (1 bowl)", 150],
-        ["Rajma (1 bowl)", 210],
-        ["Chole (1 bowl)", 240],
-        ["Paneer curry (1 bowl)", 320],
-        ["Palak paneer (1 bowl)", 280],
-        ["Mixed veg (1 bowl)", 130],
-        ["Aloo sabzi (1 bowl)", 160],
-        ["Chicken curry (1 bowl)", 300],
-        ["Egg (boiled, 1)", 78],
-        ["Omelette (2 eggs)", 190],
-        ["Idli (1)", 40],
-        ["Dosa plain (1)", 130],
-        ["Masala dosa (1)", 250],
-        ["Sambar (1 bowl)", 100],
-        ["Upma (1 bowl)", 200],
-        ["Poha (1 plate)", 250],
-        ["Samosa (1)", 260],
-        ["Pakora (4 pcs)", 200],
-        ["Chole bhature (1 plate)", 450],
-        ["Pav bhaji (1 plate)", 400],
-        ["Vada pav (1)", 290],
-        ["Veg biryani (1 plate)", 350],
-        ["Chicken biryani (1 plate)", 450],
-        ["Maggi (1 pack)", 350],
-        ["Curd / dahi (1 bowl)", 100],
-        ["Lassi (1 glass)", 180],
-        ["Chaas (1 glass)", 50],
-        ["Chai with sugar (1 cup)", 70],
-        ["Milk (1 glass)", 150],
-        ["Banana (1)", 105],
-        ["Apple (1)", 95],
-        ["Gulab jamun (1)", 150],
-        ["Jalebi (50g)", 180],
-        ["Rasgulla (1)", 130],
-        ["Ladoo (1)", 190],
-        ["Biscuits (2)", 90],
-        ["Bread slice (1)", 70],
-        ["Peanut butter (1 tbsp)", 95],
-        ["Momos (6 pcs)", 250],
-        ["Pizza slice (1)", 285],
-        ["Burger (1)", 350],
-        ["French fries (medium)", 365],
-        ["Cold drink (1 can)", 140],
-        ["Dal Paratha (1, recipe serving)", 206],
-        ["Gobi Paratha (1, recipe serving)", 181],
-        ["Keema Paratha (1, recipe serving)", 238],
-        ["Khakhra (1, recipe serving)", 135],
-        ["Makki ki Roti (1, recipe serving)", 224],
-        ["Matar Paratha (1, recipe serving)", 207],
-        ["Methi Paratha (1, recipe serving)", 135],
-        ["Methi Thepla (1, recipe serving)", 126],
-        ["Mooli Paratha (1, recipe serving)", 184],
-        ["Onion Paratha (1, recipe serving)", 146],
-        ["Paneer Paratha (1, recipe serving)", 224],
-        ["Puran Poli (1, recipe serving)", 196],
-        ["Curd Rice (1 plate, recipe serving)", 423],
-        ["Egg Fried Rice (1 plate, recipe serving)", 424],
-        ["Khichdi (1 bowl, recipe serving)", 327],
-        ["Lemon Rice (1 plate, recipe serving)", 563],
-        ["Matar Pulao (1 plate, recipe serving)", 514],
-        ["Mutton Biryani (1 plate, recipe serving)", 396],
-        ["Plain Pulao (1 plate, recipe serving)", 432],
-        ["Sabudana Khichdi (1 bowl, recipe serving)", 508],
-        ["Tamarind Rice (1 plate, recipe serving)", 477],
-        ["Vangi Bath (1 plate, recipe serving)", 538],
-        ["Vegetable Pulao (1 plate, recipe serving)", 496],
-        ["Besan Chilla (1, recipe serving)", 71],
-        ["Cornflakes With Milk (1 bowl, recipe serving)", 326],
-        ["Dhokla (1 piece, recipe serving)", 87],
-        ["Egg Bhurji (1 bowl, recipe serving)", 130],
-        ["Jowar Dosa (1, recipe serving)", 97],
-        ["Meetha Dalia (1 bowl, recipe serving)", 329],
-        ["Namkeen Dalia (1 plate, recipe serving)", 346],
-        ["Oats Porridge (1 bowl, recipe serving)", 290],
-        ["Pesarattu (1, recipe serving)", 76],
-        ["Puttu (1, recipe serving)", 344],
-        ["Rava Dosa (1, recipe serving)", 167],
-        ["Rava Idli (1, recipe serving)", 61],
-        ["Semiya Upma (1 bowl, recipe serving)", 158],
-        ["Stuffed Moong Dal Chilla (1, recipe serving)", 352],
-        ["Uttapam (1, recipe serving)", 174],
-        ["Vegetable Upma (1 plate, recipe serving)", 345],
-        ["Chana Dal (1 bowl, recipe serving)", 291],
-        ["Dal Dhokli (1 bowl, recipe serving)", 231],
-        ["Dal Makhani (1 bowl, recipe serving)", 262],
-        ["Dal Palak (1 bowl, recipe serving)", 213],
-        ["Dalma (1 bowl, recipe serving)", 314],
-        ["Kala Chana Curry (1 bowl, recipe serving)", 169],
-        ["Kulthi Dal (1 bowl, recipe serving)", 201],
-        ["Lauki Chana Dal (1 bowl, recipe serving)", 204],
-        ["Lobia Curry (1 bowl, recipe serving)", 179],
-        ["Mixed Dal (1 bowl, recipe serving)", 184],
-        ["Moong Dal (1 bowl, recipe serving)", 139],
-        ["Panchmel Dal (1 bowl, recipe serving)", 335],
-        ["Rasam (1 bowl, recipe serving)", 104],
-        ["Sabut Masoor Dal (1 bowl, recipe serving)", 185],
-        ["Sabut Moong Dal (1 bowl, recipe serving)", 184],
-        ["Soyabean Curry (1 bowl, recipe serving)", 196],
-        ["Urad Dal (1 bowl, recipe serving)", 182],
-        ["Aloo Gobi (1 bowl, recipe serving)", 187],
-        ["Aloo Matar (1 bowl, recipe serving)", 280],
-        ["Aloo Methi (1 bowl, recipe serving)", 276],
-        ["Aloo Palak (1 bowl, recipe serving)", 192],
-        ["Baingan Bharta (1 bowl, recipe serving)", 212],
-        ["Beans Thoran (1 bowl, recipe serving)", 197],
-        ["Bharwa Bhindi (1 bowl, recipe serving)", 104],
-        ["Bharwa Karela (1 bowl, recipe serving)", 231],
-        ["Bhindi Sabzi (1 bowl, recipe serving)", 184],
-        ["Cabbage Matar (1 bowl, recipe serving)", 106],
-        ["Dahi Aloo (1 bowl, recipe serving)", 227],
-        ["Kadai Paneer (1 bowl, recipe serving)", 344],
-        ["Masala Arbi (1 bowl, recipe serving)", 215],
-        ["Matar Mushroom (1 bowl, recipe serving)", 259],
-        ["Matar Paneer (1 bowl, recipe serving)", 374],
-        ["Paneer Butter Masala (1 bowl, recipe serving)", 228],
-        ["Paneer Tikka (1 plate, recipe serving)", 412],
-        ["Sarson ka Saag (1 bowl, recipe serving)", 124],
-        ["Sookhe Aloo (1 bowl, recipe serving)", 109],
-        ["Soya Chunks Curry (1 bowl, recipe serving)", 184],
-        ["Afghani Chicken (1 plate of Afghani chicken, recipe serving)", 287],
-        [
-          "Bengali Fish Curry (1 bowl of Bengali fish curry, recipe serving)",
-          340,
-        ],
-        ["Boti Kebab (1, recipe serving)", 73],
-        ["Butter Chicken (1 serving of, recipe serving)", 377],
-        ["Chicken Korma (1 bowl, recipe serving)", 513],
-        ["Egg Curry (1 bowl, recipe serving)", 178],
-        ["Fish Curry (1 bowl, recipe serving)", 282],
-        ["Fish Tikka (1 piece, recipe serving)", 42],
-        ["Keema Matar (1 bowl, recipe serving)", 457],
-        ["Mutton Seekh Kebab (1, recipe serving)", 60],
-        ["Prawn Curry (1 bowl, recipe serving)", 313],
-        ["Rogan Josh (1 bowl, recipe serving)", 329],
-        ["Tandoori Fish (1 piece, recipe serving)", 224],
-        ["Coconut Chutney (1 tablespoon, recipe serving)", 67],
-        ["Cucumber Raita (1 bowl, recipe serving)", 90],
-        ["Green Chutney (1 tablespoon, recipe serving)", 27],
-        ["Lauki Raita (1 bowl, recipe serving)", 86],
-        ["Mint Raita (1 bowl, recipe serving)", 81],
-        ["Onion Tomato Raita (1 bowl, recipe serving)", 105],
-        ["Peanut Chutney (1 tablespoon, recipe serving)", 54],
-        ["Sprouts Chaat (1 plate, recipe serving)", 83],
-        ["Sprouts Salad (1 bowl, recipe serving)", 77],
-        ["Atta Ladoo (1, recipe serving)", 142],
-        ["Besan Barfi (1 piece, recipe serving)", 162],
-        ["Besan Ladoo (1, recipe serving)", 168],
-        ["Coconut Barfi (1 piece, recipe serving)", 265],
-        ["Gajar ka Halwa (1 bowl, recipe serving)", 290],
-        ["Kesari Bath (1 bowl, recipe serving)", 432],
-        ["Kulfi (1, recipe serving)", 266],
-        ["Makhana Kheer (1 bowl, recipe serving)", 300],
-        ["Milk Barfi (1 piece, recipe serving)", 178],
-        ["Moong Dal Halwa (1 bowl, recipe serving)", 334],
-        ["Peanut Chikki (1 piece, recipe serving)", 79],
-        ["Phirni (1 bowl, recipe serving)", 337],
-        ["Rabri (1 bowl, recipe serving)", 226],
-        ["Rajgira Ladoo (1, recipe serving)", 199],
-        ["Rava Ladoo (1, recipe serving)", 169],
-        ["Rice Kheer (1 bowl, recipe serving)", 301],
-        ["Seviyan Kheer (1 bowl, recipe serving)", 279],
-        ["Shrikhand (1 bowl, recipe serving)", 327],
-        ["Suji Halwa (1 bowl, recipe serving)", 360],
-        ["Til Ladoo (1, recipe serving)", 109],
-        ["Aam Panna (1 glass, recipe serving)", 96],
-        ["Banana Milkshake (1 glass, recipe serving)", 226],
-        ["Coffee (1 cup, recipe serving)", 104],
-        ["Cold Coffee (1 glass, recipe serving)", 207],
-        ["Jal Jeera (1 glass, recipe serving)", 42],
-        ["Kashmiri Kahwa (1 cup of Kashmiri kahwa, recipe serving)", 64],
-        ["Kesar Milk (1 glass, recipe serving)", 268],
-        ["Mango Milkshake (1 glass, recipe serving)", 202],
-        ["Nimbu Pani (1 glass, recipe serving)", 73],
-        ["Salted Lassi (1 glass, recipe serving)", 80],
-        ["Sattu Drink (1 glass, recipe serving)", 125],
-        ["Thandai (1 glass, recipe serving)", 256],
-        ["Chicken Chowmein (1 plate, recipe serving)", 521],
-        ["Paneer Kathi Roll (1, recipe serving)", 424],
-        ["Vegetable Chowmein (1 plate, recipe serving)", 389],
-        ["Vegetable Puff (1, recipe serving)", 200],
-        ["Aloo Bonda (1, recipe serving)", 100],
-        ["Dahi Vada (1, recipe serving)", 90],
-        ["Fish Fry (1 piece, recipe serving)", 95],
-        ["Masala Vada (1, recipe serving)", 75],
-        ["Matar Kachori (1, recipe serving)", 190],
-        ["Medu Vada (1, recipe serving)", 70],
-        ["Sabudana Vada (1, recipe serving)", 105],
-        ["Parle-G (4 biscuits)", 67],
-        ["Marie Gold (3 biscuits)", 67],
-        ["Good Day butter (3 biscuits)", 75, { p: 1, c: 10.4, f: 3.3 }],
-        ["Hide & Seek (4 biscuits)", 78, { p: 1, c: 12.1, f: 3 }],
-        ["Oreo (1 cookie)", 53, { p: 0.6, c: 7.9, f: 2.2 }],
-        ["Bourbon (1 biscuit)", 49],
-        ["Jim Jam (2 biscuits)", 60, { p: 0.6, c: 9.1, f: 2.4 }],
-        ["Little Hearts (6 biscuits)", 63],
-        ["Monaco (6 biscuits)", 71, { p: 1.1, c: 9.8, f: 3 }],
-        ["Krackjack (4 biscuits)", 80, { p: 1.1, c: 11.6, f: 3.3 }],
-        ["Milk Bikis (3 biscuits)", 93, { p: 1.7, c: 15, f: 3.4 }],
-        ["Rusk (2 pieces)", 74],
-        ["Dark Fantasy Choco Fills (1 cookie)", 58, { p: 0.8, c: 7, f: 3.1 }],
-        ["Mom's Magic (2 biscuits)", 106],
-        ["Aloo bhujia (30g)", 169],
-        ["Bhujia sev (30g)", 183, { p: 4.5, c: 11.3, f: 13.5 }],
-        ["Moong dal namkeen (30g)", 143],
-        ["Khatta meetha (30g)", 159, { p: 2.8, c: 17.2, f: 8.8 }],
-        ["Navratan mixture (30g)", 181],
-        ["Chivda (30g)", 168],
-        ["Lays Magic Masala (1 small pack)", 280, { p: 3.6, c: 27.8, f: 17.2 }],
-        ["Kurkure Masala Munch (1 pack)", 279, { p: 3.2, c: 27.6, f: 17.4 }],
-        ["Bingo Mad Angles (20g)", 105, { p: 1.1, c: 12.2, f: 5.9 }],
-        ["Balaji wafers (30g)", 154, { p: 2.1, c: 19, f: 7.5 }],
-        ["KitKat 2-finger (1 pack)", 97],
-        ["Dairy Milk Silk (1 bar, 60g)", 319, { p: 4.5, c: 35.1, f: 18 }],
-        ["Dairy Milk (1 small bar)", 69, { p: 1, c: 7.6, f: 3.9 }],
-        ["Munch (1 bar)", 50, { p: 0.6, c: 5.7, f: 2.7 }],
-        ["5 Star (1 bar)", 80, { p: 0.6, c: 13.1, f: 2.9 }],
-        ["Perk (1 bar)", 74],
-        ["Snickers (1 bar)", 244],
-      ];
+      var FOODS = [["Roti / chapati (1)", 100], ["Plain paratha (1)", 260], ["Aloo paratha (1)", 300], ["Naan (1)", 260], ["Steamed rice (1 bowl)", 200], ["Jeera rice (1 bowl)", 230], ["Dal (1 bowl)", 150], ["Rajma (1 bowl)", 210], ["Chole (1 bowl)", 240], ["Paneer curry (1 bowl)", 320], ["Palak paneer (1 bowl)", 280], ["Mixed veg (1 bowl)", 130], ["Aloo sabzi (1 bowl)", 160], ["Chicken curry (1 bowl)", 300], ["Egg (boiled, 1)", 78], ["Omelette (2 eggs)", 190], ["Idli (1)", 40], ["Dosa plain (1)", 130], ["Masala dosa (1)", 250], ["Sambar (1 bowl)", 100], ["Upma (1 bowl)", 200], ["Poha (1 plate)", 250], ["Samosa (1)", 260], ["Pakora (4 pcs)", 200], ["Chole bhature (1 plate)", 450], ["Pav bhaji (1 plate)", 400], ["Vada pav (1)", 290], ["Veg biryani (1 plate)", 350], ["Chicken biryani (1 plate)", 450], ["Maggi (1 pack)", 350], ["Curd / dahi (1 bowl)", 100], ["Lassi (1 glass)", 180], ["Chaas (1 glass)", 50], ["Chai with sugar (1 cup)", 70], ["Milk (1 glass)", 150], ["Banana (1)", 105], ["Apple (1)", 95], ["Gulab jamun (1)", 150], ["Jalebi (50g)", 180], ["Rasgulla (1)", 130], ["Ladoo (1)", 190], ["Biscuits (2)", 90], ["Bread slice (1)", 70], ["Peanut butter (1 tbsp)", 95], ["Momos (6 pcs)", 250], ["Pizza slice (1)", 285], ["Burger (1)", 350], ["French fries (medium)", 365], ["Cold drink (1 can)", 140], ["Dal Paratha (1, recipe serving)", 206, {"p": 5.2, "c": 23.0, "f": 10.0}], ["Gobi Paratha (1, recipe serving)", 181, {"p": 3.8, "c": 19.2, "f": 9.6}], ["Keema Paratha (1, recipe serving)", 238, {"p": 9.4, "c": 18.4, "f": 13.9}], ["Khakhra (1, recipe serving)", 135, {"p": 3.6, "c": 20.9, "f": 4.0}], ["Makki ki Roti (1, recipe serving)", 224, {"p": 3.0, "c": 20.6, "f": 14.3}], ["Matar Paratha (1, recipe serving)", 207, {"p": 6.1, "c": 23.3, "f": 9.5}], ["Methi Paratha (1, recipe serving)", 135, {"p": 3.9, "c": 20.2, "f": 4.0}], ["Methi Thepla (1, recipe serving)", 126, {"p": 3.3, "c": 15.1, "f": 5.8}], ["Mooli Paratha (1, recipe serving)", 184, {"p": 3.3, "c": 20.5, "f": 9.5}], ["Onion Paratha (1, recipe serving)", 146, {"p": 3.3, "c": 20.2, "f": 5.6}], ["Paneer Paratha (1, recipe serving)", 224, {"p": 6.8, "c": 20.7, "f": 12.4}], ["Puran Poli (1, recipe serving)", 196, {"p": 5.1, "c": 33.4, "f": 4.2}], ["Curd Rice (1 plate, recipe serving)", 423, {"p": 12.4, "c": 71.2, "f": 9.3}], ["Egg Fried Rice (1 plate, recipe serving)", 424, {"p": 14.2, "c": 47.1, "f": 19.1}], ["Khichdi (1 bowl, recipe serving)", 327, {"p": 9.9, "c": 57.6, "f": 5.8}], ["Lemon Rice (1 plate, recipe serving)", 563, {"p": 13.6, "c": 69.0, "f": 25.1}], ["Matar Pulao (1 plate, recipe serving)", 514, {"p": 18.4, "c": 86.9, "f": 9.0}], ["Mutton Biryani (1 plate, recipe serving)", 396, {"p": 15.3, "c": 46.7, "f": 16.1}], ["Plain Pulao (1 plate, recipe serving)", 432, {"p": 7.2, "c": 67.2, "f": 14.2}], ["Sabudana Khichdi (1 bowl, recipe serving)", 508, {"p": 7.4, "c": 60.8, "f": 27.4}], ["Tamarind Rice (1 plate, recipe serving)", 477, {"p": 9.5, "c": 83.2, "f": 10.9}], ["Vangi Bath (1 plate, recipe serving)", 538, {"p": 15.4, "c": 92.4, "f": 10.7}], ["Vegetable Pulao (1 plate, recipe serving)", 496, {"p": 11.9, "c": 76.7, "f": 14.6}], ["Besan Chilla (1, recipe serving)", 71, {"p": 4.1, "c": 11.0, "f": 1.5}], ["Cornflakes With Milk (1 bowl, recipe serving)", 326, {"p": 10.0, "c": 41.6, "f": 14.2}], ["Dhokla (1 piece, recipe serving)", 87, {"p": 5.4, "c": 12.3, "f": 2.1}], ["Egg Bhurji (1 bowl, recipe serving)", 130, {"p": 7.7, "c": 4.7, "f": 8.8}], ["Jowar Dosa (1, recipe serving)", 97, {"p": 2.8, "c": 13.4, "f": 3.4}], ["Meetha Dalia (1 bowl, recipe serving)", 329, {"p": 10.6, "c": 35.8, "f": 16.4}], ["Namkeen Dalia (1 plate, recipe serving)", 346, {"p": 9.7, "c": 57.8, "f": 9.4}], ["Oats Porridge (1 bowl, recipe serving)", 290, {"p": 10.3, "c": 34.9, "f": 12.8}], ["Pesarattu (1, recipe serving)", 76, {"p": 3.3, "c": 8.5, "f": 3.1}], ["Puttu (1, recipe serving)", 344, {"p": 5.3, "c": 49.7, "f": 13.1}], ["Rava Dosa (1, recipe serving)", 167, {"p": 5.4, "c": 24.1, "f": 5.2}], ["Rava Idli (1, recipe serving)", 61, {"p": 2.8, "c": 10.0, "f": 1.0}], ["Semiya Upma (1 bowl, recipe serving)", 158, {"p": 3.3, "c": 17.9, "f": 7.9}], ["Stuffed Moong Dal Chilla (1, recipe serving)", 352, {"p": 15.9, "c": 44.2, "f": 11.6}], ["Uttapam (1, recipe serving)", 174, {"p": 4.2, "c": 24.7, "f": 6.1}], ["Vegetable Upma (1 plate, recipe serving)", 345, {"p": 11.1, "c": 38.8, "f": 15.6}], ["Chana Dal (1 bowl, recipe serving)", 291, {"p": 12.1, "c": 29.2, "f": 13.5}], ["Dal Dhokli (1 bowl, recipe serving)", 231, {"p": 10.0, "c": 28.8, "f": 8.3}], ["Dal Makhani (1 bowl, recipe serving)", 262, {"p": 11.7, "c": 28.1, "f": 10.8}], ["Dal Palak (1 bowl, recipe serving)", 213, {"p": 8.3, "c": 19.2, "f": 11.1}], ["Dalma (1 bowl, recipe serving)", 314, {"p": 12.9, "c": 39.7, "f": 12.1}], ["Kala Chana Curry (1 bowl, recipe serving)", 169, {"p": 6.8, "c": 16.9, "f": 7.9}], ["Kulthi Dal (1 bowl, recipe serving)", 201, {"p": 10.5, "c": 29.6, "f": 4.1}], ["Lauki Chana Dal (1 bowl, recipe serving)", 204, {"p": 7.8, "c": 19.8, "f": 10.0}], ["Lobia Curry (1 bowl, recipe serving)", 179, {"p": 7.3, "c": 21.4, "f": 6.7}], ["Mixed Dal (1 bowl, recipe serving)", 184, {"p": 7.5, "c": 17.3, "f": 9.2}], ["Moong Dal (1 bowl, recipe serving)", 139, {"p": 7.4, "c": 16.4, "f": 4.7}], ["Panchmel Dal (1 bowl, recipe serving)", 335, {"p": 13.9, "c": 32.2, "f": 16.1}], ["Rasam (1 bowl, recipe serving)", 104, {"p": 4.4, "c": 13.1, "f": 3.4}], ["Sabut Masoor Dal (1 bowl, recipe serving)", 185, {"p": 7.8, "c": 18.4, "f": 8.6}], ["Sabut Moong Dal (1 bowl, recipe serving)", 184, {"p": 7.7, "c": 17.9, "f": 8.8}], ["Soyabean Curry (1 bowl, recipe serving)", 196, {"p": 12.5, "c": 8.1, "f": 12.2}], ["Urad Dal (1 bowl, recipe serving)", 182, {"p": 7.4, "c": 17.3, "f": 8.8}], ["Aloo Gobi (1 bowl, recipe serving)", 187, {"p": 3.3, "c": 10.5, "f": 14.3}], ["Aloo Matar (1 bowl, recipe serving)", 280, {"p": 9.7, "c": 27.0, "f": 14.2}], ["Aloo Methi (1 bowl, recipe serving)", 276, {"p": 4.6, "c": 17.3, "f": 20.5}], ["Aloo Palak (1 bowl, recipe serving)", 192, {"p": 5.5, "c": 19.8, "f": 9.4}], ["Baingan Bharta (1 bowl, recipe serving)", 212, {"p": 4.5, "c": 14.3, "f": 14.6}], ["Beans Thoran (1 bowl, recipe serving)", 197, {"p": 3.9, "c": 6.6, "f": 17.0}], ["Bharwa Bhindi (1 bowl, recipe serving)", 104, {"p": 2.3, "c": 4.3, "f": 8.5}], ["Bharwa Karela (1 bowl, recipe serving)", 231, {"p": 1.4, "c": 2.6, "f": 23.7}], ["Bhindi Sabzi (1 bowl, recipe serving)", 184, {"p": 3.0, "c": 7.5, "f": 15.4}], ["Cabbage Matar (1 bowl, recipe serving)", 106, {"p": 5.4, "c": 10.4, "f": 4.4}], ["Dahi Aloo (1 bowl, recipe serving)", 227, {"p": 5.9, "c": 27.1, "f": 10.3}], ["Kadai Paneer (1 bowl, recipe serving)", 344, {"p": 13.8, "c": 23.4, "f": 21.7}], ["Masala Arbi (1 bowl, recipe serving)", 215, {"p": 3.5, "c": 18.8, "f": 13.8}], ["Matar Mushroom (1 bowl, recipe serving)", 259, {"p": 10.7, "c": 20.6, "f": 14.3}], ["Matar Paneer (1 bowl, recipe serving)", 374, {"p": 18.3, "c": 25.8, "f": 21.5}], ["Paneer Butter Masala (1 bowl, recipe serving)", 228, {"p": 11.0, "c": 15.2, "f": 13.8}], ["Paneer Tikka (1 plate, recipe serving)", 412, {"p": 22.4, "c": 35.0, "f": 19.7}], ["Sarson ka Saag (1 bowl, recipe serving)", 124, {"p": 4.3, "c": 7.5, "f": 8.3}], ["Sookhe Aloo (1 bowl, recipe serving)", 109, {"p": 1.7, "c": 15.2, "f": 4.4}], ["Soya Chunks Curry (1 bowl, recipe serving)", 184, {"p": 6.8, "c": 13.0, "f": 11.4}], ["Afghani Chicken (1 plate of Afghani chicken, recipe serving)", 287, {"p": 29.7, "c": 3.7, "f": 17.2}], ["Bengali Fish Curry (1 bowl of Bengali fish curry, recipe serving)", 340, {"p": 22.5, "c": 13.7, "f": 21.8}], ["Boti Kebab (1, recipe serving)", 73, {"p": 5.0, "c": 1.7, "f": 5.1}], ["Butter Chicken (1 serving of, recipe serving)", 377, {"p": 30.1, "c": 10.3, "f": 23.9}], ["Chicken Korma (1 bowl, recipe serving)", 513, {"p": 34.1, "c": 18.8, "f": 33.6}], ["Egg Curry (1 bowl, recipe serving)", 178, {"p": 8.2, "c": 6.1, "f": 13.4}], ["Fish Curry (1 bowl, recipe serving)", 282, {"p": 22.3, "c": 9.6, "f": 17.0}], ["Fish Tikka (1 piece, recipe serving)", 42, {"p": 5.7, "c": 1.4, "f": 1.5}], ["Keema Matar (1 bowl, recipe serving)", 457, {"p": 29.0, "c": 21.5, "f": 28.0}], ["Mutton Seekh Kebab (1, recipe serving)", 60, {"p": 5.1, "c": 1.4, "f": 3.8}], ["Prawn Curry (1 bowl, recipe serving)", 313, {"p": 24.4, "c": 8.9, "f": 19.8}], ["Rogan Josh (1 bowl, recipe serving)", 329, {"p": 22.6, "c": 11.6, "f": 21.3}], ["Tandoori Fish (1 piece, recipe serving)", 224, {"p": 26.1, "c": 5.5, "f": 10.8}], ["Coconut Chutney (1 tablespoon, recipe serving)", 67, {"p": 0.9, "c": 2.1, "f": 6.3}], ["Cucumber Raita (1 bowl, recipe serving)", 90, {"p": 6.2, "c": 9.7, "f": 3.2}], ["Green Chutney (1 tablespoon, recipe serving)", 27, {"p": 0.7, "c": 5.6, "f": 0.1}], ["Lauki Raita (1 bowl, recipe serving)", 86, {"p": 6.1, "c": 8.8, "f": 3.2}], ["Mint Raita (1 bowl, recipe serving)", 81, {"p": 5.9, "c": 8.0, "f": 3.1}], ["Onion Tomato Raita (1 bowl, recipe serving)", 105, {"p": 6.6, "c": 12.6, "f": 3.3}], ["Peanut Chutney (1 tablespoon, recipe serving)", 54, {"p": 2.5, "c": 2.1, "f": 4.0}], ["Sprouts Chaat (1 plate, recipe serving)", 83, {"p": 3.5, "c": 15.4, "f": 0.8}], ["Sprouts Salad (1 bowl, recipe serving)", 77, {"p": 4.7, "c": 11.2, "f": 1.5}], ["Atta Ladoo (1, recipe serving)", 142, {"p": 3.4, "c": 16.1, "f": 7.0}], ["Besan Barfi (1 piece, recipe serving)", 162, {"p": 4.3, "c": 17.8, "f": 8.6}], ["Besan Ladoo (1, recipe serving)", 168, {"p": 3.1, "c": 22.1, "f": 8.0}], ["Coconut Barfi (1 piece, recipe serving)", 265, {"p": 5.0, "c": 18.2, "f": 19.7}], ["Gajar ka Halwa (1 bowl, recipe serving)", 290, {"p": 5.2, "c": 31.1, "f": 16.3}], ["Kesari Bath (1 bowl, recipe serving)", 432, {"p": 4.2, "c": 55.5, "f": 22.2}], ["Kulfi (1, recipe serving)", 266, {"p": 8.7, "c": 30.5, "f": 12.7}], ["Makhana Kheer (1 bowl, recipe serving)", 300, {"p": 9.2, "c": 35.8, "f": 13.9}], ["Milk Barfi (1 piece, recipe serving)", 178, {"p": 4.3, "c": 13.5, "f": 12.2}], ["Moong Dal Halwa (1 bowl, recipe serving)", 334, {"p": 8.0, "c": 38.4, "f": 16.9}], ["Peanut Chikki (1 piece, recipe serving)", 79, {"p": 1.7, "c": 11.7, "f": 2.7}], ["Phirni (1 bowl, recipe serving)", 337, {"p": 10.1, "c": 46.7, "f": 12.6}], ["Rabri (1 bowl, recipe serving)", 226, {"p": 7.7, "c": 23.2, "f": 11.8}], ["Rajgira Ladoo (1, recipe serving)", 199, {"p": 4.4, "c": 22.5, "f": 10.0}], ["Rava Ladoo (1, recipe serving)", 169, {"p": 2.1, "c": 18.5, "f": 9.8}], ["Rice Kheer (1 bowl, recipe serving)", 301, {"p": 9.2, "c": 40.3, "f": 11.9}], ["Seviyan Kheer (1 bowl, recipe serving)", 279, {"p": 7.8, "c": 36.9, "f": 11.6}], ["Shrikhand (1 bowl, recipe serving)", 327, {"p": 16.1, "c": 48.8, "f": 8.8}], ["Suji Halwa (1 bowl, recipe serving)", 360, {"p": 3.5, "c": 39.4, "f": 21.4}], ["Til Ladoo (1, recipe serving)", 109, {"p": 2.9, "c": 12.0, "f": 5.4}], ["Aam Panna (1 glass, recipe serving)", 96, {"p": 0.4, "c": 24.3, "f": 0.1}], ["Banana Milkshake (1 glass, recipe serving)", 226, {"p": 6.4, "c": 31.6, "f": 8.2}], ["Coffee (1 cup, recipe serving)", 104, {"p": 2.9, "c": 16.4, "f": 3.4}], ["Cold Coffee (1 glass, recipe serving)", 207, {"p": 4.8, "c": 30.0, "f": 8.2}], ["Jal Jeera (1 glass, recipe serving)", 42, {"p": 0.6, "c": 9.4, "f": 0.4}], ["Kashmiri Kahwa (1 cup of Kashmiri kahwa, recipe serving)", 64, {"p": 0.4, "c": 13.4, "f": 1.3}], ["Kesar Milk (1 glass, recipe serving)", 268, {"p": 8.3, "c": 33.2, "f": 12.0}], ["Mango Milkshake (1 glass, recipe serving)", 202, {"p": 6.1, "c": 25.7, "f": 8.3}], ["Nimbu Pani (1 glass, recipe serving)", 73, {"p": 0.1, "c": 19.1, "f": 0.0}], ["Salted Lassi (1 glass, recipe serving)", 80, {"p": 5.7, "c": 7.9, "f": 3.0}], ["Sattu Drink (1 glass, recipe serving)", 125, {"p": 3.0, "c": 27.5, "f": 0.7}], ["Thandai (1 glass, recipe serving)", 256, {"p": 9.1, "c": 23.1, "f": 14.9}], ["Chicken Chowmein (1 plate, recipe serving)", 521, {"p": 21.8, "c": 45.8, "f": 28.4}], ["Paneer Kathi Roll (1, recipe serving)", 424, {"p": 10.3, "c": 29.8, "f": 29.0}], ["Vegetable Chowmein (1 plate, recipe serving)", 389, {"p": 9.2, "c": 46.3, "f": 19.0}], ["Vegetable Puff (1, recipe serving)", 200], ["Aloo Bonda (1, recipe serving)", 100], ["Dahi Vada (1, recipe serving)", 90], ["Fish Fry (1 piece, recipe serving)", 95], ["Masala Vada (1, recipe serving)", 75], ["Matar Kachori (1, recipe serving)", 190], ["Medu Vada (1, recipe serving)", 70], ["Sabudana Vada (1, recipe serving)", 105], ["Parle-G (4 biscuits)", 67], ["Marie Gold (3 biscuits)", 67], ["Good Day butter (3 biscuits)", 75, {"p": 1, "c": 10.4, "f": 3.3}], ["Hide & Seek (4 biscuits)", 78, {"p": 1, "c": 12.1, "f": 3}], ["Oreo (1 cookie)", 53, {"p": 0.6, "c": 7.9, "f": 2.2}], ["Bourbon (1 biscuit)", 49], ["Jim Jam (2 biscuits)", 60, {"p": 0.6, "c": 9.1, "f": 2.4}], ["Little Hearts (6 biscuits)", 63], ["Monaco (6 biscuits)", 71, {"p": 1.1, "c": 9.8, "f": 3}], ["Krackjack (4 biscuits)", 80, {"p": 1.1, "c": 11.6, "f": 3.3}], ["Milk Bikis (3 biscuits)", 93, {"p": 1.7, "c": 15, "f": 3.4}], ["Rusk (2 pieces)", 74], ["Dark Fantasy Choco Fills (1 cookie)", 58, {"p": 0.8, "c": 7, "f": 3.1}], ["Mom's Magic (2 biscuits)", 106], ["Aloo bhujia (30g)", 169], ["Bhujia sev (30g)", 183, {"p": 4.5, "c": 11.3, "f": 13.5}], ["Moong dal namkeen (30g)", 143], ["Khatta meetha (30g)", 159, {"p": 2.8, "c": 17.2, "f": 8.8}], ["Navratan mixture (30g)", 181], ["Chivda (30g)", 168], ["Lays Magic Masala (1 small pack)", 280, {"p": 3.6, "c": 27.8, "f": 17.2}], ["Kurkure Masala Munch (1 pack)", 279, {"p": 3.2, "c": 27.6, "f": 17.4}], ["Bingo Mad Angles (20g)", 105, {"p": 1.1, "c": 12.2, "f": 5.9}], ["Balaji wafers (30g)", 154, {"p": 2.1, "c": 19, "f": 7.5}], ["KitKat 2-finger (1 pack)", 97], ["Dairy Milk Silk (1 bar, 60g)", 319, {"p": 4.5, "c": 35.1, "f": 18}], ["Dairy Milk (1 small bar)", 69, {"p": 1, "c": 7.6, "f": 3.9}], ["Munch (1 bar)", 50, {"p": 0.6, "c": 5.7, "f": 2.7}], ["5 Star (1 bar)", 80, {"p": 0.6, "c": 13.1, "f": 2.9}], ["Perk (1 bar)", 74], ["Snickers (1 bar)", 244]];
+      var FOOD_META = {"38": {"grams": 50}, "49": {"source": "https://nnwa.in/foods/dishes/dal-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "50": {"source": "https://nnwa.in/foods/dishes/gobi-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "51": {"source": "https://nnwa.in/foods/dishes/keema-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "52": {"source": "https://nnwa.in/foods/dishes/khakhra/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "53": {"source": "https://nnwa.in/foods/dishes/makki-ki-roti/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "54": {"source": "https://nnwa.in/foods/dishes/matar-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "55": {"source": "https://nnwa.in/foods/dishes/methi-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "56": {"source": "https://nnwa.in/foods/dishes/methi-thepla/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "57": {"source": "https://nnwa.in/foods/dishes/mooli-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "58": {"source": "https://nnwa.in/foods/dishes/onion-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "59": {"source": "https://nnwa.in/foods/dishes/paneer-paratha/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "60": {"source": "https://nnwa.in/foods/dishes/puran-poli/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "61": {"source": "https://nnwa.in/foods/dishes/curd-rice/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "62": {"source": "https://nnwa.in/foods/dishes/egg-fried-rice/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "63": {"source": "https://nnwa.in/foods/dishes/khichdi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "64": {"source": "https://nnwa.in/foods/dishes/lemon-rice/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "65": {"source": "https://nnwa.in/foods/dishes/matar-pulao/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "66": {"source": "https://nnwa.in/foods/dishes/mutton-biryani/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "67": {"source": "https://nnwa.in/foods/dishes/plain-pulao/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "68": {"source": "https://nnwa.in/foods/dishes/sabudana-khichdi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "69": {"source": "https://nnwa.in/foods/dishes/tamarind-rice/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "70": {"source": "https://nnwa.in/foods/dishes/vangi-bath/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "71": {"source": "https://nnwa.in/foods/dishes/vegetable-pulao/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "72": {"source": "https://nnwa.in/foods/dishes/besan-chilla/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "73": {"source": "https://nnwa.in/foods/dishes/cornflakes-with-milk/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "74": {"source": "https://nnwa.in/foods/dishes/dhokla/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "75": {"source": "https://nnwa.in/foods/dishes/egg-bhurji/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "76": {"source": "https://nnwa.in/foods/dishes/jowar-dosa/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "77": {"source": "https://nnwa.in/foods/dishes/meetha-dalia/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "78": {"source": "https://nnwa.in/foods/dishes/namkeen-dalia/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "79": {"source": "https://nnwa.in/foods/dishes/oats-porridge/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "80": {"source": "https://nnwa.in/foods/dishes/pesarattu/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "81": {"source": "https://nnwa.in/foods/dishes/puttu/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "82": {"source": "https://nnwa.in/foods/dishes/rava-dosa/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "83": {"source": "https://nnwa.in/foods/dishes/rava-idli/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "84": {"source": "https://nnwa.in/foods/dishes/semiya-upma/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "85": {"source": "https://nnwa.in/foods/dishes/moong-dal-chilla/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "86": {"source": "https://nnwa.in/foods/dishes/uttapam/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "87": {"source": "https://nnwa.in/foods/dishes/vegetable-upma/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "88": {"source": "https://nnwa.in/foods/dishes/chana-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "89": {"source": "https://nnwa.in/foods/dishes/dal-dhokli/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "90": {"source": "https://nnwa.in/foods/dishes/dal-makhani/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "91": {"source": "https://nnwa.in/foods/dishes/dal-palak/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "92": {"source": "https://nnwa.in/foods/dishes/dalma/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "93": {"source": "https://nnwa.in/foods/dishes/kala-chana-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "94": {"source": "https://nnwa.in/foods/dishes/kulthi-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "95": {"source": "https://nnwa.in/foods/dishes/lauki-chana-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "96": {"source": "https://nnwa.in/foods/dishes/lobia-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "97": {"source": "https://nnwa.in/foods/dishes/mixed-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "98": {"source": "https://nnwa.in/foods/dishes/moong-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "99": {"source": "https://nnwa.in/foods/dishes/panchmel-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "100": {"source": "https://nnwa.in/foods/dishes/rasam/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "101": {"source": "https://nnwa.in/foods/dishes/sabut-masoor-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "102": {"source": "https://nnwa.in/foods/dishes/sabut-moong-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "103": {"source": "https://nnwa.in/foods/dishes/soyabean-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "104": {"source": "https://nnwa.in/foods/dishes/urad-dal/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "105": {"source": "https://nnwa.in/foods/dishes/aloo-gobi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "106": {"source": "https://nnwa.in/foods/dishes/aloo-matar/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "107": {"source": "https://nnwa.in/foods/dishes/aloo-methi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "108": {"source": "https://nnwa.in/foods/dishes/aloo-palak/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "109": {"source": "https://nnwa.in/foods/dishes/baingan-bharta/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "110": {"source": "https://nnwa.in/foods/dishes/beans-thoran/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "111": {"source": "https://nnwa.in/foods/dishes/bharwa-bhindi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "112": {"source": "https://nnwa.in/foods/dishes/bharwa-karela/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "113": {"source": "https://nnwa.in/foods/dishes/bhindi-sabzi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "114": {"source": "https://nnwa.in/foods/dishes/cabbage-matar/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "115": {"source": "https://nnwa.in/foods/dishes/dahi-aloo/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "116": {"source": "https://nnwa.in/foods/dishes/kadai-paneer/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "117": {"source": "https://nnwa.in/foods/dishes/masala-arbi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "118": {"source": "https://nnwa.in/foods/dishes/matar-mushroom/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "119": {"source": "https://nnwa.in/foods/dishes/matar-paneer/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "120": {"source": "https://nnwa.in/foods/dishes/paneer-butter-masala/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "121": {"source": "https://nnwa.in/foods/dishes/paneer-tikka/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "122": {"source": "https://nnwa.in/foods/dishes/sarson-ka-saag/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "123": {"source": "https://nnwa.in/foods/dishes/sookhe-aloo/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "124": {"source": "https://nnwa.in/foods/dishes/soya-chunks-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "125": {"source": "https://nnwa.in/foods/dishes/afghani-chicken/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "126": {"source": "https://nnwa.in/foods/dishes/bengali-fish-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "127": {"source": "https://nnwa.in/foods/dishes/boti-kebab/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "128": {"source": "https://nnwa.in/foods/dishes/butter-chicken/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "129": {"source": "https://nnwa.in/foods/dishes/chicken-korma/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "130": {"source": "https://nnwa.in/foods/dishes/egg-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "131": {"source": "https://nnwa.in/foods/dishes/fish-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "132": {"source": "https://nnwa.in/foods/dishes/fish-tikka/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "133": {"source": "https://nnwa.in/foods/dishes/keema-matar/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "134": {"source": "https://nnwa.in/foods/dishes/seekh-kebab/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "135": {"source": "https://nnwa.in/foods/dishes/prawn-curry/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "136": {"source": "https://nnwa.in/foods/dishes/rogan-josh/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "137": {"source": "https://nnwa.in/foods/dishes/tandoori-fish/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "138": {"source": "https://nnwa.in/foods/dishes/coconut-chutney/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "139": {"source": "https://nnwa.in/foods/dishes/cucumber-raita/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "140": {"source": "https://nnwa.in/foods/dishes/green-chutney/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "141": {"source": "https://nnwa.in/foods/dishes/lauki-raita/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "142": {"source": "https://nnwa.in/foods/dishes/mint-raita/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "143": {"source": "https://nnwa.in/foods/dishes/onion-tomato-raita/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "144": {"source": "https://nnwa.in/foods/dishes/peanut-chutney/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "145": {"source": "https://nnwa.in/foods/dishes/sprouts-chaat/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "146": {"source": "https://nnwa.in/foods/dishes/sprouts-salad/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "147": {"source": "https://nnwa.in/foods/dishes/atta-ladoo/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "148": {"source": "https://nnwa.in/foods/dishes/besan-barfi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "149": {"source": "https://nnwa.in/foods/dishes/besan-ladoo/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "150": {"source": "https://nnwa.in/foods/dishes/coconut-barfi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "151": {"source": "https://nnwa.in/foods/dishes/gajar-halwa/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "152": {"source": "https://nnwa.in/foods/dishes/kesari-bath/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "153": {"source": "https://nnwa.in/foods/dishes/kulfi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "154": {"source": "https://nnwa.in/foods/dishes/makhana-kheer/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "155": {"source": "https://nnwa.in/foods/dishes/milk-barfi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "156": {"source": "https://nnwa.in/foods/dishes/moong-dal-halwa/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "157": {"source": "https://nnwa.in/foods/dishes/peanut-chikki/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "158": {"source": "https://nnwa.in/foods/dishes/phirni/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "159": {"source": "https://nnwa.in/foods/dishes/rabri/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "160": {"source": "https://nnwa.in/foods/dishes/rajgira-ladoo/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "161": {"source": "https://nnwa.in/foods/dishes/rava-ladoo/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "162": {"source": "https://nnwa.in/foods/dishes/rice-kheer/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "163": {"source": "https://nnwa.in/foods/dishes/seviyan-kheer/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "164": {"source": "https://nnwa.in/foods/dishes/shrikhand/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "165": {"source": "https://nnwa.in/foods/dishes/suji-halwa/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "166": {"source": "https://nnwa.in/foods/dishes/til-ladoo/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "167": {"source": "https://nnwa.in/foods/dishes/aam-panna/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "168": {"source": "https://nnwa.in/foods/dishes/banana-milkshake/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "169": {"source": "https://nnwa.in/foods/dishes/coffee/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "170": {"source": "https://nnwa.in/foods/dishes/cold-coffee/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "171": {"source": "https://nnwa.in/foods/dishes/jal-jeera/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "172": {"source": "https://nnwa.in/foods/dishes/kahwa/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "173": {"source": "https://nnwa.in/foods/dishes/kesar-milk/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "174": {"source": "https://nnwa.in/foods/dishes/mango-milkshake/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "175": {"source": "https://nnwa.in/foods/dishes/nimbu-pani/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "176": {"source": "https://nnwa.in/foods/dishes/salted-lassi/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "177": {"source": "https://nnwa.in/foods/dishes/sattu-drink/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "178": {"source": "https://nnwa.in/foods/dishes/thandai/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "179": {"source": "https://nnwa.in/foods/dishes/chicken-chowmein/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "180": {"source": "https://nnwa.in/foods/dishes/paneer-kathi-roll/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "181": {"source": "https://nnwa.in/foods/dishes/vegetable-chowmein/", "note": "NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary."}, "192": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "193": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "194": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "196": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "198": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "199": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "200": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "202": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "204": {"grams": 30}, "205": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight.", "grams": 30}, "206": {"grams": 30}, "207": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight.", "grams": 30}, "208": {"grams": 30}, "209": {"grams": 30}, "210": {"source": "https://world.openfoodfacts.org/", "note": "This preset is for 50 g, not necessarily your whole packet. Weigh it or read the pack.", "grams": 50}, "211": {"source": "https://world.openfoodfacts.org/", "note": "This preset is for 50 g, not necessarily your whole packet. Weigh it or read the pack.", "grams": 50}, "212": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight.", "grams": 20}, "213": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight.", "grams": 30}, "215": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight.", "grams": 60}, "216": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "217": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}, "218": {"source": "https://world.openfoodfacts.org/", "note": "Existing packaged-food label estimate. Verify your pack and serving weight."}};
       // v2: additive schema. Existing meals and goal remain in the same cal key.
       var D = { m: [], g: 2000 },
         loadFailed = false,
@@ -590,6 +372,11 @@
         customMode = false,
         savedMode = false,
         barMode = false,
+        extraMode = "",
+        reviewItem = null,
+        liveResults = [],
+        liveRequest = 0,
+        liveController = null,
         saveSource = "",
         scanning = false,
         stream = null,
@@ -762,6 +549,7 @@
         window.scrollTo(0, 0);
       }
       function foodMode(custom, saved = false, barcode = false) {
+        extraMode = "";
         var ids = ["q", "date", "meal", "cn", "ck", "mp", "mc", "mf", "bc"],
           vals = ids
             .map((id) => [id, document.getElementById(id)])
@@ -868,23 +656,8 @@
         }
       }
       function addF(i) {
-        var q = Number(document.getElementById("q").value);
-        if (!(q > 0) || q > 100) {
-          alert("Quantity must be above 0 and at most 100");
-          return;
-        }
-        add(
-          FOODS[i][0] + (q !== 1 ? " × " + q : ""),
-          FOODS[i][1] * q,
-          FOODS[i][2]
-            ? Object.fromEntries(
-                Object.entries(FOODS[i][2]).map(([k, v]) => [
-                  k,
-                  Math.round(v * q * 10) / 10,
-                ]),
-              )
-            : undefined,
-        );
+        var f = FOODS[i], info = FOOD_META[i] || {};
+        openReview({name:f[0],k:f[1],mac:f[2] || null,grams:info.grams || null,source:info.source || '',note:info.note || 'Original estimate. Serving weight and macros are not verified. Enter values from your label or recipe, or use USDA search.'}, Number(document.getElementById('q').value) || 1);
       }
       function addC() {
         var ids = ["mp", "mc", "mf"],
@@ -1357,7 +1130,7 @@
               esc(f[0]) +
               "<br><small>" +
               f[1] +
-              ' kcal · approx.</small></span><div><button class="x star" aria-label="' +
+              ' kcal · approx. · ' + (f[2] ? 'P ' + f[2].p + 'g / C ' + f[2].c + 'g / F ' + f[2].f + 'g' : 'macros unknown') + '</small></span><div><button class="x star" aria-label="' +
               ((D.fav || []).includes(i) ? "Unsave " : "Save ") +
               esc(f[0]) +
               '" onclick="fav(' +
@@ -1371,6 +1144,82 @@
         el.innerHTML =
           h || "<small>No foods found. Tap Custom food above.</small>";
       }
+      function preserveServing(render) {
+        var ids=['date','meal','q'], vals=ids.map(id=>[id,document.getElementById(id)?.value]), opened=document.getElementById('serving')?.open;
+        render(); vals.forEach(([id,v])=>{if(v!==undefined && document.getElementById(id))document.getElementById(id).value=v;}); if(document.getElementById('serving'))document.getElementById('serving').open=!!opened;
+      }
+      function moreFood(mode) {
+        preserveServing(()=>{foodMode(false); extraMode = mode; R();});
+      }
+      function macroFields(prefix, mac) {
+        return '<div class=f>' + [['p','Protein'],['c','Carbs'],['f','Fat']].map(([k,n]) => '<div><label for='+prefix+k+'>'+n+' (g)</label><input id='+prefix+k+' type=number inputmode=decimal min=0 max=2000 step=0.1 value="'+(mac && Number.isFinite(mac[k]) ? mac[k] : '')+'" placeholder="Unknown" oninput=calcReview()></div>').join('') + '</div>';
+      }
+      function openReview(item, quantity=1) {
+        preserveServing(()=>{foodMode(false); reviewItem = item; extraMode = 'review'; R();});
+        document.getElementById('rq').value = item.per100 ? 100 : Math.min(100, Math.max(0.1, quantity)); calcReview();
+      }
+      function reviewPanel() {
+        var x = reviewItem;
+        if (!x) return '';
+        return '<div class=c><h3>Review food & portion</h3><p class=note>'+esc(x.note)+'</p>' + (x.source ? '<p class=note><a href="'+esc(x.source)+'" target=_blank rel=noopener>Nutrition source</a></p>' : '') +
+        '<label for=rn>Food name</label><input id=rn maxlength=100 value="'+esc(x.name)+'"><label for=rk>Calories in reference serving</label><input id=rk type=number inputmode=decimal min=1 max=10000 value="'+x.k+'" oninput=calcReview()>'+macroFields('r',x.mac)+
+        '<label for=rb>Reference serving weight (g)</label><input id=rb type=number inputmode=decimal min=0.1 max=10000 step=0.1 value="'+(x.grams || '')+'" placeholder="Enter verified grams" oninput=calcReview()><small>For per-100g data this is 100. Do not guess a cooked bowl weight from raw recipe ingredients.</small>'+ 
+        '<label for=ru>How to measure</label><select id=ru onchange=calcReview()><option value=servings>Servings</option><option value=grams'+(x.per100 ? ' selected' : '')+'>Grams</option></select><label for=rq id=rql>Amount eaten</label><input id=rq type=number inputmode=decimal min=0.1 max=10000 step=0.1 value="'+(x.per100 ? 100 : 1)+'" oninput=calcReview()><p class=note id=rt role=status></p><button onclick=logReview()>Add reviewed food</button><button class=ch onclick=foodMode(false)>Back to foods</button></div>';
+      }
+      function reviewValues() {
+        var val=id=>document.getElementById(id).value, unit=val('ru'), q=Number(val('rq')), base=Number(val('rb')), k=Number(val('rk'));
+        if (!Number.isFinite(q) || q<=0 || q>10000 || (unit==='servings' && q>100)) throw Error('Enter a valid amount: up to 100 servings or 10000 g.');
+        if (unit==='grams' && (!Number.isFinite(base) || base<=0 || base>10000)) throw Error('Enter the verified reference serving weight before using grams.');
+        if (!Number.isFinite(k) || k<=0 || k>10000) throw Error('Enter valid reference calories.');
+        var factor=unit==='grams' ? q/base : q, mv=['rp','rc','rf'].map(val), mac=null;
+        if (mv.some(v=>v!=='') && mv.some(v=>v==='')) throw Error('Enter all three macros, or leave all blank as unknown.');
+        if (mv.every(v=>v!=='')) {
+          var nums=mv.map(Number);
+          if(nums.some(v=>!Number.isFinite(v)||v<0||v*factor>2000)) throw Error('Macros must be valid non-negative amounts, at most 2000 g after scaling.');
+          mac=Object.fromEntries(['p','c','f'].map((n,i)=>[n,Math.round(nums[i]*factor*10)/10]));
+        }
+        if(Math.round(k*factor)<1 || Math.round(k*factor)>10000) throw Error('Scaled calories must be 1-10000.');
+        return {k:Math.round(k*factor),mac,q,unit};
+      }
+      function calcReview() {
+        if(!document.getElementById('rt')) return;
+        try {var v=reviewValues(); document.getElementById('rt').textContent=v.k+' kcal'+(v.mac ? ' · P '+v.mac.p+'g · C '+v.mac.c+'g · F '+v.mac.f+'g' : ' · macros unknown');}
+        catch(e){document.getElementById('rt').textContent=e.message;}
+      }
+      function logReview() {
+        try {var v=reviewValues();add(document.getElementById('rn').value+' ['+v.q+' '+v.unit+']',v.k,v.mac);}
+        catch(e){alert(e.message);}
+      }
+      function extraPanel() {
+        if(extraMode==='review') return reviewPanel();
+        if(extraMode==='usda') return '<div class=c><h3>USDA live food search</h3><p class=note>FoodData Central: calories and macros per 100 g. Match raw/cooked, recipe and brand carefully. This public demo access allows only 30 requests/hour and 50/day per IP; it may be unavailable on shared networks. Search runs only when you tap, not while typing. No private key is stored.</p><label for=uq>Food name (English)</label><input id=uq type=search maxlength=100 placeholder="e.g. cooked rice, hard-boiled egg"><label for=ut>Food type</label><select id=ut><option value=generic>Generic / reference (SR Legacy)</option><option value=branded>Branded foods</option></select><button id=ub onclick=searchUSDA()>Search USDA</button><p class=note id=um role=status aria-live=polite></p><div id=ures></div><p class=note><a href="https://fdc.nal.usda.gov/api-guide/" target=_blank rel=noopener>USDA source & limits</a> · Indian presets use NNWA / INDB recipes built from Indian composition data, not an official live IFCT API.</p></div>';
+        return '';
+      }
+      function normalizeUSDA(f) {
+        var ns=f.foodNutrients || [], by=id=>ns.find(n=>n.nutrientId===id), en=by(1008) || by(2047) || by(2048), p=by(1003), c=by(1005), fat=by(1004);
+        if(!en || String(en.unitName).toUpperCase()!=='KCAL' || ![en,p,c,fat].every(n=>n && finite(n.value) && n.value>=0) || en.value<=0) return null;
+        return {name:f.description,k:en.value,mac:{p:p.value,c:c.value,f:fat.value},grams:100,per100:true,source:'https://fdc.nal.usda.gov/',note:'USDA FoodData Central ID '+f.fdcId+' · '+f.dataType+' · per 100 g. '+(f.brandOwner || '')+' Match the exact food and preparation. USDA total carbs may differ from Indian available-carbohydrate values.'};
+      }
+      async function searchUSDA() {
+        var q=document.getElementById('uq').value.trim(),msg=document.getElementById('um'),btn=document.getElementById('ub'),box=document.getElementById('ures'),type=document.getElementById('ut').value;
+        if(q.length<2) {msg.textContent='Enter at least 2 letters.';return;}
+        if(liveController) liveController.abort();liveController=new AbortController();var ctl=liveController,id=++liveRequest;
+        btn.disabled=true;msg.textContent='Searching USDA...';box.textContent='';liveResults=[];
+        var timer=setTimeout(()=>ctl.abort(),15000);
+        try {
+          var params=new URLSearchParams({api_key:'DEMO_KEY',query:q,pageSize:'20'});params.set('dataType',type==='branded' ? 'Branded' : 'SR Legacy');
+          var r=await fetch('https://api.nal.usda.gov/fdc/v1/foods/search?'+params,{signal:ctl.signal});
+          if(r.status===429) throw Error('Demo search limit reached. Try later or use presets / Custom food. No food was added.');
+          if(!r.ok) throw Error('USDA is unavailable ('+r.status+'). Use presets or Custom food.');
+          var j=await r.json();if(id!==liveRequest || !box.isConnected) return;
+          liveResults=(j.foods || []).map(normalizeUSDA).filter(Boolean);
+          msg.textContent=liveResults.length ? 'Results with complete calories + macros. Review before adding.' : 'No complete nutrition matches. Try another English name or Custom food.';
+          box.innerHTML=liveResults.map((x,i)=>'<div class=r><span>'+esc(x.name)+'<br><small>'+x.k+' kcal / 100 g · P '+x.mac.p+'g / C '+x.mac.c+'g / F '+x.mac.f+'g<br>'+esc(x.note)+'</small></span><button class="x star" onclick="chooseUSDA('+i+')">Review</button></div>').join('');
+        } catch(e) {if(id===liveRequest && msg.isConnected) msg.textContent=e.name==='AbortError' ? 'Search timed out or was cancelled. Try again; no food was added.' : e.message;}
+        finally {clearTimeout(timer);if(btn.isConnected)btn.disabled=false;}
+      }
+      function chooseUSDA(i) {var x=liveResults[i];if(x) {openReview(x);document.getElementById('rq').value=100;calcReview();}}
+
       function ringSVG(pct, color) {
         var C = 2 * Math.PI * 34,
           pc = Math.max(0, Math.min(1, pct || 0)),
@@ -1442,7 +1291,7 @@
             Math.round(mac.p) +
             " / " +
             pg +
-            " g</small></div></div><p class=note>Protein counts only foods with macro values: custom entries, packaged snacks and barcode adds.</p></div>";
+            " g</small></div></div><p class=note>Protein counts recorded macros only. Preset recipes, USDA and label entries have macros; unknown values are not treated as zero.</p></div>";
           var recentT = D.m
             .slice()
             .reverse()
@@ -1530,7 +1379,7 @@
         if (P === 1) {
           h +=
             '<h2>Add food</h2><div class="addbar"><div class=f><button class="' +
-            (!customMode && !savedMode && !barMode ? "active" : "") +
+            (!customMode && !savedMode && !barMode && !extraMode ? "active" : "") +
             '" onclick="foodMode(false)">Search foods</button><button class="' +
             (customMode ? "active" : "") +
             '" onclick="foodMode(true)">Custom food</button><button class="' +
@@ -1538,7 +1387,7 @@
             '" onclick="foodMode(false,true)">Saved meals</button><button class="' +
             (barMode ? "active" : "") +
             '" onclick="foodMode(false,false,true)">Barcode</button></div>';
-          if (!customMode && !savedMode && !barMode)
+          if (!customMode && !savedMode && !barMode && !extraMode)
             h +=
               '<label for=s>Search foods</label><input id=s type=search placeholder="Search Indian food" value="' +
               esc(Q) +
@@ -1548,7 +1397,7 @@
               (filter === "fav" ? "active" : "") +
               '" data-filter=fav onclick="setFilter(\'fav\')">Favourites</button></div>';
           h +=
-            '</div><details class=c id=serving><summary>Serving settings · date, meal & quantity</summary><div class=f><div><label for=date>Date (IST)</label><input id=date type=date value="' +
+            '<div class=f><button class="ch" onclick="moreFood(\'usda\')">USDA live search</button></div></div><details class=c id=serving><summary>Serving settings · date, meal & list quantity</summary><div class=f><div><label for=date>Date (IST)</label><input id=date type=date value="' +
             now +
             '" max="' +
             now +
@@ -1578,6 +1427,7 @@
               )
               .join("") +
             "</div><button onclick=addC()>Add custom</button></div>";
+          if (extraMode) h += extraPanel();
           if (barMode) {
             h +=
               '<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts fills Custom food for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><label class=note for=bcphoto style="display:block;margin-top:12px">Or scan a barcode photo</label><input id=bcphoto type=file accept="image/*" capture=environment onchange="scanPhoto(this)"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>';
@@ -1587,7 +1437,7 @@
               "<div class=c><h3>Saved meals</h3><p class=note>One tap logs today in its saved meal group. Open Serving settings to change date, group or quantity.</p>" +
               savedList() +
               "</div>";
-          if (!customMode && !savedMode && !barMode) {
+          if (!customMode && !savedMode && !barMode && !extraMode) {
             h += "<div class=c id=foodlist></div>";
             var recent = D.m
               .slice()
@@ -1614,7 +1464,7 @@
           h +=
             "<p class=note>" +
             FOODS.length +
-            ' foods available. Food calories are rough averages. Portions, oil and recipes vary. For accurate macros, use the food label or your recipe. Added recipe servings can be smaller than home or restaurant portions; adjust quantity. <a href="https://nnwa.in/foods/dishes/" target="_blank" rel="noopener">Added food estimates: NNWA dish tables</a> · <a href="https://world.openfoodfacts.org/" target="_blank" rel="noopener">Packaged snacks: pack label values via Open Food Facts</a>.</p>';
+            ' foods available. Food calories are rough averages. Portions, oil and recipes vary. Open any food to review macros and grams before logging. Missing macros stay unknown. USDA search uses per-100g data. For accurate macros, use your pack label or recipe. Added recipe servings can be smaller than home or restaurant portions; adjust quantity. <a href="https://nnwa.in/foods/dishes/" target="_blank" rel="noopener">Added food estimates: NNWA dish tables</a> · <a href="https://world.openfoodfacts.org/" target="_blank" rel="noopener">Packaged snacks: pack label values via Open Food Facts</a>.</p>';
         }
         if (P === 2) {
           var dates = Array.from({ length: 7 }, (_, i) => days(i - 6)),

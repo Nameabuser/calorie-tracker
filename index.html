@@ -12,4 +12,20 @@ content="width=device-width,initial-scale=1,viewport-fit=cover"
 <link rel="icon" type="image/png" href="icons/4-icon-192.png" />
 <link rel="manifest" href="manifest.webmanifest" />
 <title>Calories</title>
-<style>body{font:16px -apple-system,sans-serif;background:#f4f8f5;color:#143d27;padding:24px}a{color:#167b49}</style></head><body><p id="loading" role="status">Opening your food log...</p><script>Promise.all(["1-app-part1.txt","2-app-part2.txt","3-app-part3.txt"].map(function(p){return fetch("./"+p+"?v=20261011-protein1",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("load");return r.text()})})).then(function(parts){document.open();document.write(parts.join("").replace("</body>",'<script src="1-usability.js?v=goals-tidy-4"><\/script></body>'));document.close()}).catch(function(){document.getElementById("loading").innerHTML='Could not load your food log. Your saved meals have not been changed. <a href="./">Try again</a>'});</script></body></html>
+<style>body{font:16px -apple-system,sans-serif;background:#f4f8f5;color:#143d27;padding:24px}a{color:#167b49}</style></head><body><p id="loading" role="status">Opening your food log...</p><script>(function(){
+var V="20261011-protein1",U="goals-tidy-4",S="scan-1",T="tidy-1",CN="calapp-v1";
+var urls=["1-app-part1.txt?v="+V,"2-app-part2.txt?v="+V,"3-app-part3.txt?v="+V,"1-usability.js?v="+U,"2-scan-plate.js?v="+S,"3-tidy.js?v="+T];
+function net(){return Promise.all(urls.map(function(u){return fetch("./"+u,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("load");return r.text()})}))}
+function render(t){document.open();document.write(t.slice(0,3).join("").replace("</body>",function(){return "<script>"+t[3]+"<\/script><script>"+t[4]+"<\/script><script>"+t[5]+"<\/script></body>"}));document.close()}
+function fail(){var l=document.getElementById("loading");if(l)l.innerHTML='Could not load your food log. Your saved meals have not been changed. <a href="./">Try again</a>'}
+function store(c,t){return Promise.all(urls.map(function(u,i){return c.put("./"+u,new Response(t[i]))})).then(function(){return c.keys()}).then(function(ks){return Promise.all(ks.filter(function(k){return urls.every(function(u){return !k.url.endsWith("/"+u)})}).map(function(k){return c.delete(k)}))})}
+function same(a,b){return a.every(function(x,i){return x===b[i]})}
+function cold(){return net().then(function(t){render(t);try{if(window.caches)caches.open(CN).then(function(c){return store(c,t)}).catch(function(){})}catch(e){}}).catch(fail)}
+if(!window.caches){cold();return}
+caches.open(CN).then(function(c){return Promise.all(urls.map(function(u){return c.match("./"+u)})).then(function(ms){
+if(!ms.every(Boolean))return cold();
+return Promise.all(ms.map(function(m){return m.text()})).then(function(old){
+render(old);
+net().then(function(t){if(same(t,old))return;return store(c,t).then(function(){var a=document.activeElement,o=document.getElementById("sp-ov");if((a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))||o)return;location.reload()})}).catch(function(){})
+})})}).catch(cold)
+})();</script></body></html>

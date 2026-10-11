@@ -702,8 +702,8 @@ t/D.g*100),
 mac=macros(now),
 list=D.m.filter(x=>x.d===now),
 known=list.filter(x=>x.mac).length;
-h+="<button class=th onclick=tg()>"+("dark"===T?"Light":"Dark")+" mode</button><h2>Today</h2><small>"+now+' · IST</small><div class=c><small>Eaten</small><div class="big '+(left<0?"b":"g")+'">'+t+' kcal</div><div class=bar><i class="'+(left<0?"o":"")+'" style="width:'+pc+'%"></i></div><div class=r style="border:0"><small>Goal '+D.g+"</small><small>"+(left>=0?left+" kcal remaining":-left+" kcal above goal")+"</small></div><button onclick=go(1)>+ Log food</button></div>";
-
+h+="<button class=th onclick=tg()>"+("dark"===T?"Light":"Dark")+" mode</button><h2>Today</h2><small>"+now+' · IST</small><div class=c><small>Eaten</small><div class="big '+(left<0?"b":"g")+'">'+t+' kcal</div><div class=bar><i class="'+(left<0?"o":"")+'" style="width:'+pc+'%"></i></div><div class=r style="border:0"><small>Goal '+D.g+"</small><small>"+(left>=0?left+" kcal remaining":-left+" kcal above goal")+"</small></div><button onclick=go(1)>+ Log food</button></div>",
+D.m.length||(h+='<div class="c welcome"><h3>Start with your first meal</h3><p class=help-line>Search a food, check your portion, then add it to your day. Your goals can be changed in More.</p><button class=ch onclick=go(1)>Find a food</button></div>');
 var pg=pgv();
 h+='<div class=c><h3>Goal rings</h3><div class=f style="text-align:center"><div><small>Calories</small><br>'+ringSVG(t/D.g,
 "dark"===T?"#66d993":"#167b49")+"<br><small>"+t+" / "+D.g+" kcal</small></div><div><small>Protein</small><br>"+ringSVG(mac.p/pg,

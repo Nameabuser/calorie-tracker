@@ -1,13 +1,13 @@
-// Faster photo decoding, with a higher-resolution fallback; half-second undo.
+// Faster photo decoding, with a higher-resolution fallback; 0.8-second undo.
 (function(){
 var oldDel=del;
-del=function(i){oldDel(i);if(deletedEntries.length){clearTimeout(window.undoTimer);window.undoTimer=setTimeout(clearUndo,350);}};
+del=function(i){oldDel(i);if(deletedEntries.length){clearTimeout(window.undoTimer);window.undoTimer=setTimeout(clearUndo,560);}};
 clearUndo=function(){
 clearTimeout(window.undoTimer);window.undoTimer=null;deletedEntries=[];
 var b=document.querySelector('.undo-bar');if(!b)return;
 b.style.pointerEvents='none';b.removeAttribute('class');b.className='undo-bar undo-leaving';
 if(b.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-b.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(8px)'}],{duration:150,easing:'ease-out',fill:'forwards'}).onfinish=function(){b.remove();};
+b.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(8px)'}],{duration:240,easing:'ease-out',fill:'forwards'}).onfinish=function(){b.remove();};
 }else b.remove();
 };
 scanPhoto=async function(el){

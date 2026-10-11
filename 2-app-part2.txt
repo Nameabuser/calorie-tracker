@@ -1427,6 +1427,7 @@ delayBetweenScanAttempts:200,
 delayBetweenScanSuccess:500}
 )}
 function stopScan(){
+var zb0=document.getElementById("camzoom");zb0&&zb0.remove();
 scanSession++,
 scanning=!1,
 scanStarting=!1,
@@ -1449,10 +1450,18 @@ bc&&(bc.value=code,
 lookupBarcode())}
 else scanMessage("Could not read a food barcode. Try again or type its number.")}
 var scanTimer=null,scanFrames=0,scanDetector=null,scanReader=null,scanCanvas=null;
-var SCAN_BUILD="cam-v5";
+var SCAN_BUILD="cam-v6";
 function camStatus(t){var el=document.getElementById("camstatus");el&&(el.textContent=t),scanMessage(t)}
+async function pickBackCam(m){
+try{var t=m.getVideoTracks()[0],lb=t&&t.label||"";
+if(!/ultra|tele|front/i.test(lb))return m;
+var ds=(await navigator.mediaDevices.enumerateDevices()).filter(function(d){return"videoinput"===d.kind}),
+bad=/ultra|tele|front/i,pick=ds.filter(function(d){return/back|rear|environment/i.test(d.label)&&!bad.test(d.label)})[0];
+if(!pick||pick.deviceId===(t.getSettings&&t.getSettings().deviceId))return m;
+var m2=await navigator.mediaDevices.getUserMedia({video:{deviceId:{exact:pick.deviceId},width:{ideal:1280},height:{ideal:720}},audio:!1});
+m.getTracks().forEach(function(x){x.stop()});return m2}catch(e){return m}}
 async function openCamera(){
 var tries=[{video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}},audio:!1},{video:{facingMode:{ideal:"environment"}},audio:!1},{video:!0,audio:!1}],last;
 for(var i=0;i<tries.length;i++){
-try{return await navigator.mediaDevices.getUserMedia(tries[i])}
+try{return await pickBackCam(await navigator.mediaDevices.getUserMedia(tries[i]))}
 catch(e){last=e;if("NotAllowedError"===e.name||"SecurityError"===e.name)throw e}}

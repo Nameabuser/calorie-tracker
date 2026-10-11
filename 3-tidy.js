@@ -1,13 +1,14 @@
-/* UI tidy pass: segmented protein control, compact More, tidy Today nutrition, friendlier History. Data and handlers unchanged. */
+/* UI tidy pass: protein level control, compact More, tidy Today nutrition, friendlier History. Data and handlers unchanged. */
 (function(){
 'use strict';
 var openDays={};
 var st=document.createElement('style');
 st.textContent='.seg{position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:var(--in,#e8f0ea);border-radius:12px;padding:3px;margin:8px 0}.seg-hl{position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/3);background:#1b7f4b;border-radius:10px;transition:transform .22s ease;transform:translateX(calc(var(--i,0)*100%))}.seg button{position:relative;z-index:1;background:transparent!important;border:0!important;box-shadow:none!important;margin:0!important;min-height:40px;padding:6px 2px;font-size:14px;font-weight:600;color:var(--tx,#143d27)}.seg button.on{color:#fff!important}'
 +'.bk-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.bk-row button{background:var(--in,#e8f0ea)!important;color:#167b49!important;border:1px solid var(--bd,#d5e3da)!important;border-radius:12px;font-weight:700;margin:0!important;min-height:42px;font-size:14px;padding:6px 4px}.bk-tiny{font-size:12px;color:var(--mu,#5f7a6a);margin:8px 0 0}.bk-file{font-size:13px!important;padding:6px!important;min-height:0!important;margin-top:6px}.foot{font-size:12px;color:var(--mu,#5f7a6a);text-align:center;margin:6px 4px 90px}'
-+'.nutrition-details .note.short{font-size:12px;margin:2px 0 8px}.micro small.dim{display:none}.metrics strong.dash{opacity:.45}'
++'.micro small.dim{display:none}.metrics strong.dash{opacity:.45}'
 +'.hx-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 8px}.hx-top h2{margin:0;font-size:22px}.hx-top .seg{margin:0;width:190px}.hx-top .seg button{white-space:nowrap}.hx-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.hx-sum div{background:var(--cd,#fff);border:1px solid var(--bd,#d5e3da);border-radius:12px;padding:8px 6px;text-align:center}.hx-sum strong{display:block;font-size:17px}.hx-sum small{font-size:11px;color:var(--mu,#5f7a6a)}'
 +'details.hx-day{background:var(--cd,#fff);border:1px solid var(--bd,#d5e3da);border-radius:12px;margin:6px 0;padding:0 12px}.hx-day>summary{text-align:left;align-items:stretch;list-style:none;min-height:50px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;padding:6px 0}.hx-day>summary::-webkit-details-marker{display:none}.hx-d{display:flex;justify-content:space-between;width:100%;text-align:left;font-weight:700;font-size:15px}.hx-m{font-size:12px;color:var(--mu,#5f7a6a)}.hx-e{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--bd,#d5e3da);font-size:14px}.hx-e small{color:var(--mu,#5f7a6a)}.hx-e button{min-height:34px;padding:4px 10px;font-size:13px;margin:0}.hx-more{margin:10px 0}.hx-more>summary{font-weight:700;min-height:44px;display:flex;align-items:center;cursor:pointer}.hx-more .rep{box-shadow:none;border:0;padding:0}.hx-empty{padding:20px 4px;color:var(--mu,#5f7a6a)}';
+st.textContent+='html,body,button,input,select,a,[role=button],.portion-step{touch-action:manipulation}.protein-level-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0}.protein-level-row label{font-weight:600;font-size:15px}.protein-level-row select{flex:0 1 62%;width:auto;min-width:0;min-height:44px;padding:8px 36px 8px 12px;border:1px solid var(--bd,#dce9df);border-radius:12px;background-color:var(--in,#eaf2ec);color:var(--tx,#173b27);font:inherit;font-size:15px}';
 document.head.appendChild(st);
 function E(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function cardByTitle(t){return Array.from(document.querySelectorAll('#app .c')).find(function(e){var h=e.querySelector('h3');return h&&h.textContent===t;});}
@@ -23,9 +24,12 @@ function tidyToday(){
 function tidyMore(){
  var box=document.getElementById('protein-level-options');
  if(box&&!box.querySelector('.seg')){
-  var btns=Array.from(box.querySelectorAll('button')),idx=Math.max(0,btns.findIndex(function(b){return b.classList.contains('active');}));
   var names=['Lower','Medium','Higher'],rates=['1.2','1.6','1.8'];
-  var h='<div class="seg" role="group" aria-label="Automatic protein level" style="--i:'+idx+'"><span class="seg-hl"></span>'+names.map(function(n,i){return '<button class="'+(i===idx?'on':'')+'" aria-pressed="'+(i===idx)+'" onclick="segPick(this,\''+n+'\','+i+')">'+n+' '+rates[i]+'</button>';}).join('')+'</div>';
+  /* Restore point: previous segmented pill markup retained for easy rollback:
+  var idx=Math.max(0,Array.from(box.querySelectorAll('button')).findIndex(function(b){return b.classList.contains('active');}));
+  var h='<div class="seg" role="group" aria-label="Automatic protein level" style="--i:'+idx+'"><span class="seg-hl"></span>'+names.map(function(n,i){return '<button class="'+(n===level?'on':'')+'" aria-pressed="'+(n===level)+'" onclick="segPick(this,\''+n+'\','+i+')">'+n+' '+rates[i]+'</button>';}).join('')+'</div>';
+  */
+  var h='<div class="protein-level-row"><label for="protein-level-select">Protein level</label><select id="protein-level-select" aria-label="Protein level" onchange="chooseProteinLevel(this.value)">'+names.map(function(n,i){return '<option value="'+n+'"'+(n===level?' selected':'')+'>'+n+' ('+rates[i]+' g/kg)</option>';}).join('')+'</select></div>';
   box.innerHTML=h;
  }
  var safe=cardByTitle('Keep your data safe');

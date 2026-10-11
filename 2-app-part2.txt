@@ -1415,18 +1415,45 @@ throw zxingLoad=null,
 e}
 ))}
 function newScanner(z){
-return new z.BrowserMultiFormatOneDReader(new Map([[2,
-[6,
-7,
-14,
-15]],
-[3,
-!0]]),
-{
-delayBetweenScanAttempts:200,
-delayBetweenScanSuccess:500}
-)}
+// No TRY_HARDER: @zxing/browser 0.2.1 has a broken internal canvas rotation path.
+// No format hints: keep every supported 1D format, including Code 128 and ITF.
+return new z.BrowserMultiFormatOneDReader(void 0,{delayBetweenScanAttempts:200,delayBetweenScanSuccess:500})
+}
+var wasmLoad=null,scanWasm=null;
+function loadStrongScanner(){
+if(window.ZXingWASM)return Promise.resolve(window.ZXingWASM);
+return wasmLoad||(wasmLoad=new Promise(function(resolve,reject){
+var urls=["https://cdn.jsdelivr.net/npm/zxing-wasm@3.1.5/dist/iife/reader/index.js","https://unpkg.com/zxing-wasm@3.1.5/dist/iife/reader/index.js"];
+function next(){if(!urls.length)return reject(new Error("strong-reader-load"));
+var sc=document.createElement("script"),timer,done=!1;sc.src=urls.shift();sc.async=!0;
+function fail(){if(done)return;done=!0;clearTimeout(timer);sc.remove();next()}
+sc.onerror=fail;sc.onload=function(){if(done)return;done=!0;clearTimeout(timer);window.ZXingWASM?resolve(window.ZXingWASM):reject(new Error("strong-reader-load"))};
+timer=setTimeout(fail,8000);document.head.appendChild(sc)}next()
+}).catch(function(e){wasmLoad=null;throw e}))}
+function foodCode(s){return /^\d{8,14}$/.test(s||"")}
+function barcodeCanvas(src,pass,limit){
+var w=src.videoWidth||src.naturalWidth||src.width,h=src.videoHeight||src.naturalHeight||src.height;
+var sx=0,sy=0,sw=w,sh=h,rot=pass===3;
+if(pass===1){sy=Math.round(h*.48);sh=h-sy}
+if(pass===2){sy=Math.round(h*.25);sh=Math.round(h*.5)}
+if(pass>=4){sy=Math.round(h*(pass-4)/5);sh=Math.min(h-sy,Math.round(h*.25))}
+var scale=Math.min(1,(limit||1920)/Math.max(sw,sh));
+var c=document.createElement("canvas");c.width=Math.max(1,Math.round((rot?sh:sw)*scale));c.height=Math.max(1,Math.round((rot?sw:sh)*scale));
+var cx=c.getContext("2d",{willReadFrequently:!0});
+if(rot){cx.translate(c.width,0);cx.rotate(Math.PI/2)}
+cx.drawImage(src,sx,sy,sw,sh,0,0,sw*scale,sh*scale);return c}
+async function decodeBarcodeCanvas(c,reader,strong){
+if(strong){try{var found=await strong.readBarcodes(c.getContext("2d").getImageData(0,0,c.width,c.height),{
+formats:["EAN13","EAN8","UPCA","UPCE","Code128","Code39","Code93","ITF","Codabar","DataBar"],
+tryHarder:!0,tryRotate:!0,tryInvert:!0,maxNumberOfSymbols:4});
+var hit=found.find(function(r){return r.isValid&&foodCode(r.text)});if(hit)return hit.text
+}catch(e){scanWasm=null}}
+if(reader)try{var text=reader.decodeFromCanvas(c).getText();if(foodCode(text))return text}catch(e){if(e&&e.name!=="NotFoundException"&&e.name!=="ChecksumException"&&e.name!=="FormatException")throw e}
+return null}
+async function decodeBarcodeStill(src,reader,strong){
+for(var pass=0;pass<9;pass++){var code=await decodeBarcodeCanvas(barcodeCanvas(src,pass,4096),reader,strong);if(code)return code}return null}
 function stopScan(){
+var cap0=document.getElementById("camcapture");cap0&&cap0.remove();
 var zb0=document.getElementById("camzoom");zb0&&zb0.remove();
 scanSession++,
 scanning=!1,
@@ -1450,7 +1477,7 @@ bc&&(bc.value=code,
 lookupBarcode())}
 else scanMessage("Could not read a food barcode. Try again or type its number.")}
 var scanTimer=null,scanFrames=0,scanDetector=null,scanReader=null,scanCanvas=null;
-var SCAN_BUILD="cam-v6";
+var SCAN_BUILD="cam-v7";
 function camStatus(t){var el=document.getElementById("camstatus");el&&(el.textContent=t),scanMessage(t)}
 async function pickBackCam(m){
 try{var t=m.getVideoTracks()[0],lb=t&&t.label||"";

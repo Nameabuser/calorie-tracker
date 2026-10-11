@@ -42,14 +42,31 @@ if(token!==scanSession)return void stopScan();
 scanReader=newScanner(z),scanCanvas=document.createElement("canvas");
 scanning=!0,scanStarting=!1,scanFrames=0;
 var lastErr="none",busy=!1,mode="";
-function dbg(){var el=document.getElementById("camdbg");el&&(el.textContent=SCAN_BUILD+" | frames "+scanFrames+" | "+v.videoWidth+"x"+v.videoHeight+" | "+mode+" | det "+(scanDetector?"native+zxing":"zxing")+" | last: "+lastErr)}
+function dbg(){var el=document.getElementById("camdbg");el&&(el.textContent=SCAN_BUILD+" | frames "+scanFrames+" | "+v.videoWidth+"x"+v.videoHeight+" | "+mode+" | det "+(scanDetector?"native+zxing":"zxing")+" | last: "+lastErr+capInfo)}
 btn&&(btn.textContent="Stop scan");
 v.onclick=async function(ev){try{var t=stream&&stream.getVideoTracks()[0],c=t.getCapabilities?t.getCapabilities():{},adv=[];
 if(c.focusMode){var fm=c.focusMode.indexOf("single-shot")>-1?"single-shot":"continuous";adv.push({focusMode:fm})}
 if(c.pointsOfInterest){var rc=v.getBoundingClientRect();adv.push({pointsOfInterest:[{x:(ev.clientX-rc.left)/rc.width,y:(ev.clientY-rc.top)/rc.height}]})}
 if(adv.length){await t.applyConstraints({advanced:adv});lastErr="focus tapped"}else lastErr="tap-focus not supported here"}catch(fe){lastErr="focus: "+(fe&&fe.name)}dbg()};
+var capInfo="";
 try{var trk=media.getVideoTracks()[0],caps=trk.getCapabilities?trk.getCapabilities():{};
-caps.focusMode&&caps.focusMode.indexOf("continuous")>-1&&await trk.applyConstraints({advanced:[{focusMode:"continuous"}]})}catch(fe){}
+if(caps.focusMode&&caps.focusMode.indexOf("continuous")>-1)try{await trk.applyConstraints({advanced:[{focusMode:"continuous"}]})}catch(fe){}
+var zc=caps.zoom,zmin=0,zmax=0,zstep=.1,zcur=1;
+if(zc&&"number"==typeof zc.max){zmin=zc.min||1,zmax=zc.max,zstep=zc.step||.1;
+var want=Math.min(zmax,Math.max(zmin,1.5));
+try{await trk.applyConstraints({advanced:[{zoom:want}]});zcur=want}catch(fe){try{await trk.applyConstraints({zoom:want});zcur=want}catch(fe2){}}
+var bar=document.createElement("div");bar.id="camzoom";bar.style.cssText="display:flex;gap:8px;align-items:center;justify-content:center;margin-top:8px";
+var zl=document.createElement("span");zl.style.cssText="font:600 14px -apple-system,sans-serif;min-width:48px;text-align:center";
+function zset(n){n=Math.min(zmax,Math.max(zmin,n));trk.applyConstraints({advanced:[{zoom:n}]}).then(function(){zcur=n;zl.textContent=zcur.toFixed(1)+"x"}).catch(function(){trk.applyConstraints({zoom:n}).then(function(){zcur=n;zl.textContent=zcur.toFixed(1)+"x"}).catch(function(){lastErr="zoom failed"}).then(dbg)}).then(dbg)}
+var zm=document.createElement("button"),zp=document.createElement("button");
+zm.textContent="-",zp.textContent="+";
+[zm,zp].forEach(function(b){b.type="button";b.style.cssText="width:44px;height:36px;font-size:20px;border-radius:10px;border:1px solid #cfe0d5;background:#fff;color:#143d27"});
+zm.onclick=function(){zset(zcur-.5)},zp.onclick=function(){zset(zcur+.5)};
+zl.textContent=zcur.toFixed(1)+"x";
+bar.appendChild(zm),bar.appendChild(zl),bar.appendChild(zp);
+var old=document.getElementById("camzoom");old&&old.remove();
+v.parentNode.insertBefore(bar,v.nextSibling)}
+capInfo=" | zoom "+(zc?zmin+"-"+zmax+" @"+zcur:"n/a")+" | focus "+(caps.focusMode?caps.focusMode.join("/"):"n/a")+" | "+(trk.label||"?")}catch(fe){capInfo=" | caps err "+(fe&&fe.name)}
 camStatus("Point at barcode. Hold steady, fill the width. Tap the video to focus.");
 function draw(w,h,sx,sy,sw,sh,rot,inv,mw){
 var maxw=mw||1280,s=Math.min(1,maxw/(rot?sh:sw)),cw=Math.round((rot?sh:sw)*s),ch=Math.round((rot?sw:sh)*s);

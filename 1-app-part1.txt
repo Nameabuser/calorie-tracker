@@ -551,6 +551,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--ac);outline-o
 [data-t=light] .rep .f>button.ch.active{color:#fff}
 
 .mealcard h3{margin:0;font-size:17px}.mealcard h3 small{display:block;font-weight:400;margin-top:4px}.mealcard .mealhead{margin-top:0;gap:8px}.meal-save{font-size:13px;min-height:44px}.swipe-wrap{position:relative;overflow:hidden;border-radius:10px;margin:4px 0;background:#b42318}.swipe-row{position:relative;background:var(--cd);margin:0;min-height:64px;touch-action:pan-y;transition:transform .15s ease}.swipe-row span{min-width:0;overflow-wrap:anywhere;flex:1}.swipe-delete{position:absolute;right:0;top:0;bottom:0;width:92px;margin:0;background:#b42318;color:#fff;border-radius:0}.swipe-row.revealed .visible-delete{visibility:hidden}.visible-delete{color:var(--tx);min-width:65px;min-height:44px}.undo-bar{position:fixed;bottom:calc(74px + env(safe-area-inset-bottom));left:14px;right:14px;z-index:40;background:var(--cd);color:var(--tx);border:1px solid var(--bd);box-shadow:0 3px 16px #0003;border-radius:12px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}.undo-bar button{width:auto;margin:0;min-width:80px;min-height:44px}@media(prefers-reduced-motion:reduce){.swipe-row{transition:none}}
+html,body,button,input,select,a,[role=button],.portion-step{touch-action:manipulation}
 </style>
 </head>
 <body>

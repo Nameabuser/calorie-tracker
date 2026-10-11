@@ -13,7 +13,7 @@ content="width=device-width,initial-scale=1,viewport-fit=cover"
 <link rel="manifest" href="manifest.webmanifest" />
 <title>Calories</title>
 <style>body{font:16px -apple-system,sans-serif;background:#f4f8f5;color:#143d27;padding:24px}a{color:#167b49}</style></head><body><p id="loading" role="status">Opening your food log...</p><script>(function(){
-var V="20261011-protein2",U="goals-tidy-4",S="scan-save-2",T="tidy-edit-2",CN="calapp-v1";
+var V="20261011-protein2",U="goals-tidy-4",S="scan-save-2",T="protein-select-1",CN="calapp-v1";
 var urls=["1-app-part1.txt?v="+V,"2-app-part2.txt?v="+V,"3-app-part3.txt?v="+V,"1-usability.js?v="+U,"2-scan-plate.js?v="+S,"3-tidy.js?v="+T];
 function net(){return Promise.all(urls.map(function(u){return fetch("./"+u,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("load");return r.text()})}))}
 function render(t){document.open();document.write(t.slice(0,3).join("").replace("</body>",function(){return "<script>"+t[3]+"<\/script><script>"+t[4]+"<\/script><script>"+t[5]+"<\/script></body>"}));document.close()}

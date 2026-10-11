@@ -58,22 +58,6 @@ function tidyHistory(){
   var label=new Date(d+'T12:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',timeZone:'UTC'});
   h+='<details class="hx-day" data-d="'+d+'"'+(openDays[d]?' open':'')+'><summary><span class="hx-d"><span>'+E(d===today()?'Today':label)+'</span><span>'+tot(d)+' kcal</span></span><span class="hx-m">'+(hasM?'P '+Math.round(m.p)+' · C '+Math.round(m.c)+' · F '+Math.round(m.f)+' g':'Macros not recorded')+' · '+es.length+' item'+(es.length>1?'s':'')+'</span></summary>';
   es.forEach(function(x){h+='<div class="hx-e"><span>'+E(x.n)+'<br><small>'+E(x.meal||'Unsorted')+' · '+x.k+' kcal</small></span><button class="x" aria-label="Delete '+E(x.n)+'" onclick="del('+x.i+')">Delete</button></div>';});
-  h+='</details>';
- });
- var wrap=document.createElement('div');wrap.innerHTML=h;
- var more=document.createElement('details');more.className='hx-more';more.innerHTML='<summary>Charts & nutrient report</summary>';
- var oldH2=app.querySelector('h2');
- rep.querySelectorAll('.f').forEach(function(f){f.remove();});
- more.appendChild(rep);
- if(oldH2)oldH2.remove();
- app.insertBefore(more,app.firstChild);
- Array.from(wrap.childNodes).reverse().forEach(function(c){app.insertBefore(c,app.firstChild);});
- app.querySelectorAll('details.hx-day').forEach(function(dt){dt.addEventListener('toggle',function(){openDays[dt.getAttribute('data-d')]=dt.open;});});
-}
-var prev=window.R;
-window.R=function(){
- prev();
- if(P===0)tidyToday();
 (function(){
 'use strict';
 var openDays={};

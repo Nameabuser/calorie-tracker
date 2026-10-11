@@ -43,29 +43,31 @@ if(token!==scanSession)return void stopScan();
 scanReader=newScanner(z),scanCanvas=document.createElement("canvas")}
 scanning=!0,scanStarting=!1,scanFrames=0,
 btn&&(btn.textContent="Stop scan");
-camStatus("["+SCAN_BUILD+"] 4/4 Scanning ("+v.videoWidth+"x"+v.videoHeight+"). Hold the barcode steady with all bars in view and good light.");
+try{var trk=media.getVideoTracks()[0],caps=trk.getCapabilities?trk.getCapabilities():{};
+caps.focusMode&&caps.focusMode.indexOf("continuous")>-1&&await trk.applyConstraints({advanced:[{focusMode:"continuous"}]})}catch(fe){}
+camStatus("Point at barcode");
 !function loop(){
 if(token!==scanSession)return;
-scanTimer=setTimeout(async function(){
+requestAnimationFrame(async function(){
 if(token!==scanSession)return;
 try{
 if(v.videoWidth>0){
-var code=null;
+var code=null,w=v.videoWidth,h=v.videoHeight;
 if(scanDetector){
 var r=await scanDetector.detect(v);
 r&&r.length&&(code=r[0].rawValue)}
 else{
-var w=v.videoWidth,h=v.videoHeight,sc=Math.min(1,1280/w);
-scanCanvas.width=Math.round(w*sc),scanCanvas.height=Math.round(h*sc);
-scanCanvas.getContext("2d").drawImage(v,0,0,scanCanvas.width,scanCanvas.height);
+var full=scanFrames%3==2,sw=Math.min(w,1920),sc=sw/w,sh=full?h:Math.round(h*.45),sy=full?0:Math.round((h-sh)/2);
+if(full){var fs=Math.min(1,1280/w);sw=Math.round(w*fs);sc=fs;sh=Math.round(h*fs);sy=0}
+scanCanvas.width=sw,scanCanvas.height=full?sh:Math.round(sh*sc);
+var cx=scanCanvas.getContext("2d");
+full?cx.drawImage(v,0,0,sw,sh):cx.drawImage(v,0,sy,w,sh,0,0,sw,scanCanvas.height);
 try{code=scanReader.decodeFromCanvas(scanCanvas).getText()}catch(de){code=null}}
 scanFrames++;
 if(token!==scanSession)return;
-if(code)return void scannedCode(code);
-scanFrames%10==0&&camStatus("["+SCAN_BUILD+"] Scanning... "+scanFrames+" frames checked. Hold steady, all bars in view.")}}
+if(code)return void scannedCode(code)}}
 catch(le){}
-loop()},
-180)}()}
+loop()})}()}
 catch(e){
 if(token!==scanSession)return;
 stopScan();

@@ -1449,10 +1449,10 @@ bc&&(bc.value=code,
 lookupBarcode())}
 else scanMessage("Could not read a food barcode. Try again or type its number.")}
 var scanTimer=null,scanFrames=0,scanDetector=null,scanReader=null,scanCanvas=null;
-var SCAN_BUILD="cam-v4";
+var SCAN_BUILD="cam-v5";
 function camStatus(t){var el=document.getElementById("camstatus");el&&(el.textContent=t),scanMessage(t)}
 async function openCamera(){
-var tries=[{video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:30}},audio:!1},{video:{facingMode:{ideal:"environment"}},audio:!1},{video:!0,audio:!1}],last;
+var tries=[{video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}},audio:!1},{video:{facingMode:{ideal:"environment"}},audio:!1},{video:!0,audio:!1}],last;
 for(var i=0;i<tries.length;i++){
 try{return await navigator.mediaDevices.getUserMedia(tries[i])}
 catch(e){last=e;if("NotAllowedError"===e.name||"SecurityError"===e.name)throw e}}

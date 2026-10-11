@@ -35,39 +35,52 @@ if(token!==scanSession)return void stopScan();
 if(!ok)return stopScan(),void camStatus("["+SCAN_BUILD+"] Camera opened but no video frames arrived (readyState "+v.readyState+", size "+v.videoWidth+"x"+v.videoHeight+"). Scan a barcode photo or type the number.");
 scanDetector=null,scanReader=null;
 if("BarcodeDetector"in window){
-try{scanDetector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e","code_128","code_39","itf"]})}catch(e){scanDetector=null}}
-if(!scanDetector){
+try{scanDetector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e","code_128"]})}catch(e){scanDetector=null}}
 camStatus("["+SCAN_BUILD+"] 3/4 Camera ready ("+v.videoWidth+"x"+v.videoHeight+"). Loading barcode reader.");
 var z=await loadScanner();
 if(token!==scanSession)return void stopScan();
-scanReader=newScanner(z),scanCanvas=document.createElement("canvas")}
-scanning=!0,scanStarting=!1,scanFrames=0,
+scanReader=newScanner(z),scanCanvas=document.createElement("canvas");
+scanning=!0,scanStarting=!1,scanFrames=0;
+var lastErr="none",busy=!1,mode="";
+function dbg(){var el=document.getElementById("camdbg");el&&(el.textContent=SCAN_BUILD+" | frames "+scanFrames+" | "+v.videoWidth+"x"+v.videoHeight+" | "+mode+" | det "+(scanDetector?"native+zxing":"zxing")+" | last: "+lastErr)}
 btn&&(btn.textContent="Stop scan");
+v.onclick=async function(ev){try{var t=stream&&stream.getVideoTracks()[0],c=t.getCapabilities?t.getCapabilities():{},adv=[];
+if(c.focusMode){var fm=c.focusMode.indexOf("single-shot")>-1?"single-shot":"continuous";adv.push({focusMode:fm})}
+if(c.pointsOfInterest){var rc=v.getBoundingClientRect();adv.push({pointsOfInterest:[{x:(ev.clientX-rc.left)/rc.width,y:(ev.clientY-rc.top)/rc.height}]})}
+if(adv.length){await t.applyConstraints({advanced:adv});lastErr="focus tapped"}else lastErr="tap-focus not supported here"}catch(fe){lastErr="focus: "+(fe&&fe.name)}dbg()};
 try{var trk=media.getVideoTracks()[0],caps=trk.getCapabilities?trk.getCapabilities():{};
 caps.focusMode&&caps.focusMode.indexOf("continuous")>-1&&await trk.applyConstraints({advanced:[{focusMode:"continuous"}]})}catch(fe){}
-camStatus("Point at barcode");
-!function loop(){
+camStatus("Point at barcode. Hold steady, fill the width. Tap the video to focus.");
+function draw(w,h,sx,sy,sw,sh,rot,inv,mw){
+var maxw=mw||1280,s=Math.min(1,maxw/(rot?sh:sw)),cw=Math.round((rot?sh:sw)*s),ch=Math.round((rot?sw:sh)*s);
+scanCanvas.width=cw,scanCanvas.height=ch;
+var cx=scanCanvas.getContext("2d",{willReadFrequently:!0});
+cx.save();
+if(rot){cx.translate(cw,0),cx.rotate(Math.PI/2),cx.drawImage(v,sx,sy,sw,sh,0,0,Math.round(sw*s),Math.round(sh*s))}
+else cx.drawImage(v,sx,sy,sw,sh,0,0,cw,ch);
+cx.restore();
+if(inv){var im=cx.getImageData(0,0,cw,ch),d=im.data;for(var i=0;i<d.length;i+=4){d[i]=255-d[i],d[i+1]=255-d[i+1],d[i+2]=255-d[i+2]}cx.putImageData(im,0,0)}}
+function tick(){
 if(token!==scanSession)return;
-requestAnimationFrame(async function(){
-if(token!==scanSession)return;
+if(busy||!(v.videoWidth>0)){setTimeout(tick,100);return}
+busy=!0;
+(async function(){
+var code=null,w=v.videoWidth,h=v.videoHeight,k=scanFrames%8;
 try{
-if(v.videoWidth>0){
-var code=null,w=v.videoWidth,h=v.videoHeight;
-if(scanDetector){
-var r=await scanDetector.detect(v);
-r&&r.length&&(code=r[0].rawValue)}
-else{
-var full=scanFrames%3==2,sw=Math.min(w,1920),sc=sw/w,sh=full?h:Math.round(h*.45),sy=full?0:Math.round((h-sh)/2);
-if(full){var fs=Math.min(1,1280/w);sw=Math.round(w*fs);sc=fs;sh=Math.round(h*fs);sy=0}
-scanCanvas.width=sw,scanCanvas.height=full?sh:Math.round(sh*sc);
-var cx=scanCanvas.getContext("2d");
-full?cx.drawImage(v,0,0,sw,sh):cx.drawImage(v,0,sy,w,sh,0,0,sw,scanCanvas.height);
-try{code=scanReader.decodeFromCanvas(scanCanvas).getText()}catch(de){code=null}}
+if(scanDetector&&k%2==0&&k<6){mode="native full";var r=await scanDetector.detect(v);r&&r.length&&(code=r[0].rawValue)}
+if(!code){
+var plan=[["full",0,0,w,h,0,0],["mid-strip",0,Math.round(h*.25),w,Math.round(h*.5),0,0],["full",0,0,w,h,0,0],["tight-strip",Math.round(w*.1),Math.round(h*.35),Math.round(w*.8),Math.round(h*.3),0,0],["rotated",0,0,w,h,1,0],["inverted",0,0,w,h,0,1],["soft-480",0,0,w,h,0,0,480],["soft-640-strip",0,Math.round(h*.25),w,Math.round(h*.5),0,0,640]][k];
+mode=plan[0];
+draw(w,h,plan[1],plan[2],plan[3],plan[4],plan[5],plan[6],plan[7]);
+try{code=scanReader.decodeFromCanvas(scanCanvas).getText()}catch(de){lastErr=(de&&(de.name||de.message)||"err")+" ("+mode+")"}}
+}catch(le){lastErr="loop: "+(le&&(le.name||le.message))}
 scanFrames++;
+dbg();
+busy=!1;
 if(token!==scanSession)return;
-if(code)return void scannedCode(code)}}
-catch(le){}
-loop()})}()}
+if(code){lastErr="read "+code;dbg();return void scannedCode(code)}
+setTimeout(tick,100)})()}
+tick()}
 catch(e){
 if(token!==scanSession)return;
 stopScan();
@@ -713,7 +726,7 @@ h+="<div class=c id=customform "+(customMode?"":"hidden")+'><h3>Custom food</h3>
 }
 )+"<button onclick=addC()>Add custom</button></div>",
 extraMode&&(h+=extraPanel()),
-barMode&&(h+='<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts opens nutrition review for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay webkit-playsinline style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><p class=note id=camstatus role=status aria-live=polite></p><label class=note for=bcphoto style="display:block;margin-top:12px">Or scan a barcode photo</label><input id=bcphoto type=file accept="image/*" onchange="scanPhoto(this)"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>'),
+barMode&&(h+='<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts opens nutrition review for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay webkit-playsinline style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><p class=note id=camstatus role=status aria-live=polite></p><p class=note id=camdbg style="font:11px ui-monospace,monospace;color:#6b7f73;word-break:break-all"></p><label class=note for=bcphoto style="display:block;margin-top:12px">Or scan a barcode photo</label><input id=bcphoto type=file accept="image/*" onchange="scanPhoto(this)"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>'),
 savedMode&&(h+="<div class=c><h3>Saved meals</h3><p class=note>One tap logs today in its saved meal group. Open Serving settings to change date, group or quantity.</p>"+savedList()+"</div>"),
 !(customMode||savedMode||barMode||extraMode)){
 var recent=D.m.slice().reverse().filter((x,

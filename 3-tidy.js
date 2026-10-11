@@ -80,3 +80,50 @@ window.R=function(){
 };
 R();
 })();
+/* Edit existing logs in place. Optional portion metadata is backward compatible. */
+(function(){
+'use strict';
+var original=null,draft=null,amount=1,unit='servings';
+function round(n){return Math.round(n*100)/100;}
+function close(){var el=document.getElementById('ed-ov');if(el)el.remove();original=draft=null;}
+window.edClose=close;
+var style=document.createElement('style');style.textContent='#ed-ov{position:fixed;inset:0;z-index:9999;background:var(--bg,#f4f8f5);color:var(--tx,#143d27);overflow:auto;padding:max(16px,env(safe-area-inset-top)) 16px 100px;-webkit-overflow-scrolling:touch}#ed-ov .ed-card{max-width:520px;margin:auto}#ed-ov h2{font-size:24px}#ed-ov label{display:block;font-size:13px;margin:10px 0 4px}#ed-ov input,#ed-ov select{width:100%;font-size:16px;min-height:44px;box-sizing:border-box}#ed-ov .ed-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#ed-ov .ed-actions{display:flex;gap:10px;margin-top:18px}#ed-ov .ed-actions button{flex:1;min-height:46px}.entry-edit{border:0;background:transparent;color:inherit;text-align:left;font:inherit;padding:0;flex:1;min-width:0;min-height:44px;margin:0}.entry-edit small{color:var(--mu,#5f7a6a)}';document.head.appendChild(style);
+window.edOpen=function(id){
+ var x=D.m.find(function(y){return String(y.i)===String(id);});if(!x)return;
+ original=JSON.parse(JSON.stringify(x));draft=JSON.parse(JSON.stringify(x));
+ var match=x.n.match(/(?:est\.\s*)?(\d+(?:\.\d+)?)\s*g\)/i);
+ unit=x.portion&&x.portion.unit==='g'?'g':match?'g':'servings';
+ amount=x.portion&&x.portion.value>0?x.portion.value:match?Number(match[1]):1;
+ var el=document.createElement('div');el.id='ed-ov';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-labelledby','ed-title');
+ el.innerHTML='<div class="ed-card"><h2 id="ed-title">Edit food</h2><label for="ed-name">Food name</label><input id="ed-name" maxlength="100" value="'+esc(x.n)+'"><div class="ed-grid"><div><label for="ed-amount">'+(unit==='g'?'Grams':'Servings')+'</label><input id="ed-amount" type="number" inputmode="decimal" min="0.01" step="any" value="'+amount+'"></div><div><label for="ed-meal">Meal</label><select id="ed-meal">'+MEALS.map(function(m){return '<option'+(m===(x.meal||'Unsorted')?' selected':'')+'>'+esc(m)+'</option>';}).join('')+'</select></div></div><p class="note">Changing the amount scales recorded nutrition. Or edit the values below.</p><div class="ed-grid">'+[['k','Calories (kcal)'],['p','Protein (g)'],['c','Carbs (g)'],['f','Fat (g)']].map(function(a){var v=a[0]==='k'?x.k:x.mac?x.mac[a[0]]:'';return '<div><label for="ed-'+a[0]+'">'+a[1]+'</label><input id="ed-'+a[0]+'" type="number" inputmode="decimal" min="0" step="any" value="'+v+'" placeholder="Not recorded"></div>';}).join('')+'</div><p class="note">Leave all macro fields blank if unknown. Original date stays '+esc(x.d)+'.</p><div class="ed-actions"><button class="ch" onclick="edSave()">Save changes</button><button onclick="edClose()">Cancel</button></div></div>';
+ var old=document.getElementById('ed-ov');if(old)old.remove();document.body.appendChild(el);
+ document.getElementById('ed-amount').addEventListener('change',function(){
+  var next=Number(this.value);if(!(next>0)||!isFinite(next)){this.value=amount;return;}
+  var factor=next/amount;
+  ['k','p','c','f'].forEach(function(f){var e=document.getElementById('ed-'+f);if(e.value.trim()!=='')e.value=round(Number(e.value)*factor);});
+  if(draft.micro)Object.keys(draft.micro).forEach(function(f){draft.micro[f]=round(draft.micro[f]*factor);});
+  var name=document.getElementById('ed-name');if(unit==='g')name.value=name.value.replace(/((?:est\.\s*)?)\d+(?:\.\d+)?\s*g\)/i,'$1'+round(next)+' g)');
+  amount=next;
+ });
+};
+window.edSave=function(){
+ if(!draft)return;
+ var n=document.getElementById('ed-name').value.trim(),k=Number(document.getElementById('ed-k').value),meal=document.getElementById('ed-meal').value;
+ var vals=['p','c','f'].map(function(f){return document.getElementById('ed-'+f).value.trim();}),mac;
+ if(vals.some(Boolean)){if(vals.some(function(v){return v===''||!isFinite(Number(v))||Number(v)<0||Number(v)>2000;})){alert('Fill all macros (0-2000 g), or leave all blank if unknown.');return;}mac={p:Number(vals[0]),c:Number(vals[1]),f:Number(vals[2])};}
+ if(!n||n.length>100||!isFinite(k)||k<1||k>10000||!MEALS.includes(meal)||!validMicro(draft.micro)){alert('Check the name, calories (1-10000) and portion size. Nothing changed.');return;}
+ var idx=D.m.findIndex(function(x){return x.i===original.i;});if(idx<0){close();return;}
+ var updated=Object.assign({},draft,{n:n,k:Math.round(k),meal:meal,portion:{unit:unit,value:amount}});
+ if(mac)updated.mac=mac;else delete updated.mac;
+ D.m[idx]=updated;
+ if(sv()){close();notify('Food updated');}
+};
+var prev=window.R;
+window.R=function(){prev();
+ if(P===0){document.querySelectorAll('.swipe-wrap').forEach(function(w){var span=w.querySelector('.swipe-row>span');if(!span)return;span.className='entry-edit';span.setAttribute('role','button');span.setAttribute('tabindex','0');span.setAttribute('aria-label','Edit '+span.textContent);span.onclick=function(){if(!w.querySelector('.swipe-row').classList.contains('revealed'))edOpen(w.getAttribute('data-entry'));};span.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();edOpen(w.getAttribute('data-entry'));}};});
+ var note=Array.from(document.querySelectorAll('#app p.note')).find(function(e){return e.textContent.indexOf('Swipe a food left')===0;});if(note)note.textContent='Tap a food to edit. Swipe left to delete.';
+ }
+ if(P===2){document.querySelectorAll('.hx-e').forEach(function(row){var span=row.querySelector(':scope>span'),del=row.querySelector('button[onclick]');if(!span||!del)return;var match=del.getAttribute('onclick').match(/del\(([^)]+)\)/);if(!match)return;var b=document.createElement('button');b.className='entry-edit';b.innerHTML=span.innerHTML;b.setAttribute('aria-label','Edit '+span.textContent);b.onclick=function(){edOpen(match[1]);};span.replaceWith(b);});}
+};
+R();
+})();

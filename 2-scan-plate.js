@@ -3,7 +3,7 @@
 'use strict';
 var KEY='gemkey',MODELS=['gemini-3.8-flash','gemini-3.5-flash-lite','gemini-2.5-flash'];
 var API='https://generativelanguage.googleapis.com/v1beta/models/';
-var items=[],meal='Lunch';
+var items=[],meal='Lunch',savedPlate=false;
 function gk(){try{return (localStorage.getItem(KEY)||'').trim();}catch(e){return '';}}
 function E(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function num(v){v=Number(v);return isFinite(v)&&v>=0?v:0;}
@@ -66,17 +66,27 @@ function draw(){
   var ms=(window.MEALS||['Breakfast','Lunch','Snack','Dinner']);
   h+='<p><strong>Total: '+Math.round(t.k)+' kcal</strong> · P '+r1(t.p)+' g · C '+r1(t.c)+' g · F '+r1(t.f)+' g</p><label for="sp-meal">Meal</label><select id="sp-meal" onchange="spMeal(this.value)">'+ms.map(function(m){return '<option'+(m===meal?' selected':'')+'>'+E(m)+'</option>';}).join('')+'</select><button class="ch" onclick="spLog()">Add to '+E(meal)+'</button>';
  }
+ if(items.length)h+='<div class="sp-row"><label for="sp-name">Save this plate for next time</label><input id="sp-name" maxlength="60" placeholder="Meal name, e.g. Dal and roti"><button class="ch" onclick="spSaveMeal()"'+(savedPlate?' disabled':'')+'>'+(savedPlate?'Meal saved':'Save as meal')+'</button><p class="sp-est">Keeps these edited portions in Add > Meals. Saving does not log food.</p></div>';
  h+='<button onclick="spClose()">Cancel</button>';
  o.innerHTML=h;
 }
+window.spSaveMeal=function(){
+ var name=(document.getElementById('sp-name').value||'').trim();
+ var v={i:Date.now()+Math.random(),n:name,meal:meal,items:items.map(function(x){return {n:x.n.trim()+(x.g>0?' (est. '+r1(x.g)+' g)':' (est.)'),k:Math.round(x.k),mac:{p:r1(x.p),c:r1(x.c),f:r1(x.f)}};})};
+ if(!validSaved(v)){alert('Enter a meal name and check each food: 1-10000 kcal, macros 0-2000 g.');return;}
+ if((D.savedMeals||[]).length>=200){alert('You have 200 saved meals. Delete one first.');return;}
+ D.savedMeals=(D.savedMeals||[]).concat(v);
+ if(sv()){savedPlate=true;draw();notify('Meal saved in Add > Meals');}
+};
 window.spSet=function(i,f,v){
+ savedPlate=false;
  var x=items[i];if(!x)return;
  if(f==='n'){x.n=String(v).slice(0,60);return;}
  v=num(v);
  if(f==='g'&&x.g>0&&v>0){var s=v/x.g;x.k*=s;x.p*=s;x.c*=s;x.f*=s;}
  x[f]=v;draw();
 };
-window.spDel=function(i){items.splice(i,1);draw();};
+window.spDel=function(i){savedPlate=false;items.splice(i,1);draw();};
 window.spMeal=function(m){meal=m;draw();};
 window.spLog=function(){
  var d=today(),n=0;
@@ -100,7 +110,7 @@ async function scan(file){
  msg('Reading your plate...','This takes a few seconds.');
  try{
   var b64=await shrink(file),j=await run(b64);
-  items=parse(j);meal=(typeof defaultMeal==='function'?defaultMeal():'Lunch');draw();
+  items=parse(j);savedPlate=false;meal=(typeof defaultMeal==='function'?defaultMeal():'Lunch');draw();
  }catch(e){
   if(e&&e.status===429)msg('Free limit reached','Gemini says too many requests (per-minute or daily free limit). Wait a bit and try later, or log manually.','err');
   else if(e&&(e.status===400||e.status===401||e.status===403))msg('Key not accepted','Gemini rejected the key or request. Check the key in More > Scan plate, then try again.','err');

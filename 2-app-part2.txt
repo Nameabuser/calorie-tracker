@@ -1,0 +1,1464 @@
+d recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.6,
+sugar:.9}
+}
+,
+118:{
+source:"https://nnwa.in/foods/dishes/matar-mushroom/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:10.7,
+sugar:5.1}
+}
+,
+119:{
+source:"https://nnwa.in/foods/dishes/matar-paneer/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:9.2,
+sugar:10.8}
+}
+,
+120:{
+source:"https://nnwa.in/foods/dishes/paneer-butter-masala/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.3,
+sugar:11.7}
+}
+,
+121:{
+source:"https://nnwa.in/foods/dishes/paneer-tikka/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.4,
+sugar:20.2}
+}
+,
+122:{
+source:"https://nnwa.in/foods/dishes/sarson-ka-saag/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.2,
+sugar:1.1}
+}
+,
+123:{
+source:"https://nnwa.in/foods/dishes/sookhe-aloo/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2,
+sugar:.3}
+}
+,
+124:{
+source:"https://nnwa.in/foods/dishes/soya-chunks-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.4,
+sugar:3.7}
+}
+,
+125:{
+source:"https://nnwa.in/foods/dishes/afghani-chicken/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.6,
+sugar:1.6}
+}
+,
+126:{
+source:"https://nnwa.in/foods/dishes/bengali-fish-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6,
+sugar:7.4}
+}
+,
+127:{
+source:"https://nnwa.in/foods/dishes/boti-kebab/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.4,
+sugar:1.1}
+}
+,
+128:{
+source:"https://nnwa.in/foods/dishes/butter-chicken/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.6,
+sugar:6.5}
+}
+,
+129:{
+source:"https://nnwa.in/foods/dishes/chicken-korma/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.3,
+sugar:11.5}
+}
+,
+130:{
+source:"https://nnwa.in/foods/dishes/egg-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.2,
+sugar:2.9}
+}
+,
+131:{
+source:"https://nnwa.in/foods/dishes/fish-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.8,
+sugar:5.1}
+}
+,
+132:{
+source:"https://nnwa.in/foods/dishes/fish-tikka/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.4,
+sugar:.4}
+}
+,
+133:{
+source:"https://nnwa.in/foods/dishes/keema-matar/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:10.2,
+sugar:6.3}
+}
+,
+134:{
+source:"https://nnwa.in/foods/dishes/seekh-kebab/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.8,
+sugar:.6}
+}
+,
+135:{
+source:"https://nnwa.in/foods/dishes/prawn-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.5,
+sugar:5.8}
+}
+,
+136:{
+source:"https://nnwa.in/foods/dishes/rogan-josh/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.9,
+sugar:6.3}
+}
+,
+137:{
+source:"https://nnwa.in/foods/dishes/tandoori-fish/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.4,
+sugar:3.7}
+}
+,
+138:{
+source:"https://nnwa.in/foods/dishes/coconut-chutney/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.7,
+sugar:1}
+}
+,
+139:{
+source:"https://nnwa.in/foods/dishes/cucumber-raita/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.3,
+sugar:8}
+}
+,
+140:{
+source:"https://nnwa.in/foods/dishes/green-chutney/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.1,
+sugar:4.2}
+}
+,
+141:{
+source:"https://nnwa.in/foods/dishes/lauki-raita/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.3,
+sugar:8}
+}
+,
+142:{
+source:"https://nnwa.in/foods/dishes/mint-raita/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.4,
+sugar:7.8}
+}
+,
+143:{
+source:"https://nnwa.in/foods/dishes/onion-tomato-raita/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.7,
+sugar:10.6}
+}
+,
+144:{
+source:"https://nnwa.in/foods/dishes/peanut-chutney/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.2,
+sugar:.6}
+}
+,
+145:{
+source:"https://nnwa.in/foods/dishes/sprouts-chaat/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.5,
+sugar:4}
+}
+,
+146:{
+source:"https://nnwa.in/foods/dishes/sprouts-salad/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.9,
+sugar:4.3}
+}
+,
+147:{
+source:"https://nnwa.in/foods/dishes/atta-ladoo/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.6,
+sugar:5.8}
+}
+,
+148:{
+source:"https://nnwa.in/foods/dishes/besan-barfi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.3,
+sugar:10.9}
+}
+,
+149:{
+source:"https://nnwa.in/foods/dishes/besan-ladoo/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.6,
+sugar:13.3}
+}
+,
+150:{
+source:"https://nnwa.in/foods/dishes/coconut-barfi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2,
+sugar:17.9}
+}
+,
+151:{
+source:"https://nnwa.in/foods/dishes/gajar-halwa/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.5,
+sugar:28.3}
+}
+,
+152:{
+source:"https://nnwa.in/foods/dishes/kesari-bath/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.9,
+sugar:35.6}
+}
+,
+153:{
+source:"https://nnwa.in/foods/dishes/kulfi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.3,
+sugar:28.1}
+}
+,
+154:{
+source:"https://nnwa.in/foods/dishes/makhana-kheer/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.3,
+sugar:32.1}
+}
+,
+155:{
+source:"https://nnwa.in/foods/dishes/milk-barfi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.1,
+sugar:13.3}
+}
+,
+156:{
+source:"https://nnwa.in/foods/dishes/moong-dal-halwa/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.5,
+sugar:24.4}
+}
+,
+157:{
+source:"https://nnwa.in/foods/dishes/peanut-chikki/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.6,
+sugar:10.8}
+}
+,
+158:{
+source:"https://nnwa.in/foods/dishes/phirni/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1,
+sugar:31.3}
+}
+,
+159:{
+source:"https://nnwa.in/foods/dishes/rabri/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.4,
+sugar:22.2}
+}
+,
+160:{
+source:"https://nnwa.in/foods/dishes/rajgira-ladoo/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.2,
+sugar:8.7}
+}
+,
+161:{
+source:"https://nnwa.in/foods/dishes/rava-ladoo/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.4,
+sugar:9.9}
+}
+,
+162:{
+source:"https://nnwa.in/foods/dishes/rice-kheer/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.7,
+sugar:32.2}
+}
+,
+163:{
+source:"https://nnwa.in/foods/dishes/seviyan-kheer/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.2,
+sugar:29.7}
+}
+,
+164:{
+source:"https://nnwa.in/foods/dishes/shrikhand/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.2,
+sugar:48.2}
+}
+,
+165:{
+source:"https://nnwa.in/foods/dishes/suji-halwa/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3,
+sugar:22.3}
+}
+,
+166:{
+source:"https://nnwa.in/foods/dishes/til-ladoo/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.1,
+sugar:10.6}
+}
+,
+167:{
+source:"https://nnwa.in/foods/dishes/aam-panna/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.6,
+sugar:20.1}
+}
+,
+168:{
+source:"https://nnwa.in/foods/dishes/banana-milkshake/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.9,
+sugar:27.5}
+}
+,
+169:{
+source:"https://nnwa.in/foods/dishes/coffee/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:0,
+sugar:16.3}
+}
+,
+170:{
+source:"https://nnwa.in/foods/dishes/cold-coffee/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:0,
+sugar:29.8}
+}
+,
+171:{
+source:"https://nnwa.in/foods/dishes/jal-jeera/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.3,
+sugar:8}
+}
+,
+172:{
+source:"https://nnwa.in/foods/dishes/kahwa/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.4,
+sugar:13.2}
+}
+,
+173:{
+source:"https://nnwa.in/foods/dishes/kesar-milk/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.4,
+sugar:32.9}
+}
+,
+174:{
+source:"https://nnwa.in/foods/dishes/mango-milkshake/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.9,
+sugar:25.4}
+}
+,
+175:{
+source:"https://nnwa.in/foods/dishes/nimbu-pani/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.1,
+sugar:19.1}
+}
+,
+176:{
+source:"https://nnwa.in/foods/dishes/salted-lassi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:.1,
+sugar:7.8}
+}
+,
+177:{
+source:"https://nnwa.in/foods/dishes/sattu-drink/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.1,
+sugar:21.1}
+}
+,
+178:{
+source:"https://nnwa.in/foods/dishes/thandai/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2,
+sugar:20.8}
+}
+,
+179:{
+source:"https://nnwa.in/foods/dishes/chicken-chowmein/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.7,
+sugar:5.6}
+}
+,
+180:{
+source:"https://nnwa.in/foods/dishes/paneer-kathi-roll/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.6,
+sugar:4.9}
+}
+,
+181:{
+source:"https://nnwa.in/foods/dishes/vegetable-chowmein/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.6,
+sugar:5.9}
+}
+,
+192:{
+source:"https://world.openfoodfacts.org/product/8901063092617/good-day-butter-cookies-britannia",
+grams:100,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+193:{
+source:"https://world.openfoodfacts.org/product/8901719105913/parle-hide-seek-120g",
+grams:100,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+194:{
+source:"https://world.openfoodfacts.org/product/7622201428525/oreo-original",
+grams:100,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+196:{
+source:"https://world.openfoodfacts.org/product/8901063029217/jim-jam-britannia",
+grams:12.5,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+198:{
+source:"https://world.openfoodfacts.org/product/8901719121432/monaco-classic-biscuits-parle",
+grams:14.4,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+199:{
+source:"https://world.openfoodfacts.org/product/8901719135255/krackjack-parle",
+grams:15.8,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+200:{
+source:"https://world.openfoodfacts.org/product/8901063012349/milk-bikis-britannia",
+grams:100,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+202:{
+source:"https://world.openfoodfacts.org/",
+note:"Existing packaged-food label estimate. Verify your pack and serving weight."}
+,
+204:{
+grams:30}
+,
+205:{
+source:"https://world.openfoodfacts.org/",
+note:"Existing packaged-food label estimate. Verify your pack and serving weight.",
+grams:30}
+,
+206:{
+grams:30}
+,
+207:{
+source:"https://world.openfoodfacts.org/",
+note:"Existing packaged-food label estimate. Verify your pack and serving weight.",
+grams:30}
+,
+208:{
+grams:30}
+,
+209:{
+source:"https://world.openfoodfacts.org/product/0846203001150/patal-poha-chivda-indian-snack-chitale",
+grams:20,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+210:{
+source:"https://world.openfoodfacts.org/product/8901491981699/lay-s-magic-masala-pepsico",
+grams:40,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+211:{
+source:"https://world.openfoodfacts.org/product/8901491361026/kurkure-masala-munch",
+grams:50,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+212:{
+source:"https://world.openfoodfacts.org/",
+note:"Existing packaged-food label estimate. Verify your pack and serving weight.",
+grams:20}
+,
+213:{
+source:"https://world.openfoodfacts.org/",
+note:"Existing packaged-food label estimate. Verify your pack and serving weight.",
+grams:30}
+,
+215:{
+source:"https://world.openfoodfacts.org/",
+note:"Existing packaged-food label estimate. Verify your pack and serving weight.",
+grams:60}
+,
+216:{
+source:"https://world.openfoodfacts.org/product/8901233030548/cadbury-dairy-milk-mondelez",
+grams:13.2,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+217:{
+source:"https://world.openfoodfacts.org/product/8901058022087/munch-nestle",
+grams:8.7,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+218:{
+source:"https://world.openfoodfacts.org/product/7622202318078/5-star-chocolate-bar-cadbury",
+grams:18,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+0:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. App omits gram weight and/or recipe; comparison assumes this reference portion. Do not auto-correct. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+1:{
+source:"https://nnwa.in/foods/dishes/plain-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:3,
+sugar:.5}
+}
+,
+2:{
+source:"https://nnwa.in/foods/dishes/aloo-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:3.9,
+sugar:1.1}
+}
+,
+3:{
+source:"https://nnwa.in/foods/dishes/naan/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:1,
+sugar:3}
+}
+,
+4:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. App omits gram weight and/or recipe; comparison assumes this reference portion. Do not auto-correct. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+6:{
+source:"https://nnwa.in/foods/dishes/mixed-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:4.8,
+sugar:1}
+}
+,
+8:{
+source:"https://nnwa.in/foods/dishes/chole/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:5.7,
+sugar:5.7}
+}
+,
+9:{
+source:"https://nnwa.in/foods/dishes/paneer-butter-masala/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:2.3,
+sugar:11.7}
+}
+,
+10:{
+source:"https://nnwa.in/foods/dishes/palak-paneer/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:5.6,
+sugar:7.5}
+}
+,
+15:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Two whole-egg reference omelets include twice the reference added fat. A two-egg omelet need not use twice the oil; recipe difference, not proof of error. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+16:{
+source:"https://nnwa.in/foods/dishes/idli/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:.6,
+sugar:.1}
+}
+,
+18:{
+source:"https://nnwa.in/foods/dishes/masala-dosa/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:5.3,
+sugar:2.8}
+}
+,
+19:{
+source:"https://nnwa.in/foods/dishes/sambar/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:9.1,
+sugar:8.5}
+}
+,
+20:{
+source:"https://nnwa.in/foods/dishes/upma/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:3.4,
+sugar:1.4}
+}
+,
+21:{
+source:"https://nnwa.in/foods/dishes/poha/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:2,
+sugar:.5}
+}
+,
+23:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Different standard recipe/unspecified app portion. Not a confirmed error. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+24:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference density located, but app serving weight is absent. Assumed weight shown only to explain plausibility; not verification. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+26:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. App omits gram weight and/or recipe; comparison assumes this reference portion. Do not auto-correct. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+27:{
+source:"https://nnwa.in/foods/dishes/vegetable-biryani/",
+note:"NNWA / Indian Nutrient Databank standard recipe, NOT an unspecified home bowl. Carbs are available carbohydrate. Cooked gram weight unknown; enter verified weight to scale by grams.",
+micro:{
+fiber:10,
+sugar:6.5}
+}
+,
+28:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference density located, but app serving weight is absent. Assumed weight shown only to explain plausibility; not verification. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+29:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference located but app serving lacks grams/ml or variant. Reference comparison is an example, not verified equivalence. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+30:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference density located, but app serving weight is absent. Assumed weight shown only to explain plausibility; not verification. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+33:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. App explicitly includes sugar; NNWA chai may have a different milk/sugar recipe. Cup volume absent. Not proof of error. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+35:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference density located, but app serving weight is absent. Assumed weight shown only to explain plausibility; not verification. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+39:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. App omits gram weight and/or recipe; comparison assumes this reference portion. Do not auto-correct. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+40:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. App omits gram weight and/or recipe; comparison assumes this reference portion. Do not auto-correct. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+41:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Two biscuits can differ greatly by brand/size. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+42:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference density located, but app serving weight is absent. Assumed weight shown only to explain plausibility; not verification. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+43:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference located but app serving lacks grams/ml or variant. Reference comparison is an example, not verified equivalence. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+45:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference located but app serving lacks grams/ml or variant. Reference comparison is an example, not verified equivalence. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+46:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference is chicken burger; app says only burger. Patty/type/size absent. Not proof of error. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+48:{
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. Reference located but app serving lacks grams/ml or variant. Reference comparison is an example, not verified equivalence. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+190:{
+source:"https://world.openfoodfacts.org/product/8901719902413/parle-g-original-gluco-biscuits",
+grams:30,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+191:{
+source:"https://world.openfoodfacts.org/product/8901063162914/marie-gold-biscuit-britannia",
+grams:15,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+195:{
+source:"https://world.openfoodfacts.org/product/8901063139336/britannia-bourbon-100g",
+grams:100,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+197:{
+source:"https://world.openfoodfacts.org/product/8901063136250/little-hearts-biscuits-britannia",
+grams:33,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+203:{
+source:"https://world.openfoodfacts.org/product/8901725013066/sunfeast-mom-s-magic-cashew-almond",
+grams:20,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+219:{
+source:"https://world.openfoodfacts.org/product/7622201758639/perk-cadbury",
+grams:100,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+,
+220:{
+source:"https://world.openfoodfacts.org/product/8906002482450/snickers-chocolate-bar-mars",
+grams:45,
+note:"Open Food Facts label reference for the linked product/variant. This gram serving is NOT a biscuit count or entire pack/bar unless your pack confirms it. Check your label; community data and formulations vary."}
+}
+,
+D={
+m:[],
+g:2e3}
+,
+loadFailed=!1,
+P=0,
+T="light",
+Q="",
+filter="all",
+customMode=!1,
+savedMode=!1,
+barMode=!1,
+extraMode="",
+reviewItem=null,
+liveResults=[],
+liveRequest=0,
+liveController=null,
+saveSource="",
+scanning=!1,
+stream=null,
+detector=null,
+scanTimer=null,
+lastSaved="",
+MEALS=["Breakfast",
+"Lunch",
+"Dinner",
+"Snack",
+"Unsorted"];
+
+(window.INDIAN_USDA||[]).concat(window.INDIAN_OFF||[]).forEach(function(x){
+var i=FOODS.length;
+FOODS.push([x.name,
+x.k,
+x.mac]);
+FOOD_META[i]=x;
+}
+);
+
+function finite(v){
+return"number"==typeof v&&Number.isFinite(v)}
+function validDate(s){
+return"string"==typeof s&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&new Date(s+"T12:00:00Z").toISOString().slice(0,
+10)===s}
+function withoutWeight(x){
+var data={
+...x}
+;
+return delete data.weights,
+data}
+var MICRO={
+fiber:{
+name:"Fiber",
+unit:"g",
+max:2e3}
+,
+sugar:{
+name:"Sugar",
+unit:"g",
+max:2e3}
+,
+sodium:{
+name:"Sodium",
+unit:"mg",
+max:1e5}
+,
+iron:{
+name:"Iron",
+unit:"mg",
+max:1e4}
+,
+calcium:{
+name:"Calcium",
+unit:"mg",
+max:1e5}
+,
+potassium:{
+name:"Potassium",
+unit:"mg",
+max:1e5}
+}
+;
+function validMicro(m){
+return void 0===m||m&&"object"==typeof m&&!Array.isArray(m)&&Object.entries(m).every(([k,
+v])=>MICRO[k]&&finite(v)&&v>=0&&v<=MICRO[k].max)}
+function validItem(v){
+return v&&"string"==typeof v.n&&v.n.trim().length>0&&v.n.length<=100&&finite(v.k)&&v.k>0&&v.k<=1e4&&validMicro(v.micro)&&(!v.mac||["p",
+"c",
+"f"].every(k=>finite(v.mac[k])&&v.mac[k]>=0&&v.mac[k]<=2e3))}
+function validSaved(v){
+return v&&finite(v.i)&&"string"==typeof v.n&&v.n.trim().length>0&&v.n.length<=60&&MEALS.includes(v.meal)&&Array.isArray(v.items)&&v.items.length>0&&v.items.length<=200&&v.items.every(validItem)}
+function ok(x){
+try{
+return x&&"object"==typeof x&&Array.isArray(x.m)&&finite(x.g)&&x.g>0&&x.m.every(v=>v&&finite(v.i)&&"string"==typeof v.n&&finite(v.k)&&v.k>=0&&validDate(v.d)&&validMicro(v.micro)&&(!v.mac||["p",
+"c",
+"f"].every(k=>finite(v.mac[k])&&v.mac[k]>=0))&&(!v.meal||MEALS.includes(v.meal)))&&(!x.water||Array.isArray(x.water)&&x.water.every(v=>v&&validDate(v.d)&&finite(v.ml)&&v.ml>=0))&&(!x.fav||Array.isArray(x.fav)&&x.fav.every(v=>Number.isInteger(v)&&v>=0&&v<FOODS.length))&&(!x.savedMeals||Array.isArray(x.savedMeals)&&x.savedMeals.length<=200&&x.savedMeals.every(validSaved))&&(void 0===x.wg||finite(x.wg)&&x.wg>0)&&(void 0===x.pg||finite(x.pg)&&x.pg>0)&&(void 0===x.bw||finite(x.bw)&&x.bw>=30&&x.bw<=300)&&(void 0===x.pm||"boolean"==typeof x.pm)}
+catch(e){
+return!1}
+}
+try{
+var raw=localStorage.getItem("cal");
+if(null!==raw){
+var j=JSON.parse(raw);
+if(!ok(j))throw 1;
+D=withoutWeight(j)}
+lastSaved=JSON.stringify(D),
+T=localStorage.getItem("calt")||"light"}
+catch(e){
+loadFailed=!0,
+alert("Saved data could not be loaded. It has not been changed. Restore a valid backup to continue.")}
+function today(d=new Date){
+return new Intl.DateTimeFormat("en-CA",
+{
+timeZone:"Asia/Kolkata",
+year:"numeric",
+month:"2-digit",
+day:"2-digit"}
+).format(d)}
+function days(n){
+var d=new Date(today()+"T12:00:00Z");
+return d.setUTCDate(d.getUTCDate()+n),
+d.toISOString().slice(0,
+10)}
+function esc(s){
+return String(s).replace(/[&<>"']/g,
+c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"}
+[c]))}
+function notify(s){
+var el=document.getElementById("toast");
+el.className="toast",
+el.textContent=s,
+clearTimeout(window.toastTimer),
+window.toastTimer=setTimeout(()=>{
+el.textContent="",
+el.className=""}
+,
+2200)}
+function sv(){
+if(loadFailed)return D=JSON.parse(lastSaved||'{"m":[],"g":2000}'),
+alert("Saved data is protected. Restore a valid backup first."),
+R(),
+!1;
+try{
+return localStorage.setItem("cal",
+JSON.stringify(D)),
+lastSaved=JSON.stringify(D),
+R(),
+!0}
+catch(e){
+return D=JSON.parse(lastSaved),
+R(),
+alert("Could not save. Storage may be full or disabled. Your change was not saved."),
+!1}
+}
+function go(p){
+clearUndo(),
+P=p,
+R(),
+window.scrollTo(0,
+0)}
+function foodMode(custom,
+saved=!1,
+barcode=!1){
+liveController&&liveController.abort(),
+extraMode="";
+var vals=["q",
+"date",
+"meal",
+"cn",
+"ck",
+"mp",
+"mc",
+"mf",
+"bc"].map(id=>[id,
+document.getElementById(id)]).filter(([id,
+e])=>e).map(([id,
+e])=>[id,
+e.value]),
+open=document.getElementById("serving").open;
+customMode=custom,
+savedMode=saved,
+barMode=barcode,
+scanning&&!barcode&&stopScan(),
+R(),
+vals.forEach(([id,
+v])=>{
+var e=document.getElementById(id);
+e&&(e.value=v)}
+),
+document.getElementById("serving").open=open,
+document.getElementById("meal").dispatchEvent(new Event("change")),
+window.scrollTo(0,
+0)}
+function tg(){
+var t="dark"===T?"light":"dark";
+try{
+localStorage.setItem("calt",
+t),
+T=t,
+R()}
+catch(e){
+alert("Could not save theme")}
+}
+function tot(d){
+return D.m.filter(x=>x.d===d).reduce((a,
+x)=>a+x.k,
+0)}
+function macros(d){
+return D.m.filter(x=>x.d===d&&x.mac).reduce((a,
+x)=>(["p",
+"c",
+"f"].forEach(k=>a[k]+=x.mac[k]),
+a),
+{
+p:0,
+c:0,
+f:0}
+)}
+function autoPG(g){
+g=g||D.g;
+var p=D.bw?1.8*D.bw:.3*g/4;
+return Math.min(500,
+Math.max(10,
+Math.round(p)))}
+function isAuto(){
+return void 0===D.pg||!1===D.pm}
+function pgv(){
+return void 0!==D.pg&&!1!==D.pm?D.pg:autoPG()}
+function setG(){
+var v=prompt("Daily calorie goal (500-10000 kcal)",
+D.g);
+null!==v&&((v=Math.round(Number(v)))>=500&&v<=1e4?(D.g=v,
+void 0!==D.pg&&!1!==D.pm||(D.pm=!1,
+D.pg=autoPG(v)),
+sv()):alert("Enter 500-10000"))}
+function setPG(){
+var v=prompt("Daily protein goal (10-500 g)",
+pgv());
+null!==v&&((v=Math.round(Number(v)))>=10&&v<=500?(D.pg=v,
+D.pm=!0,
+sv()):alert("Enter 10-500"))}
+function autoProtein(){
+D.pm=!1,
+D.pg=autoPG(),
+sv()}
+function setBW(){
+var v=prompt("Body weight in kg for the protein target (30-300). Leave empty to clear.",
+D.bw||"");
+if(null!==v){
+if(""===String(v).trim())delete D.bw;
+else{
+if(!((v=Math.round(10*Number(v))/10)>=30&&v<=300))return alert("Enter 30-300");
+D.bw=v}
+!1===D.pm&&(D.pg=autoPG()),
+sv()}
+}
+function fields(){
+return{
+d:document.getElementById("date").value,
+meal:document.getElementById("meal").value}
+}
+function add(n,
+k,
+mac,
+fd,
+micro){
+if(k=Math.round(Number(k)),
+fd=fd||fields(),
+!(n.trim()&&k>0)||k>1e4||!validDate(fd.d)||fd.d>today())alert("Enter a food name, 1-10000 calories and a date no later than today");
+else if(!mac||["p",
+"c",
+"f"].every(k=>finite(mac[k])&&mac[k]>=0&&mac[k]<=2e3)){
+var x={
+i:Date.now()+Math.random(),
+n:n.trim().slice(0,
+100),
+k:k,
+d:fd.d,
+meal:fd.meal}
+;
+validMicro(micro)?(micro&&Object.keys(micro).length&&(x.micro=micro),
+mac&&(x.mac=mac),
+D.m.push(x),
+P=0,
+sv()&&(window.scrollTo(0,
+0),
+notify("Added to your day"))):alert("Invalid micronutrients; nothing saved.")}
+else alert("Macros must be between 0 and 2000 g")}
+function addF(i){
+var f=FOODS[i],
+info=FOOD_META[i]||{
+}
+;
+openReview({
+name:f[0],
+k:f[1],
+mac:f[2]||null,
+micro:info.micro||{
+}
+,
+grams:info.grams||null,
+per100:!!info.per100,
+suggestedGrams:info.suggestedGrams,
+source:info.source||"",
+note:info.note||"Original estimate. Serving weight and macros are not verified. Enter values from your label or recipe, or use USDA search."}
+,
+Number(document.getElementById("q").value)||1)}
+function addC(){
+try{
+var customMicro=readMicro("c",
+1)}
+catch(e){
+return void alert(e.message)}
+var vals=["mp",
+"mc",
+"mf"].map(id=>document.getElementById(id).value);
+vals.some(v=>""!==v)&&vals.some(v=>""===v)?alert("Enter all three macros, or leave all blank"):add(document.getElementById("cn").value,
+document.getElementById("ck").value,
+vals.every(v=>""===v)?null:{
+p:Number(vals[0]),
+c:Number(vals[1]),
+f:Number(vals[2])}
+,
+void 0,
+customMicro)}
+function quickAdd(i){
+var x=D.m.find(y=>String(y.i)===String(i));
+x&&add(x.n,
+x.k,
+x.mac?{
+...x.mac}
+:void 0,
+{
+d:today(),
+meal:x.meal||"Unsorted"}
+,
+x.micro?{
+...x.micro}
+:void 0)}
+function repeat(i){
+var x=D.m.find(x=>x.i===i);
+x&&add(x.n,
+x.k,
+x.mac,
+fields(),
+x.micro?{
+...x.micro}
+:void 0)}
+var deletedEntries=[];
+function clearUndo(){
+clearTimeout(window.undoTimer);
+window.undoTimer=null;
+deletedEntries=[];
+document.querySelector(".undo-bar")?.remove()}
+document.addEventListener("pointerdown",
+e=>{if(!e.target.closest(".undo-bar"))clearUndo()},
+true);
+document.addEventListener("keydown",
+e=>{if(!e.target.closest(".undo-bar"))clearUndo()},
+true);
+function del(i){
+var index=D.m.findIndex(x=>x.i===i);
+if(index<0)return;
+var item=D.m[index];
+D.m.splice(index,
+1);
+if(sv()){
+deletedEntries.push({
+item:item,
+index:index}
+);
+R();
+clearTimeout(window.undoTimer);
+window.undoTimer=setTimeout(clearUndo,2000)}
+}
+function undoDelete(){
+var undo=deletedEntries[deletedEntries.length-1];
+if(!undo)return;
+if(D.m.some(x=>x.i===undo.item.i))return;
+D.m.splice(Math.min(undo.index,
+D.m.length),
+0,
+undo.item);
+if(sv()){
+deletedEntries.pop();
+R()}
+}
+function addToMeal(m){
+go(1);
+document.getElementById("meal").value=m;
+document.getElementById("serving").open=true;
+document.getElementById("meal").dispatchEvent(new Event("change"));
+document.getElementById("s")?.focus()}
+function bindSwipes(){
+document.querySelectorAll(".swipe-row").forEach(row=>{
+var start=null,
+dx=0,
+locked=false;
+row.addEventListener("pointerdown",
+e=>{
+if(e.target.closest("button"))return;
+start={
+x:e.clientX,
+y:e.clientY}
+;
+dx=0;
+locked=false}
+);
+row.addEventListener("pointermove",
+e=>{
+if(!start)return;
+var x=e.clientX-start.x,
+y=e.clientY-start.y;
+if(!locked&&Math.abs(y)>12&&Math.abs(y)>Math.abs(x)){
+start=null;
+return}
+if(Math.abs(x)>12&&Math.abs(x)>Math.abs(y)){
+locked=true;
+row.setPointerCapture(e.pointerId);
+dx=Math.max(-92,
+Math.min(0,
+x));
+row.style.transform="translateX("+dx+"px)"}
+}
+);
+var finish=()=>{
+if(!start)return;
+row.style.transform=dx < -40?"translateX(-92px)":"";
+row.classList.toggle("revealed",
+dx < -40);
+start=null}
+;
+row.addEventListener("pointerup",
+finish);
+row.addEventListener("pointercancel",
+()=>{
+row.style.transform="";
+start=null}
+)}
+)}
+function fav(i){
+D.fav=D.fav||[],
+D.fav=D.fav.includes(i)?D.fav.filter(x=>x!==i):D.fav.concat(i);
+var inputs=["q",
+"date",
+"meal",
+"cn",
+"ck",
+"mp",
+"mc",
+"mf"].map(id=>[id,
+document.getElementById(id).value]);
+sv(),
+inputs.forEach(([id,
+v])=>{
+var e=document.getElementById(id);
+e&&(e.value=v)}
+)}
+function startSave(m){
+saveSource=m,
+R(),
+document.getElementById("smname").focus()}
+function saveMeal(){
+var name=document.getElementById("smname").value.trim(),
+items=D.m.filter(x=>x.d===today()&&(x.meal||"Unsorted")===saveSource).map(x=>({
+n:x.n,
+k:x.k,
+...x.mac?{
+mac:{
+...x.mac}
+}
+:{
+}
+,
+...x.micro?{
+micro:{
+...x.micro}
+}
+:{
+}
+}
+)),
+v={
+i:Date.now()+Math.random(),
+n:name,
+meal:saveSource,
+items:items}
+;
+validSaved(v)?(D.savedMeals||[]).length>=200?alert("You have 200 saved meals. Delete one first."):(D.savedMeals=(D.savedMeals||[]).concat(v),
+saveSource="",
+sv()&&notify("Meal saved. Log it again in one tap.")):alert("Enter a name (up to 60 characters). A meal needs 1-200 foods.")}
+function deleteSaved(i){
+confirm("Delete this saved meal? Logged foods will stay.")&&(D.savedMeals=(D.savedMeals||[]).filter(x=>x.i!==i),
+sv())}
+function addSaved(i){
+var v=(D.savedMeals||[]).find(x=>x.i===i);
+if(v){
+var fd=1===P&&document.getElementById("serving").open?fields():{
+d:today(),
+meal:v.meal}
+,
+q=1===P?Number(document.getElementById("q").value):1;
+if(!validDate(fd.d)||fd.d>today()||!MEALS.includes(fd.meal)||!(q>0)||q>100||v.items.some(x=>Math.round(x.k*q)<1||Math.round(x.k*q)>1e4||x.mac&&Object.values(x.mac).some(n=>n*q>2e3)||x.micro&&Object.entries(x.micro).some(([k,
+n])=>n*q>MICRO[k].max)))alert("Check date and quantity. Each food must stay within 1-10000 kcal and macros within 0-2000 g.");
+else{
+var entries=v.items.map(x=>({
+i:Date.now()+Math.random(),
+n:(x.n+(1!==q?" × "+q:"")).slice(0,
+100),
+k:Math.round(x.k*q),
+d:fd.d,
+meal:fd.meal,
+...x.micro?{
+micro:Object.fromEntries(Object.entries(x.micro).map(([k,
+n])=>[k,
+Math.round(n*q*100)/100]))}
+:{
+}
+,
+...x.mac?{
+mac:Object.fromEntries(Object.entries(x.mac).map(([k,
+n])=>[k,
+n*q]))}
+:{
+}
+}
+));
+D.m.push(...entries),
+P=0,
+sv()&&(window.scrollTo(0,
+0),
+notify(v.n+" logged"))}
+}
+}
+function savedList(){
+var a=D.savedMeals||[];
+return a.length?a.map(v=>"<div class=r><span>"+esc(v.n)+"<br><small>"+v.items.length+" foods · "+v.items.reduce((n,
+x)=>n+x.k,
+0)+" kcal · "+esc(v.meal)+'</small></span><div class=savedactions><button class="x star" onclick="addSaved('+v.i+')">Log meal</button><button class=x aria-label="Delete saved meal '+esc(v.n)+'" onclick="deleteSaved('+v.i+')">Delete</button></div></div>').join(""):"<p class=note>Log your foods first. On Today, tap Save meal beside Breakfast, Lunch, Dinner or Snack to keep the whole group for next time.</p>"}
+var scanControls=null,
+scanStarting=!1,
+scanSession=0,
+zxingLoad=null;
+function scanMessage(text){
+var el=document.getElementById("bcmsg");
+el&&(el.textContent=text)}
+function loadScanner(){
+return window.ZXingBrowser?Promise.resolve(window.ZXingBrowser):zxingLoad||(zxingLoad=new Promise((resolve,
+reject)=>{
+var urls=["https://cdn.jsdelivr.net/npm/@zxing/browser@0.2.1/umd/zxing-browser.min.js",
+"https://unpkg.com/@zxing/browser@0.2.1/umd/zxing-browser.min.js"];
+!function next(){
+if(urls.length){
+var timer,
+script=document.createElement("script");
+script.src=urls.shift(),
+script.async=!0,
+script.onerror=fail,
+script.onload=()=>{
+clearTimeout(timer),
+window.ZXingBrowser?resolve(window.ZXingBrowser):fail()}
+,
+timer=setTimeout(fail,
+12e3),
+document.head.appendChild(script)}
+else reject(new Error("scanner-load"));
+function fail(){
+clearTimeout(timer),
+script.remove(),
+next()}
+}
+()}
+).catch(e=>{
+throw zxingLoad=null,
+e}
+))}
+function newScanner(z){
+return new z.BrowserMultiFormatOneDReader(new Map([[2,
+[6,
+7,
+14,
+15]],
+[3,
+!0]]),
+{
+delayBetweenScanAttempts:200,
+delayBetweenScanSuccess:500}
+)}
+function stopScan(){
+scanSession++,
+scanning=!1,
+scanStarting=!1,
+scanControls&&(scanControls.stop(),
+scanControls=null),
+stream&&(stream.getTracks().forEach(t=>t.stop()),
+stream=null);
+var v=document.getElementById("cam");
+v&&(v.pause(),
+v.srcObject=null,
+v.hidden=!0);
+var btn=document.getElementById("scanbtn");
+btn&&(btn.textContent="Scan with camera")}
+function scannedCode(code){
+if(/^\d{8,14}$/.test(code)){
+stopScan();
+var bc=document.getElementById("bc");
+bc&&(bc.value=code,
+lookupBarcode())}
+else scanMessage("Could not read a food barcode. Try again or type its number.")}
+async function scanToggle(){
+if(scanning||scanStarting)return stopScan(),
+void scanMessage("Scan stopped. You can still type the barcode number.");
+if(window.isSecureContext&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+var token=++scanSession;
+scanStarting=!0;
+var btn=document.getElementById("scanbtn");
+btn&&(btn.textContent="Cancel scan"),
+scanMessage("Opening camera. Allow camera access when asked.");
+try{
+var media=await navigator.mediaDevices.getUserMedia({
+video:{
+facingMode:{
+ideal:"environme

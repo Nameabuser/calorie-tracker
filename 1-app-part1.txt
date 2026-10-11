@@ -1,0 +1,2420 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover"
+/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="Calories" />
+<meta name="theme-color" content="#f4f8f5" />
+<link rel="apple-touch-icon" href="icons/3-apple-touch-icon.png" />
+<link rel="icon" type="image/png" href="icons/4-icon-192.png" />
+<link rel="manifest" href="manifest.webmanifest" />
+<title>Calories</title>
+<style>
+:root {
+--bg: #0a120d;
+--tx: #f5f5f5;
+--cd: #14201a;
+--in: #22332a;
+--nv: #0a120d;
+--mu: #a8a8a8;
+--bd: #22332a;
+}
+[data-t="light"] {
+--bg: #f2f4f8;
+--tx: #111827;
+--cd: #fff;
+--in: #e6e9f2;
+--nv: #fff;
+--mu: #667085;
+--bd: #e3e6ee;
+}
+* {
+box-sizing: border-box;
+}
+body {
+margin: 0;
+background: var(--bg);
+color: var(--tx);
+font:
+16px -apple-system,
+sans-serif;
+padding: env(safe-area-inset-top) 14px
+calc(90px + env(safe-area-inset-bottom));
+}
+h2 {
+margin: 16px 0 8px;
+}
+.c {
+background: var(--cd);
+border-radius: 14px;
+padding: 12px;
+margin: 10px 0;
+}
+input,
+select,
+button {
+width: 100%;
+padding: 12px;
+margin: 4px 0;
+border-radius: 10px;
+border: 0;
+background: var(--in);
+color: var(--tx);
+font-size: 16px;
+}
+button {
+background: #ff8a1f;
+color: #111;
+font-weight: 600;
+}
+.rep h3 {
+margin: 20px 0 6px;
+font-size: 15px;
+letter-spacing: 0.2px;
+}
+.rep h3:first-child {
+margin-top: 4px;
+font-size: 18px;
+}
+.rep .note {
+line-height: 1.45;
+color: var(--mu);
+font-size: 13px;
+margin: 8px 0 12px;
+}
+.rep .ch {
+transition:
+background 0.25s,
+color 0.25s,
+transform 0.15s;
+}
+.rep .ch.active {
+background: #22c55e;
+color: #08130c;
+}
+.rep .ch:active {
+transform: scale(0.96);
+}
+.tiles {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 8px;
+margin: 10px 0 4px;
+}
+.tiles div {
+background: var(--in);
+border-radius: 12px;
+padding: 10px 8px;
+text-align: center;
+display: flex;
+flex-direction: column;
+gap: 2px;
+}
+.tiles strong {
+font-size: 22px;
+}
+.tiles small {
+font-size: 11px;
+}
+.chart {
+width: 100%;
+height: 110px;
+display: block;
+margin-top: 6px;
+overflow: visible;
+}
+.tl {
+stroke-dasharray: 1;
+stroke-dashoffset: 1;
+animation: draw 0.9s ease-out forwards;
+}
+.ta {
+opacity: 0;
+animation: fade 0.9s 0.2s ease-out forwards;
+}
+.td {
+opacity: 0;
+animation: fade 0.4s 0.6s ease-out forwards;
+}
+.rep details {
+margin-top: 14px;
+background: var(--in);
+border-radius: 12px;
+padding: 4px 12px;
+}
+.rep summary {
+padding: 10px 0;
+cursor: pointer;
+font-weight: 600;
+}
+.rep .r:last-child {
+border-bottom: 0;
+}
+@keyframes draw {
+to {
+stroke-dashoffset: 0;
+}
+}
+@keyframes fade {
+to {
+opacity: 1;
+}
+}
+@media (prefers-reduced-motion: reduce) {
+.tl,
+.ta,
+.td {
+animation: none;
+stroke-dashoffset: 0;
+opacity: 1;
+}
+}
+.r {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 8px 0;
+border-bottom: 1px solid var(--bd);
+}
+.g {
+color: #22c55e;
+}
+.b {
+color: #ef4444;
+}
+small {
+color: var(--mu);
+}
+.x {
+background: none;
+width: auto;
+padding: 4px 8px;
+color: var(--mu);
+}
+.n {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+display: flex;
+background: var(--nv);
+padding: 8px 8px calc(8px + env(safe-area-inset-bottom) / 2);
+}
+.n button {
+background: none;
+color: var(--mu);
+font-size: 14px;
+}
+.n .a {
+color: var(--tx);
+}
+.big {
+font-size: 28px;
+font-weight: 700;
+}
+.ch {
+width: auto;
+display: inline-block;
+margin: 3px;
+padding: 8px 14px;
+background: var(--in);
+color: var(--tx);
+font-weight: 500;
+}
+.th {
+width: auto;
+float: right;
+padding: 6px 14px;
+margin-top: 14px;
+background: var(--in);
+color: var(--tx);
+}
+.th + h2 + .c {
+clear: both;
+}
+.bar {
+height: 14px;
+background: var(--in);
+border-radius: 8px;
+overflow: hidden;
+margin: 10px 0;
+}
+.bar i {
+display: block;
+height: 100%;
+background: #22c55e;
+}
+.bar i.o {
+background: #ef4444;
+}
+.f {
+display: flex;
+gap: 8px;
+}
+.f > * {
+flex: 1;
+min-width: 0;
+}
+::-webkit-scrollbar {
+display: none;
+width: 0;
+height: 0;
+}
+html {
+scrollbar-width: none;
+}
+body {
+max-width: 650px;
+margin: auto;
+}
+.n {
+max-width: 650px;
+margin: auto;
+}
+.metrics {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 8px;
+}
+.metrics > div {
+background: var(--in);
+border-radius: 10px;
+padding: 10px;
+text-align: center;
+}
+.metrics strong {
+display: block;
+font-size: 20px;
+}
+.muted {
+color: var(--mu);
+}
+label {
+display: block;
+color: var(--mu);
+font-size: 13px;
+margin: 8px 0 2px;
+}
+.chart {
+display: flex;
+align-items: flex-end;
+gap: 7px;
+height: 155px;
+padding-top: 24px;
+}
+.col {
+flex: 1;
+min-width: 0;
+text-align: center;
+}
+.col i {
+display: block;
+background: #22c55e;
+min-height: 3px;
+border-radius: 6px 6px 0 0;
+margin-top: 4px;
+}
+.col small {
+font-size: 11px;
+display: block;
+padding-top: 6px;
+}
+.col b {
+font-size: 10px;
+font-weight: 400;
+}
+.r > span {
+min-width: 0;
+overflow-wrap: anywhere;
+padding-right: 8px;
+}
+.r button {
+flex-shrink: 0;
+}
+.note {
+font-size: 12px;
+line-height: 1.5;
+}
+.active {
+outline: 2px solid #ff8a1f;
+}
+.toast {
+position: fixed;
+bottom: 86px;
+left: 50%;
+transform: translateX(-50%);
+background: #ff8a1f;
+color: #111;
+padding: 10px 18px;
+border-radius: 12px;
+z-index: 10;
+max-width: 90%;
+text-align: center;
+}
+input[type="checkbox"] {
+width: auto;
+}
+.f button {
+padding: 10px;
+}
+.mealhead {
+font-size: 14px;
+color: var(--mu);
+margin: 14px 0 3px;
+}
+h3 {
+margin: 6px 0 12px;
+font-size: 17px;
+}
+.star {
+color: #ff8a1f;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+outline: 2px solid #22c55e;
+}
+button {
+cursor: pointer;
+}
+input[type="date"] {
+min-height: 44px;
+}
+.n {
+border-top: 1px solid var(--bd);
+}
+.addbar {
+position: sticky;
+top: 0;
+z-index: 3;
+background: var(--bg);
+padding: 8px 0;
+border-bottom: 1px solid var(--bd);
+}
+.addbar .f button {
+background: var(--in);
+color: var(--tx);
+min-height: 44px;
+}
+.addbar .f button.active {
+background: #ff8a1f;
+color: #111;
+outline: 0;
+}
+summary {
+cursor: pointer;
+min-height: 44px;
+display: flex;
+align-items: center;
+font-size: 14px;
+}
+.r .x {
+min-height: 44px;
+min-width: 44px;
+}
+.n {
+z-index: 5;
+}
+[hidden] {
+display: none !important;
+}
+.mealhead {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 6px;
+}
+.mealhead span {
+min-width: 0;
+}
+.savedactions {
+display: flex;
+flex-direction: column;
+flex-shrink: 0;
+}
+.addbar .f button {
+font-size: 14px;
+padding: 10px 5px;
+}
+.r > span {
+min-width: 0;
+overflow-wrap: anywhere;
+}
+.r > div {
+flex-shrink: 0;
+}
+.r small {
+display: block;
+line-height: 1.5;
+}
+textarea {
+width: 100%;
+min-height: 120px;
+background: var(--in);
+color: var(--tx);
+border: 0;
+border-radius: 10px;
+padding: 12px;
+font: inherit;
+}
+a {
+color: #ff8a1f;
+}
+.note {
+overflow-wrap: anywhere;
+}
+.ch.active {
+background: #ff8a1f;
+color: #111;
+}
+.note a {
+color: #ff8a1f;
+}
+/* UI polish */
+:root{--ac:#ff8a1f;--gr:#22c55e;--sh:0 1px 2px rgba(0,0,0,.25),0 8px 24px rgba(0,0,0,.18)}
+[data-t="light"]{--bg:#f3f5f1;--cd:#fff;--in:#eef1ec;--nv:rgba(255,255,255,.92);--bd:#e2e7de;--mu:#66705f;--sh:0 1px 2px rgba(20,40,20,.06),0 8px 24px rgba(20,40,20,.06)}
+[data-t="dark"]{--nv:rgba(10,18,13,.92);--bd:#1f3027;--cd:#13201a}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;padding-left:16px;padding-right:16px}
+h2{font-size:30px;font-weight:800;letter-spacing:-.6px;margin:20px 0 12px}
+h3{font-size:17px;font-weight:700;letter-spacing:-.2px;margin:2px 0 12px}
+#app>*{animation:rise .28s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.c{border-radius:20px;padding:16px;margin:12px 0;border:1px solid var(--bd);box-shadow:var(--sh)}
+.big{font-size:38px;font-weight:800;letter-spacing:-1px;line-height:1.1;margin:2px 0}
+small,.muted{color:var(--mu)}
+input,select,textarea{min-height:48px;border-radius:14px;padding:12px 14px;border:1px solid transparent;transition:border-color .15s,background .15s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ac);background:var(--cd)}
+button{min-height:48px;border-radius:14px;font-weight:700;letter-spacing:.1px;transition:transform .12s,opacity .15s,background .15s;-webkit-appearance:none}
+button:active{transform:scale(.97);opacity:.85}
+.c>button,.c>.f>button{background:var(--in);color:var(--ac);border:1px solid var(--bd);text-align:left;padding:14px 16px}
+.c>button[onclick="go(1)"],.c>button[onclick="addC()"],.c>button[onclick="logReview()"],.c>.f>button[onclick="saveMeal()"]{background:var(--ac);color:#1a0e00;border:0;text-align:center;box-shadow:0 6px 16px rgba(255,138,31,.28)}
+.ch{border-radius:999px;min-height:40px;padding:8px 16px;font-weight:600;border:1px solid var(--bd);text-align:center}
+.ch.active{background:var(--ac);color:#1a0e00;border-color:var(--ac);outline:0}
+.f>.ch{border-radius:12px}
+.th{border-radius:999px;min-height:36px;padding:6px 14px;font-size:14px;font-weight:600;border:1px solid var(--bd)}
+.bar{height:12px;border-radius:999px}
+.bar i{border-radius:999px;transition:width .5s ease;background:linear-gradient(90deg,#16a34a,#22c55e)}
+.tiles div,.metrics>div{border-radius:16px;border:1px solid var(--bd)}
+.metrics strong{font-size:22px;font-weight:800}
+.metrics>div{min-width:0}.micro>div{padding:10px 6px}.micro strong{font-size:clamp(14px,4.4vw,18px);line-height:1.25}.micro small{display:block;font-size:12px;color:var(--mu);margin-top:2px}.micro small+small{font-size:11px;opacity:.85}
+.r{padding:12px 0;min-height:56px}
+.r small{font-size:13px}
+.x{border-radius:10px;min-height:44px;min-width:44px;font-weight:700}
+.r .x.star{color:var(--ac)}
+.addbar{background:var(--bg);padding:10px 0;border-bottom:0}
+.addbar .f{gap:6px;background:var(--in);padding:4px;border-radius:16px}
+.addbar .f button{background:transparent;border:0;border-radius:12px;font-size:14px;min-height:44px;margin:0;color:var(--mu);font-weight:700}
+.addbar .f button.active{background:var(--ac);color:#1a0e00;box-shadow:0 2px 8px rgba(255,138,31,.3)}
+details.c summary{min-height:44px;font-weight:700}
+.mealhead{font-size:12px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin:18px 0 4px}
+.note{color:var(--mu);font-size:13px;line-height:1.5}
+.n{display:flex;gap:4px;padding:6px 10px calc(6px + env(safe-area-inset-bottom)/2);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);border-top:1px solid var(--bd)}
+.n button{background:transparent;margin:0;min-height:50px;border-radius:14px;font-size:12px;font-weight:700;letter-spacing:.3px;padding:8px 4px;color:var(--mu);position:relative}
+.n .a{color:var(--ac);background:rgba(255,138,31,.12)}
+.n .a::after{content:"";position:absolute;top:5px;left:50%;width:18px;height:3px;margin-left:-9px;border-radius:3px;background:var(--ac)}
+.toast{bottom:92px;border-radius:999px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.rep .ch.active{background:var(--ac);color:#1a0e00}
+[data-t="light"] .c>button,[data-t="light"] .c>.f>button,[data-t="light"] .r .x.star,[data-t="light"] .n .a,[data-t="light"] a{color:#b24a00}
+[data-t="light"] .c>button[onclick="go(1)"],[data-t="light"] .c>button[onclick="addC()"],[data-t="light"] .c>button[onclick="logReview()"],[data-t="light"] .c>.f>button[onclick="saveMeal()"]{color:#1a0e00}
+@media (prefers-reduced-motion:reduce){#app>*{animation:none}html{scroll-behavior:auto}button{transition:none}}
+/* Friendly UX: compact choices, visible next steps, optional detail */
+.addbar .f:first-child{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.addbar .f:first-child button{font-size:13px;padding:10px 3px}
+.addbar label{margin-top:8px}.addbar input{margin-bottom:5px}
+.addbar>.f:last-child{background:none;padding:0}.addbar>.f:last-child button{border:1px solid var(--bd);min-height:44px}
+.help-line{font-size:13px;color:var(--mu);margin:0 0 10px;line-height:1.45}
+.welcome{border-left:3px solid var(--ac)}.welcome p{margin:6px 0 12px}
+.empty{text-align:center;padding:22px 12px}.empty strong{display:block;font-size:18px;margin-bottom:6px}
+.empty p{margin:6px 0 16px;font-size:14px;color:var(--mu)}
+.foodactions{display:flex;gap:4px;align-items:center}.foodactions .x{min-width:48px}
+.foodactions .pick{background:var(--in);color:var(--ac);padding:10px 14px;border:1px solid var(--bd)}
+.quick-list .r:last-child{border:0}.quick-list h3{margin-bottom:2px}
+details.help{padding:8px 0}details.help summary{color:var(--mu);font-size:13px}details.help[open] summary{margin-bottom:8px}
+.portion-step{background:var(--in);border-radius:16px;padding:12px;margin:12px 0}.portion-step p{font-size:16px;font-weight:700;margin:10px 0 0;color:var(--tx)}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--ac);outline-offset:3px}
+.ch,.th{min-height:44px}.bar{height:14px}
+@media(max-width:360px){body{padding-left:12px;padding-right:12px}.addbar .f:first-child button{font-size:12px}}
+/* White + green theme, selected by Rahul */
+:root,[data-t=light]{--bg:#f4f8f5;--cd:#ffffff;--in:#eaf2ec;--nv:#ffffff;--tx:#173b27;--mu:#597163;--bd:#dce9df;--ac:#167b49;--gr:#218c52;--sh:0 3px 20px #194c2310}.g{color:#167b49}.bar i,.col i{background:#218c52}.n .a{background:#e1f2e6}.n{backdrop-filter:none}.active,.ch.active,.rep .ch.active,.addbar .f button.active{background:#167b49;color:#fff}.c>button[onclick="go(1)"],.c>button[onclick="addC()"],.c>button[onclick="logReview()"],.c>.f>button[onclick="saveMeal()"]{color:white;box-shadow:0 4px 12px #167b4922}a,.note a,.star{color:#167b49}.toast{background:#167b49;color:white}
+[data-t=dark]{--bg:#0b1710;--cd:#14251c;--in:#213a2c;--nv:#0b1710;--tx:#edf8f0;--mu:#aac2b0;--bd:#2b4635;--ac:#66d993;--gr:#66d993;--sh:0 3px 20px #0002}
+[data-t=dark] .g{color:#66d993}[data-t=dark] .n .a{background:#203c2a}[data-t=dark] .active,[data-t=dark] .ch.active,[data-t=dark] .rep .ch.active,[data-t=dark] .addbar .f button.active{background:var(--ac);color:#0b2816}
+[data-t=dark] .c>button[onclick="go(1)"],[data-t=dark] .c>button[onclick="addC()"],[data-t=dark] .c>button[onclick="logReview()"],[data-t=dark] .c>.f>button[onclick="saveMeal()"]{background:var(--ac);color:#0b2816;box-shadow:none}
+[data-t=light] .c>button,[data-t=light] .c>.f>button,[data-t=light] .r .x.star,[data-t=light] .n .a,[data-t=light] a{color:#167b49}
+[data-t=light] .c>button[onclick="go(1)"],[data-t=light] .c>button[onclick="addC()"],[data-t=light] .c>button[onclick="logReview()"],[data-t=light] .c>.f>button[onclick="saveMeal()"]{color:#fff}
+[data-t=dark] a,[data-t=dark] .note a,[data-t=dark] .star{color:#66d993}.bar i.o{background:#dc5346}
+[data-t=light] .rep .f>button.ch.active{color:#fff}
+
+.mealcard h3{margin:0;font-size:17px}.mealcard h3 small{display:block;font-weight:400;margin-top:4px}.mealcard .mealhead{margin-top:0;gap:8px}.meal-save{font-size:13px;min-height:44px}.swipe-wrap{position:relative;overflow:hidden;border-radius:10px;margin:4px 0;background:#b42318}.swipe-row{position:relative;background:var(--cd);margin:0;min-height:64px;touch-action:pan-y;transition:transform .15s ease}.swipe-row span{min-width:0;overflow-wrap:anywhere;flex:1}.swipe-delete{position:absolute;right:0;top:0;bottom:0;width:92px;margin:0;background:#b42318;color:#fff;border-radius:0}.swipe-row.revealed .visible-delete{visibility:hidden}.visible-delete{color:var(--tx);min-width:65px;min-height:44px}.undo-bar{position:fixed;bottom:calc(74px + env(safe-area-inset-bottom));left:14px;right:14px;z-index:40;background:var(--cd);color:var(--tx);border:1px solid var(--bd);box-shadow:0 3px 16px #0003;border-radius:12px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}.undo-bar button{width:auto;margin:0;min-width:80px;min-height:44px}@media(prefers-reduced-motion:reduce){.swipe-row{transition:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav class="n" aria-label="Main">
+<button onclick="go(0)" id="n0">Today</button
+><button onclick="go(1)" id="n1">Add</button
+><button onclick="go(2)" id="n2">History</button
+><button onclick="go(3)" id="n3">More</button>
+</nav>
+<div id="toast" role="status"></div>
+<script src="1-indian-foods.js"></script>
+<script>var FOODS=[["Roti / chapati (1)",
+100],
+["Plain Paratha (1 standard recipe serving)",
+166,
+{
+p:2.8,
+c:17.1,
+f:9.4}
+],
+["Aloo Paratha (1 standard recipe serving)",
+191,
+{
+p:3.5,
+c:22.3,
+f:9.5}
+],
+["Naan (1 standard recipe serving)",
+152,
+{
+p:4.3,
+c:27.5,
+f:2.7}
+],
+["Steamed rice (1 bowl)",
+200],
+["Jeera rice (1 bowl)",
+230],
+["Mixed Dal (1 standard recipe serving)",
+184,
+{
+p:7.5,
+c:17.3,
+f:9.2}
+],
+["Rajma (1 bowl)",
+210],
+["Chole (1 standard recipe serving)",
+196,
+{
+p:7.3,
+c:24,
+f:8.2}
+],
+["Paneer Butter Masala (1 standard recipe serving)",
+228,
+{
+p:11,
+c:15.2,
+f:13.8}
+],
+["Palak Paneer (1 standard recipe serving)",
+230,
+{
+p:11.9,
+c:13.1,
+f:14.1}
+],
+["Mixed veg (1 bowl)",
+130],
+["Aloo sabzi (1 bowl)",
+160],
+["Chicken curry (1 bowl)",
+300],
+["Egg (boiled, 1)",
+78],
+["Omelette (2 eggs)",
+190],
+["Idli (1 standard recipe serving)",
+34,
+{
+p:1.2,
+c:7.1,
+f:.1}
+],
+["Dosa plain (1)",
+130],
+["Masala Dosa (1 standard recipe serving)",
+345,
+{
+p:6.9,
+c:41,
+f:16.4}
+],
+["Sambar (1 standard recipe serving)",
+249,
+{
+p:8.6,
+c:27.2,
+f:11.3}
+],
+["Upma (1 standard recipe serving)",
+157,
+{
+p:3.5,
+c:17.3,
+f:8}
+],
+["Poha (1 standard recipe serving)",
+161,
+{
+p:3.3,
+c:19.1,
+f:7.7}
+],
+["Samosa (1)",
+260],
+["Pakora (4 pcs)",
+200],
+["Chole bhature (1 plate)",
+450],
+["Pav bhaji (1 plate)",
+400],
+["Vada pav (1)",
+290],
+["Vegetable Biryani (1 standard recipe serving)",
+527,
+{
+p:9.5,
+c:56,
+f:28.7}
+],
+["Chicken biryani (1 plate)",
+450],
+["Maggi (1 pack)",
+350],
+["Curd / dahi (1 bowl)",
+100],
+["Lassi (1 glass)",
+180],
+["Chaas (1 glass)",
+50],
+["Chai with sugar (1 cup)",
+70],
+["Milk (1 glass)",
+150],
+["Banana (1)",
+105],
+["Apple (1)",
+95],
+["Gulab jamun (1)",
+150],
+["Jalebi (50g)",
+180],
+["Rasgulla (1)",
+130],
+["Ladoo (1)",
+190],
+["Biscuits (2)",
+90],
+["Bread slice (1)",
+70],
+["Peanut butter (1 tbsp)",
+95],
+["Momos (6 pcs)",
+250],
+["Pizza slice (1)",
+285],
+["Burger (1)",
+350],
+["French fries (medium)",
+365],
+["Cold drink (1 can)",
+140],
+["Dal Paratha (1, recipe serving)",
+206,
+{
+p:5.2,
+c:23,
+f:10}
+],
+["Gobi Paratha (1, recipe serving)",
+181,
+{
+p:3.8,
+c:19.2,
+f:9.6}
+],
+["Keema Paratha (1, recipe serving)",
+238,
+{
+p:9.4,
+c:18.4,
+f:13.9}
+],
+["Khakhra (1, recipe serving)",
+135,
+{
+p:3.6,
+c:20.9,
+f:4}
+],
+["Makki ki Roti (1, recipe serving)",
+224,
+{
+p:3,
+c:20.6,
+f:14.3}
+],
+["Matar Paratha (1, recipe serving)",
+207,
+{
+p:6.1,
+c:23.3,
+f:9.5}
+],
+["Methi Paratha (1, recipe serving)",
+135,
+{
+p:3.9,
+c:20.2,
+f:4}
+],
+["Methi Thepla (1, recipe serving)",
+126,
+{
+p:3.3,
+c:15.1,
+f:5.8}
+],
+["Mooli Paratha (1, recipe serving)",
+184,
+{
+p:3.3,
+c:20.5,
+f:9.5}
+],
+["Onion Paratha (1, recipe serving)",
+146,
+{
+p:3.3,
+c:20.2,
+f:5.6}
+],
+["Paneer Paratha (1, recipe serving)",
+224,
+{
+p:6.8,
+c:20.7,
+f:12.4}
+],
+["Puran Poli (1, recipe serving)",
+196,
+{
+p:5.1,
+c:33.4,
+f:4.2}
+],
+["Curd Rice (1 plate, recipe serving)",
+423,
+{
+p:12.4,
+c:71.2,
+f:9.3}
+],
+["Egg Fried Rice (1 plate, recipe serving)",
+424,
+{
+p:14.2,
+c:47.1,
+f:19.1}
+],
+["Khichdi (1 bowl, recipe serving)",
+327,
+{
+p:9.9,
+c:57.6,
+f:5.8}
+],
+["Lemon Rice (1 plate, recipe serving)",
+563,
+{
+p:13.6,
+c:69,
+f:25.1}
+],
+["Matar Pulao (1 plate, recipe serving)",
+514,
+{
+p:18.4,
+c:86.9,
+f:9}
+],
+["Mutton Biryani (1 plate, recipe serving)",
+396,
+{
+p:15.3,
+c:46.7,
+f:16.1}
+],
+["Plain Pulao (1 plate, recipe serving)",
+432,
+{
+p:7.2,
+c:67.2,
+f:14.2}
+],
+["Sabudana Khichdi (1 bowl, recipe serving)",
+508,
+{
+p:7.4,
+c:60.8,
+f:27.4}
+],
+["Tamarind Rice (1 plate, recipe serving)",
+477,
+{
+p:9.5,
+c:83.2,
+f:10.9}
+],
+["Vangi Bath (1 plate, recipe serving)",
+538,
+{
+p:15.4,
+c:92.4,
+f:10.7}
+],
+["Vegetable Pulao (1 plate, recipe serving)",
+496,
+{
+p:11.9,
+c:76.7,
+f:14.6}
+],
+["Besan Chilla (1, recipe serving)",
+71,
+{
+p:4.1,
+c:11,
+f:1.5}
+],
+["Cornflakes With Milk (1 bowl, recipe serving)",
+326,
+{
+p:10,
+c:41.6,
+f:14.2}
+],
+["Dhokla (1 piece, recipe serving)",
+87,
+{
+p:5.4,
+c:12.3,
+f:2.1}
+],
+["Egg Bhurji (1 bowl, recipe serving)",
+130,
+{
+p:7.7,
+c:4.7,
+f:8.8}
+],
+["Jowar Dosa (1, recipe serving)",
+97,
+{
+p:2.8,
+c:13.4,
+f:3.4}
+],
+["Meetha Dalia (1 bowl, recipe serving)",
+329,
+{
+p:10.6,
+c:35.8,
+f:16.4}
+],
+["Namkeen Dalia (1 plate, recipe serving)",
+346,
+{
+p:9.7,
+c:57.8,
+f:9.4}
+],
+["Oats Porridge (1 bowl, recipe serving)",
+290,
+{
+p:10.3,
+c:34.9,
+f:12.8}
+],
+["Pesarattu (1, recipe serving)",
+76,
+{
+p:3.3,
+c:8.5,
+f:3.1}
+],
+["Puttu (1, recipe serving)",
+344,
+{
+p:5.3,
+c:49.7,
+f:13.1}
+],
+["Rava Dosa (1, recipe serving)",
+167,
+{
+p:5.4,
+c:24.1,
+f:5.2}
+],
+["Rava Idli (1, recipe serving)",
+61,
+{
+p:2.8,
+c:10,
+f:1}
+],
+["Semiya Upma (1 bowl, recipe serving)",
+158,
+{
+p:3.3,
+c:17.9,
+f:7.9}
+],
+["Stuffed Moong Dal Chilla (1, recipe serving)",
+352,
+{
+p:15.9,
+c:44.2,
+f:11.6}
+],
+["Uttapam (1, recipe serving)",
+174,
+{
+p:4.2,
+c:24.7,
+f:6.1}
+],
+["Vegetable Upma (1 plate, recipe serving)",
+345,
+{
+p:11.1,
+c:38.8,
+f:15.6}
+],
+["Chana Dal (1 bowl, recipe serving)",
+291,
+{
+p:12.1,
+c:29.2,
+f:13.5}
+],
+["Dal Dhokli (1 bowl, recipe serving)",
+231,
+{
+p:10,
+c:28.8,
+f:8.3}
+],
+["Dal Makhani (1 bowl, recipe serving)",
+262,
+{
+p:11.7,
+c:28.1,
+f:10.8}
+],
+["Dal Palak (1 bowl, recipe serving)",
+213,
+{
+p:8.3,
+c:19.2,
+f:11.1}
+],
+["Dalma (1 bowl, recipe serving)",
+314,
+{
+p:12.9,
+c:39.7,
+f:12.1}
+],
+["Kala Chana Curry (1 bowl, recipe serving)",
+169,
+{
+p:6.8,
+c:16.9,
+f:7.9}
+],
+["Kulthi Dal (1 bowl, recipe serving)",
+201,
+{
+p:10.5,
+c:29.6,
+f:4.1}
+],
+["Lauki Chana Dal (1 bowl, recipe serving)",
+204,
+{
+p:7.8,
+c:19.8,
+f:10}
+],
+["Lobia Curry (1 bowl, recipe serving)",
+179,
+{
+p:7.3,
+c:21.4,
+f:6.7}
+],
+["Mixed Dal (1 bowl, recipe serving)",
+184,
+{
+p:7.5,
+c:17.3,
+f:9.2}
+],
+["Moong Dal (1 bowl, recipe serving)",
+139,
+{
+p:7.4,
+c:16.4,
+f:4.7}
+],
+["Panchmel Dal (1 bowl, recipe serving)",
+335,
+{
+p:13.9,
+c:32.2,
+f:16.1}
+],
+["Rasam (1 bowl, recipe serving)",
+104,
+{
+p:4.4,
+c:13.1,
+f:3.4}
+],
+["Sabut Masoor Dal (1 bowl, recipe serving)",
+185,
+{
+p:7.8,
+c:18.4,
+f:8.6}
+],
+["Sabut Moong Dal (1 bowl, recipe serving)",
+184,
+{
+p:7.7,
+c:17.9,
+f:8.8}
+],
+["Soyabean Curry (1 bowl, recipe serving)",
+196,
+{
+p:12.5,
+c:8.1,
+f:12.2}
+],
+["Urad Dal (1 bowl, recipe serving)",
+182,
+{
+p:7.4,
+c:17.3,
+f:8.8}
+],
+["Aloo Gobi (1 bowl, recipe serving)",
+187,
+{
+p:3.3,
+c:10.5,
+f:14.3}
+],
+["Aloo Matar (1 bowl, recipe serving)",
+280,
+{
+p:9.7,
+c:27,
+f:14.2}
+],
+["Aloo Methi (1 bowl, recipe serving)",
+276,
+{
+p:4.6,
+c:17.3,
+f:20.5}
+],
+["Aloo Palak (1 bowl, recipe serving)",
+192,
+{
+p:5.5,
+c:19.8,
+f:9.4}
+],
+["Baingan Bharta (1 bowl, recipe serving)",
+212,
+{
+p:4.5,
+c:14.3,
+f:14.6}
+],
+["Beans Thoran (1 bowl, recipe serving)",
+197,
+{
+p:3.9,
+c:6.6,
+f:17}
+],
+["Bharwa Bhindi (1 bowl, recipe serving)",
+104,
+{
+p:2.3,
+c:4.3,
+f:8.5}
+],
+["Bharwa Karela (1 bowl, recipe serving)",
+231,
+{
+p:1.4,
+c:2.6,
+f:23.7}
+],
+["Bhindi Sabzi (1 bowl, recipe serving)",
+184,
+{
+p:3,
+c:7.5,
+f:15.4}
+],
+["Cabbage Matar (1 bowl, recipe serving)",
+106,
+{
+p:5.4,
+c:10.4,
+f:4.4}
+],
+["Dahi Aloo (1 bowl, recipe serving)",
+227,
+{
+p:5.9,
+c:27.1,
+f:10.3}
+],
+["Kadai Paneer (1 bowl, recipe serving)",
+344,
+{
+p:13.8,
+c:23.4,
+f:21.7}
+],
+["Masala Arbi (1 bowl, recipe serving)",
+215,
+{
+p:3.5,
+c:18.8,
+f:13.8}
+],
+["Matar Mushroom (1 bowl, recipe serving)",
+259,
+{
+p:10.7,
+c:20.6,
+f:14.3}
+],
+["Matar Paneer (1 bowl, recipe serving)",
+374,
+{
+p:18.3,
+c:25.8,
+f:21.5}
+],
+["Paneer Butter Masala (1 bowl, recipe serving)",
+228,
+{
+p:11,
+c:15.2,
+f:13.8}
+],
+["Paneer Tikka (1 plate, recipe serving)",
+412,
+{
+p:22.4,
+c:35,
+f:19.7}
+],
+["Sarson ka Saag (1 bowl, recipe serving)",
+124,
+{
+p:4.3,
+c:7.5,
+f:8.3}
+],
+["Sookhe Aloo (1 bowl, recipe serving)",
+109,
+{
+p:1.7,
+c:15.2,
+f:4.4}
+],
+["Soya Chunks Curry (1 bowl, recipe serving)",
+184,
+{
+p:6.8,
+c:13,
+f:11.4}
+],
+["Afghani Chicken (1 plate of Afghani chicken, recipe serving)",
+287,
+{
+p:29.7,
+c:3.7,
+f:17.2}
+],
+["Bengali Fish Curry (1 bowl of Bengali fish curry, recipe serving)",
+340,
+{
+p:22.5,
+c:13.7,
+f:21.8}
+],
+["Boti Kebab (1, recipe serving)",
+73,
+{
+p:5,
+c:1.7,
+f:5.1}
+],
+["Butter Chicken (1 serving of, recipe serving)",
+377,
+{
+p:30.1,
+c:10.3,
+f:23.9}
+],
+["Chicken Korma (1 bowl, recipe serving)",
+513,
+{
+p:34.1,
+c:18.8,
+f:33.6}
+],
+["Egg Curry (1 bowl, recipe serving)",
+178,
+{
+p:8.2,
+c:6.1,
+f:13.4}
+],
+["Fish Curry (1 bowl, recipe serving)",
+282,
+{
+p:22.3,
+c:9.6,
+f:17}
+],
+["Fish Tikka (1 piece, recipe serving)",
+42,
+{
+p:5.7,
+c:1.4,
+f:1.5}
+],
+["Keema Matar (1 bowl, recipe serving)",
+457,
+{
+p:29,
+c:21.5,
+f:28}
+],
+["Mutton Seekh Kebab (1, recipe serving)",
+60,
+{
+p:5.1,
+c:1.4,
+f:3.8}
+],
+["Prawn Curry (1 bowl, recipe serving)",
+313,
+{
+p:24.4,
+c:8.9,
+f:19.8}
+],
+["Rogan Josh (1 bowl, recipe serving)",
+329,
+{
+p:22.6,
+c:11.6,
+f:21.3}
+],
+["Tandoori Fish (1 piece, recipe serving)",
+224,
+{
+p:26.1,
+c:5.5,
+f:10.8}
+],
+["Coconut Chutney (1 tablespoon, recipe serving)",
+67,
+{
+p:.9,
+c:2.1,
+f:6.3}
+],
+["Cucumber Raita (1 bowl, recipe serving)",
+90,
+{
+p:6.2,
+c:9.7,
+f:3.2}
+],
+["Green Chutney (1 tablespoon, recipe serving)",
+27,
+{
+p:.7,
+c:5.6,
+f:.1}
+],
+["Lauki Raita (1 bowl, recipe serving)",
+86,
+{
+p:6.1,
+c:8.8,
+f:3.2}
+],
+["Mint Raita (1 bowl, recipe serving)",
+81,
+{
+p:5.9,
+c:8,
+f:3.1}
+],
+["Onion Tomato Raita (1 bowl, recipe serving)",
+105,
+{
+p:6.6,
+c:12.6,
+f:3.3}
+],
+["Peanut Chutney (1 tablespoon, recipe serving)",
+54,
+{
+p:2.5,
+c:2.1,
+f:4}
+],
+["Sprouts Chaat (1 plate, recipe serving)",
+83,
+{
+p:3.5,
+c:15.4,
+f:.8}
+],
+["Sprouts Salad (1 bowl, recipe serving)",
+77,
+{
+p:4.7,
+c:11.2,
+f:1.5}
+],
+["Atta Ladoo (1, recipe serving)",
+142,
+{
+p:3.4,
+c:16.1,
+f:7}
+],
+["Besan Barfi (1 piece, recipe serving)",
+162,
+{
+p:4.3,
+c:17.8,
+f:8.6}
+],
+["Besan Ladoo (1, recipe serving)",
+168,
+{
+p:3.1,
+c:22.1,
+f:8}
+],
+["Coconut Barfi (1 piece, recipe serving)",
+265,
+{
+p:5,
+c:18.2,
+f:19.7}
+],
+["Gajar ka Halwa (1 bowl, recipe serving)",
+290,
+{
+p:5.2,
+c:31.1,
+f:16.3}
+],
+["Kesari Bath (1 bowl, recipe serving)",
+432,
+{
+p:4.2,
+c:55.5,
+f:22.2}
+],
+["Kulfi (1, recipe serving)",
+266,
+{
+p:8.7,
+c:30.5,
+f:12.7}
+],
+["Makhana Kheer (1 bowl, recipe serving)",
+300,
+{
+p:9.2,
+c:35.8,
+f:13.9}
+],
+["Milk Barfi (1 piece, recipe serving)",
+178,
+{
+p:4.3,
+c:13.5,
+f:12.2}
+],
+["Moong Dal Halwa (1 bowl, recipe serving)",
+334,
+{
+p:8,
+c:38.4,
+f:16.9}
+],
+["Peanut Chikki (1 piece, recipe serving)",
+79,
+{
+p:1.7,
+c:11.7,
+f:2.7}
+],
+["Phirni (1 bowl, recipe serving)",
+337,
+{
+p:10.1,
+c:46.7,
+f:12.6}
+],
+["Rabri (1 bowl, recipe serving)",
+226,
+{
+p:7.7,
+c:23.2,
+f:11.8}
+],
+["Rajgira Ladoo (1, recipe serving)",
+199,
+{
+p:4.4,
+c:22.5,
+f:10}
+],
+["Rava Ladoo (1, recipe serving)",
+169,
+{
+p:2.1,
+c:18.5,
+f:9.8}
+],
+["Rice Kheer (1 bowl, recipe serving)",
+301,
+{
+p:9.2,
+c:40.3,
+f:11.9}
+],
+["Seviyan Kheer (1 bowl, recipe serving)",
+279,
+{
+p:7.8,
+c:36.9,
+f:11.6}
+],
+["Shrikhand (1 bowl, recipe serving)",
+327,
+{
+p:16.1,
+c:48.8,
+f:8.8}
+],
+["Suji Halwa (1 bowl, recipe serving)",
+360,
+{
+p:3.5,
+c:39.4,
+f:21.4}
+],
+["Til Ladoo (1, recipe serving)",
+109,
+{
+p:2.9,
+c:12,
+f:5.4}
+],
+["Aam Panna (1 glass, recipe serving)",
+96,
+{
+p:.4,
+c:24.3,
+f:.1}
+],
+["Banana Milkshake (1 glass, recipe serving)",
+226,
+{
+p:6.4,
+c:31.6,
+f:8.2}
+],
+["Coffee (1 cup, recipe serving)",
+104,
+{
+p:2.9,
+c:16.4,
+f:3.4}
+],
+["Cold Coffee (1 glass, recipe serving)",
+207,
+{
+p:4.8,
+c:30,
+f:8.2}
+],
+["Jal Jeera (1 glass, recipe serving)",
+42,
+{
+p:.6,
+c:9.4,
+f:.4}
+],
+["Kashmiri Kahwa (1 cup of Kashmiri kahwa, recipe serving)",
+64,
+{
+p:.4,
+c:13.4,
+f:1.3}
+],
+["Kesar Milk (1 glass, recipe serving)",
+268,
+{
+p:8.3,
+c:33.2,
+f:12}
+],
+["Mango Milkshake (1 glass, recipe serving)",
+202,
+{
+p:6.1,
+c:25.7,
+f:8.3}
+],
+["Nimbu Pani (1 glass, recipe serving)",
+73,
+{
+p:.1,
+c:19.1,
+f:0}
+],
+["Salted Lassi (1 glass, recipe serving)",
+80,
+{
+p:5.7,
+c:7.9,
+f:3}
+],
+["Sattu Drink (1 glass, recipe serving)",
+125,
+{
+p:3,
+c:27.5,
+f:.7}
+],
+["Thandai (1 glass, recipe serving)",
+256,
+{
+p:9.1,
+c:23.1,
+f:14.9}
+],
+["Chicken Chowmein (1 plate, recipe serving)",
+521,
+{
+p:21.8,
+c:45.8,
+f:28.4}
+],
+["Paneer Kathi Roll (1, recipe serving)",
+424,
+{
+p:10.3,
+c:29.8,
+f:29}
+],
+["Vegetable Chowmein (1 plate, recipe serving)",
+389,
+{
+p:9.2,
+c:46.3,
+f:19}
+],
+["Vegetable Puff (1, recipe serving)",
+200],
+["Aloo Bonda (1, recipe serving)",
+100],
+["Dahi Vada (1, recipe serving)",
+90],
+["Fish Fry (1 piece, recipe serving)",
+95],
+["Masala Vada (1, recipe serving)",
+75],
+["Matar Kachori (1, recipe serving)",
+190],
+["Medu Vada (1, recipe serving)",
+70],
+["Sabudana Vada (1, recipe serving)",
+105],
+["Parle-G (30g label reference)",
+140,
+{
+p:2,
+c:23,
+f:4}
+],
+["Marie Gold (15g label reference)",
+67,
+{
+p:1.2,
+c:11.9,
+f:1.6}
+],
+["Good Day butter (100g label reference)",
+494,
+{
+p:7,
+c:67,
+f:22}
+],
+["Hide & Seek (100g label reference)",
+479,
+{
+p:5.9,
+c:73.4,
+f:18}
+],
+["Oreo (100g label reference)",
+483,
+{
+p:5.2,
+c:71.9,
+f:19.6}
+],
+["Bourbon (100g label reference)",
+493,
+{
+p:5,
+c:72.7,
+f:20.3}
+],
+["Jim Jam (12.5g label reference)",
+60,
+{
+p:.6,
+c:9.1,
+f:2.4}
+],
+["Little Hearts (33g label reference)",
+160,
+{
+p:2,
+c:23,
+f:7}
+],
+["Monaco (14.4g label reference)",
+71,
+{
+p:1.1,
+c:9.9,
+f:3}
+],
+["Krackjack (15.8g label reference)",
+77,
+{
+p:1.1,
+c:11.1,
+f:3.1}
+],
+["Milk Bikis (100g label reference)",
+454,
+{
+p:7,
+c:75,
+f:14}
+],
+["Rusk (2 pieces)",
+74],
+["Dark Fantasy Choco Fills (1 cookie)",
+58,
+{
+p:.8,
+c:7,
+f:3.1}
+],
+["Mom's Magic cashew almond (20g label reference)",
+100,
+{
+p:1.6,
+c:13.4,
+f:4.4}
+],
+["Aloo bhujia (30g)",
+169],
+["Bhujia sev (30g)",
+183,
+{
+p:4.5,
+c:11.3,
+f:13.5}
+],
+["Moong dal namkeen (30g)",
+143],
+["Khatta meetha (30g)",
+159,
+{
+p:2.8,
+c:17.2,
+f:8.8}
+],
+["Navratan mixture (30g)",
+181],
+["Chitale Patal Poha Chivda (20g label reference)",
+87,
+{
+p:1.6,
+c:13.4,
+f:3.1}
+],
+["Lays Magic Masala (40g label reference)",
+212,
+{
+p:2.6,
+c:20.8,
+f:13.2}
+],
+["Kurkure Masala Munch (50g label reference)",
+279,
+{
+p:3.2,
+c:27.6,
+f:17.4}
+],
+["Bingo Mad Angles (20g)",
+105,
+{
+p:1.1,
+c:12.2,
+f:5.9}
+],
+["Balaji wafers (30g)",
+154,
+{
+p:2.1,
+c:19,
+f:7.5}
+],
+["KitKat 2-finger (1 pack)",
+97],
+["Dairy Milk Silk (1 bar, 60g)",
+319,
+{
+p:4.5,
+c:35.1,
+f:18}
+],
+["Dairy Milk (13.2g label reference)",
+70,
+{
+p:.7,
+c:8.5,
+f:3.7}
+],
+["Munch (8.7g label reference)",
+38,
+{
+p:.5,
+c:4.3,
+f:2}
+],
+["5 Star (18g label reference)",
+80,
+{
+p:.6,
+c:13.1,
+f:2.9}
+],
+["Perk (100g label reference)",
+512,
+{
+p:3.7,
+c:67.9,
+f:25.4}
+],
+["Snickers (45g label reference)",
+221,
+{
+p:4,
+c:25.8,
+f:11.3}
+]],
+FOOD_META={
+38:{
+grams:50,
+status:"Needs portion / recipe check",
+note:"Unverified original estimate. App omits gram weight and/or recipe; comparison assumes this reference portion. Do not auto-correct. Reference weights must not be assumed. Use a label, weighed recipe or exact USDA match."}
+,
+49:{
+source:"https://nnwa.in/foods/dishes/dal-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5,
+sugar:1.1}
+}
+,
+50:{
+source:"https://nnwa.in/foods/dishes/gobi-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.8,
+sugar:1.2}
+}
+,
+51:{
+source:"https://nnwa.in/foods/dishes/keema-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.4,
+sugar:1}
+}
+,
+52:{
+source:"https://nnwa.in/foods/dishes/khakhra/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.1,
+sugar:.7}
+}
+,
+53:{
+source:"https://nnwa.in/foods/dishes/makki-ki-roti/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.4,
+sugar:.6}
+}
+,
+54:{
+source:"https://nnwa.in/foods/dishes/matar-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.1,
+sugar:1.4}
+}
+,
+55:{
+source:"https://nnwa.in/foods/dishes/methi-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.6,
+sugar:2.2}
+}
+,
+56:{
+source:"https://nnwa.in/foods/dishes/methi-thepla/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.8,
+sugar:1.1}
+}
+,
+57:{
+source:"https://nnwa.in/foods/dishes/mooli-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.3,
+sugar:1.3}
+}
+,
+58:{
+source:"https://nnwa.in/foods/dishes/onion-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.9,
+sugar:2.1}
+}
+,
+59:{
+source:"https://nnwa.in/foods/dishes/paneer-paratha/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.4,
+sugar:3.2}
+}
+,
+60:{
+source:"https://nnwa.in/foods/dishes/puran-poli/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.4,
+sugar:13.2}
+}
+,
+61:{
+source:"https://nnwa.in/foods/dishes/curd-rice/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.6,
+sugar:8.5}
+}
+,
+62:{
+source:"https://nnwa.in/foods/dishes/egg-fried-rice/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:8.1,
+sugar:5.2}
+}
+,
+63:{
+source:"https://nnwa.in/foods/dishes/khichdi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.9,
+sugar:.7}
+}
+,
+64:{
+source:"https://nnwa.in/foods/dishes/lemon-rice/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:8.1,
+sugar:2.5}
+}
+,
+65:{
+source:"https://nnwa.in/foods/dishes/matar-pulao/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:15.2,
+sugar:6.2}
+}
+,
+66:{
+source:"https://nnwa.in/foods/dishes/mutton-biryani/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5,
+sugar:5}
+}
+,
+67:{
+source:"https://nnwa.in/foods/dishes/plain-pulao/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.2,
+sugar:3.5}
+}
+,
+68:{
+source:"https://nnwa.in/foods/dishes/sabudana-khichdi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.9,
+sugar:2.8}
+}
+,
+69:{
+source:"https://nnwa.in/foods/dishes/tamarind-rice/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.5,
+sugar:14.9}
+}
+,
+70:{
+source:"https://nnwa.in/foods/dishes/vangi-bath/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:12.9,
+sugar:12.7}
+}
+,
+71:{
+source:"https://nnwa.in/foods/dishes/vegetable-pulao/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:11.7,
+sugar:5.9}
+}
+,
+72:{
+source:"https://nnwa.in/foods/dishes/besan-chilla/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.2,
+sugar:1}
+}
+,
+73:{
+source:"https://nnwa.in/foods/dishes/cornflakes-with-milk/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.2,
+sugar:27.7}
+}
+,
+74:{
+source:"https://nnwa.in/foods/dishes/dhokla/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2,
+sugar:1.9}
+}
+,
+75:{
+source:"https://nnwa.in/foods/dishes/egg-bhurji/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.9,
+sugar:2.5}
+}
+,
+76:{
+source:"https://nnwa.in/foods/dishes/jowar-dosa/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.8,
+sugar:.2}
+}
+,
+77:{
+source:"https://nnwa.in/foods/dishes/meetha-dalia/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:2.5,
+sugar:20.6}
+}
+,
+78:{
+source:"https://nnwa.in/foods/dishes/namkeen-dalia/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:10,
+sugar:1}
+}
+,
+79:{
+source:"https://nnwa.in/foods/dishes/oats-porridge/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.6,
+sugar:20.7}
+}
+,
+80:{
+source:"https://nnwa.in/foods/dishes/pesarattu/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.6,
+sugar:.8}
+}
+,
+81:{
+source:"https://nnwa.in/foods/dishes/puttu/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.2,
+sugar:1.4}
+}
+,
+82:{
+source:"https://nnwa.in/foods/dishes/rava-dosa/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3,
+sugar:3.2}
+}
+,
+83:{
+source:"https://nnwa.in/foods/dishes/rava-idli/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:1.7,
+sugar:1}
+}
+,
+84:{
+source:"https://nnwa.in/foods/dishes/semiya-upma/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.4,
+sugar:1.5}
+}
+,
+85:{
+source:"https://nnwa.in/foods/dishes/moong-dal-chilla/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:9.7,
+sugar:2.5}
+}
+,
+86:{
+source:"https://nnwa.in/foods/dishes/uttapam/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3,
+sugar:1}
+}
+,
+87:{
+source:"https://nnwa.in/foods/dishes/vegetable-upma/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:9.9,
+sugar:3.3}
+}
+,
+88:{
+source:"https://nnwa.in/foods/dishes/chana-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:10.9,
+sugar:2.9}
+}
+,
+89:{
+source:"https://nnwa.in/foods/dishes/dal-dhokli/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.3,
+sugar:3.8}
+}
+,
+90:{
+source:"https://nnwa.in/foods/dishes/dal-makhani/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:8,
+sugar:2.8}
+}
+,
+91:{
+source:"https://nnwa.in/foods/dishes/dal-palak/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.2,
+sugar:.9}
+}
+,
+92:{
+source:"https://nnwa.in/foods/dishes/dalma/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.7,
+sugar:8.2}
+}
+,
+93:{
+source:"https://nnwa.in/foods/dishes/kala-chana-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:9.6,
+sugar:2.8}
+}
+,
+94:{
+source:"https://nnwa.in/foods/dishes/kulthi-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.5,
+sugar:2.6}
+}
+,
+95:{
+source:"https://nnwa.in/foods/dishes/lauki-chana-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:7.6,
+sugar:2.9}
+}
+,
+96:{
+source:"https://nnwa.in/foods/dishes/lobia-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.5,
+sugar:3}
+}
+,
+97:{
+source:"https://nnwa.in/foods/dishes/mixed-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.8,
+sugar:1}
+}
+,
+98:{
+source:"https://nnwa.in/foods/dishes/moong-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.2,
+sugar:.3}
+}
+,
+99:{
+source:"https://nnwa.in/foods/dishes/panchmel-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:9.6,
+sugar:2.2}
+}
+,
+100:{
+source:"https://nnwa.in/foods/dishes/rasam/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.2,
+sugar:3.2}
+}
+,
+101:{
+source:"https://nnwa.in/foods/dishes/sabut-masoor-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.8,
+sugar:2.3}
+}
+,
+102:{
+source:"https://nnwa.in/foods/dishes/sabut-moong-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.9,
+sugar:2}
+}
+,
+103:{
+source:"https://nnwa.in/foods/dishes/soyabean-curry/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:8.8,
+sugar:3.2}
+}
+,
+104:{
+source:"https://nnwa.in/foods/dishes/urad-dal/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.5,
+sugar:1}
+}
+,
+105:{
+source:"https://nnwa.in/foods/dishes/aloo-gobi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.3,
+sugar:.8}
+}
+,
+106:{
+source:"https://nnwa.in/foods/dishes/aloo-matar/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:10,
+sugar:5.2}
+}
+,
+107:{
+source:"https://nnwa.in/foods/dishes/aloo-methi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6,
+sugar:1.1}
+}
+,
+108:{
+source:"https://nnwa.in/foods/dishes/aloo-palak/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.8,
+sugar:3.1}
+}
+,
+109:{
+source:"https://nnwa.in/foods/dishes/baingan-bharta/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:10.7,
+sugar:5.9}
+}
+,
+110:{
+source:"https://nnwa.in/foods/dishes/beans-thoran/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:8.4,
+sugar:3.1}
+}
+,
+111:{
+source:"https://nnwa.in/foods/dishes/bharwa-bhindi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.6,
+sugar:.5}
+}
+,
+112:{
+source:"https://nnwa.in/foods/dishes/bharwa-karela/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:3.2,
+sugar:.1}
+}
+,
+113:{
+source:"https://nnwa.in/foods/dishes/bhindi-sabzi/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:5.9,
+sugar:2.4}
+}
+,
+114:{
+source:"https://nnwa.in/foods/dishes/cabbage-matar/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.6,
+sugar:1.6}
+}
+,
+115:{
+source:"https://nnwa.in/foods/dishes/dahi-aloo/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:4.5,
+sugar:6.9}
+}
+,
+116:{
+source:"https://nnwa.in/foods/dishes/kadai-paneer/",
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",
+micro:{
+fiber:6.6,
+sugar:17.6}
+}
+,
+117:{
+source:"https://nnwa.in/foods/dishes/masala-arbi/",
+note:"NNWA / Indian Nutrient Databank standar

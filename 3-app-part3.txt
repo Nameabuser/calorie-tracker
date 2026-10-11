@@ -1,0 +1,761 @@
+nt"}
+,
+width:{
+ideal:1280}
+,
+height:{
+ideal:720}
+}
+,
+audio:!1}
+);
+if(token!==scanSession)return void media.getTracks().forEach(t=>t.stop());
+stream=media;
+var v=document.getElementById("cam");
+if(!v)return void stopScan();
+v.playsInline=!0,
+v.muted=!0,
+v.autoplay=!0,
+v.srcObject=media,
+v.hidden=!1;
+await v.play();
+if(token!==scanSession)return void stopScan();
+var z=await loadScanner();
+if(token!==scanSession)return void stopScan();
+scanning=!0,
+scanStarting=!1,
+btn.textContent="Stop scan",
+scanMessage("Hold the barcode steady, with all bars in view and good light. Move the phone back if it is blurry.");
+var controls=await newScanner(z).decodeFromStream(media,
+v,
+(result,
+error,
+controls)=>{
+token===scanSession?result&&(controls.stop(),
+scannedCode(result.getText())):controls.stop()}
+);
+token!==scanSession?controls.stop():scanControls=controls}
+catch(e){
+if(token!==scanSession)return;
+stopScan(),
+scanMessage("NotAllowedError"===e.name||"SecurityError"===e.name?"Camera permission denied or unavailable. Allow camera access in Safari settings, scan a photo, or type the number.":"NotFoundError"===e.name?"No camera found. Scan a photo or type the number.":"scanner-load"===e.message?"Barcode scanner could not load. Check your connection, try again, or type the number.":"Camera could not start or play. Close other camera apps and try again, scan a photo, or type the number.")}
+}
+else scanMessage("Camera unavailable here. Open this page in Safari over HTTPS, scan a photo, or type the number.")}
+async function scanPhoto(el){
+var file=el.files&&el.files[0];
+if(file){
+stopScan();
+var token=scanSession,
+url=URL.createObjectURL(file);
+scanMessage("Reading barcode photo on this device...");
+try{
+var z=await loadScanner();
+if(token!==scanSession)return;
+var result=await newScanner(z).decodeFromImageUrl(url);
+token===scanSession&&scannedCode(result.getText())}
+catch(e){
+token===scanSession&&scanMessage("No clear barcode found. Try a sharper photo with all bars visible, or type the number.")}
+finally{
+URL.revokeObjectURL(url),
+el.value=""}
+}
+}
+function offMap(p){
+var n=p.nutriments||{
+}
+,
+full=normalizeOFF(p);
+if(full)return{
+review:full}
+;
+var k=n["energy-kcal_100g"];
+return!finite(k)||k<=0?{
+err:"no-kcal",
+name:p.product_name||"product"}
+:{
+label:(String(p.product_name||"Packaged food")+" (per 100g)").slice(0,
+100),
+k:Math.round(k),
+mac:null,
+micro:{
+}
+}
+}
+async function lookupBarcode(){
+var bcEl=document.getElementById("bc");
+if(bcEl){
+var code=(bcEl.value||"").replace(/\D/g,
+"");
+if(code.length<8)alert("Enter the full barcode number (8-14 digits)");
+else{
+var msg=document.getElementById("bcmsg");
+msg&&(msg.textContent="Looking up "+code+" in Open Food Facts…");
+try{
+var r=await fetch("https://world.openfoodfacts.org/api/v2/product/"+encodeURIComponent(code)+".json?fields=product_name,brands,quantity,serving_size,nutriments,status"),
+j=await r.json();
+if(!j||1!==j.status||!j.product)return void(msg&&(msg.textContent="Not found in Open Food Facts. Many Indian products are missing; add it with Custom food from the pack label."));
+var m=offMap(j.product);
+if(m.err)return void(msg&&(msg.textContent='Found "'+m.name+'" but it has no calorie data. Add it with Custom food from the pack label.'));
+if(m.review)return openReview(m.review),
+void notify("Barcode found. Review per-100g nutrition and grams before adding.");
+foodMode(!0,
+!1,
+!1),
+document.getElementById("cn").value=m.label,
+document.getElementById("ck").value=m.k,
+document.getElementById("mp").value=m.mac?m.mac.p:"",
+document.getElementById("mc").value=m.mac?m.mac.c:"",
+document.getElementById("mf").value=m.mac?m.mac.f:"",
+notify("Found: "+m.name+". Review, then tap Add custom.")}
+catch(e){
+msg&&(msg.textContent="Lookup failed. Check your connection and try again.")}
+}
+}
+}
+function sq(v){
+Q=v,
+renderFood()}
+function setFilter(f){
+filter=f,
+renderFood(),
+document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",
+b.dataset.filter===f))}
+function downloadOFF(){
+var b=new Blob([JSON.stringify({
+license:"ODbL 1.0",
+contentsLicense:"DbCL 1.0",
+attribution:"Open Food Facts",
+source:"https://openfoodfacts.org",
+records:INDIAN_OFF}
+,
+null,
+2)],
+{
+type:"application/json"}
+),
+u=URL.createObjectURL(b),
+a=document.createElement("a");
+a.href=u;
+a.download="indian-off-foods-odbl.json";
+a.click();
+setTimeout(()=>URL.revokeObjectURL(u),
+1000)}
+function renderFood(){
+var el=document.getElementById("foodlist");
+if(el){
+var h="";
+FOODS.forEach((f,
+i)=>{
+f[0].toLowerCase().includes(Q.toLowerCase())&&("fav"!==filter||(D.fav||[]).includes(i))&&(h+="<div class=r><span>"+esc(f[0])+"<br><small>"+f[1]+" kcal · "+((FOOD_META[i]||{
+}
+).status||"approx.")+" · "+(f[2]?"P "+f[2].p+"g / C "+f[2].c+"g / F "+f[2].f+"g":"macros unknown")+'</small></span><div class=foodactions><button class="x star" aria-label="'+((D.fav||[]).includes(i)?"Unsave ":"Save ")+esc(f[0])+'" onclick="fav('+i+')">'+((D.fav||[]).includes(i)?"★":"☆")+'</button><button class="x star pick" aria-label="Choose portion for '+esc(f[0])+'" onclick="addF('+i+')">Choose</button></div></div>')}
+),
+el.innerHTML="<details class=help><summary>Food sources &amp; licences</summary><p class=note>New Indian food references: USDA FoodData Central (CC0 public domain). Recipe values and portion guides are approximate, not IFCT data. IFCT 2017 has not been imported.</p><p class=note>Contains data from <a href=https://openfoodfacts.org target=_blank rel=noopener>Open Food Facts</a>, available under the <a href=https://opendatacommons.org/licenses/odbl/1-0/ target=_blank rel=noopener>Open Database License 1.0</a>. Individual contents: DbCL 1.0. Packaged labels are community data, not verified.</p><button class=ch onclick=downloadOFF()>Download added OFF data (ODbL)</button><a href=https://fdc.nal.usda.gov/api-guide/ target=_blank rel=noopener>USDA source &amp; terms</a></details>"+(h||'<div class="empty"><strong>No matches yet</strong><p>Try a shorter name, search the online database, or enter the pack label.</p><button class=ch onclick="moreFood(\'usda\')">Search online</button><button class=ch onclick="foodMode(true)">Enter food manually</button></div>')}
+ }
+function preserveServing(render){
+var vals=["date",
+"meal",
+"q"].map(id=>[id,
+document.getElementById(id)?.value]),
+opened=document.getElementById("serving")?.open;
+render(),
+vals.forEach(([id,
+v])=>{
+void 0!==v&&document.getElementById(id)&&(document.getElementById(id).value=v)}
+),
+document.getElementById("serving")&&(document.getElementById("serving").open=!!opened),
+document.getElementById("meal")?.dispatchEvent(new Event("change"))}
+function moreFood(mode){
+preserveServing(()=>{
+foodMode(!1),
+extraMode=mode,
+R()}
+)}
+function macroFields(prefix,
+mac){
+return"<div class=f>"+[["p",
+"Protein"],
+["c",
+"Carbs"],
+["f",
+"Fat"]].map(([k,
+n])=>"<div><label for="+prefix+k+">"+n+" (g)</label><input id="+prefix+k+' type=number inputmode=decimal min=0 max=2000 step=0.1 value="'+(mac&&Number.isFinite(mac[k])?mac[k]:"")+'" placeholder="Unknown" oninput=calcReview()></div>').join("")+"</div>"}
+function openReview(item,
+quantity=1){
+preserveServing(()=>{
+foodMode(!1),
+reviewItem=item,
+extraMode="review",
+R()}
+),
+document.getElementById("rq").value=item.per100?(item.suggestedGrams||100):Math.min(100,
+Math.max(.1,
+quantity)),
+calcReview()}
+function reviewPanel(){
+var x=reviewItem;
+return x?"<div class=c><h3>Check your portion</h3><p class=help-line>"+esc(x.name)+"</p><p class=help-line>Estimates vary by recipe. Check source notes if unsure. Adjust your portion before logging.</p><div class=portion-step><label for=ru>Measure in</label><select id=ru onchange=calcReview()><option value=servings>Servings</option><option value=grams"+(x.per100?" selected":"")+'>Grams</option></select><label for=rq id=rql>Amount eaten</label><input id=rq type=number inputmode=decimal min=0.1 max=10000 step=0.1 value="'+(x.per100?100:1)+'" oninput=calcReview()><p id=rt role=status aria-live=polite></p></div><button onclick=logReview()>Add to my day</button><button class=ch onclick=foodMode(false)>Choose another food</button><details class=help><summary>Check source & accuracy notes</summary><p class=note>'+esc(x.note)+"</p>"+(x.source?'<p class=note><a href="'+esc(x.source)+'" target=_blank rel=noopener>Nutrition source</a></p>':"")+'</details><details class=help><summary>Edit name, calories & nutrition</summary><label for=rn>Food name</label><input id=rn maxlength=100 value="'+esc(x.name)+'"><label for=rk>Calories in reference serving</label><input id=rk type=number inputmode=decimal min=1 max=10000 value="'+x.k+'" oninput=calcReview()>'+macroFields("r",
+x.mac)+microFields("r",
+x.micro)+'<label for=rb>Reference serving weight (g)</label><input id=rb type=number inputmode=decimal min=0.1 max=10000 step=0.1 value="'+(x.grams||"")+'" placeholder="Enter verified grams" oninput=calcReview()><small>Per-100g data uses 100 g. Use a verified serving weight, not a guessed cooked weight.</small></details></div>':""}
+function reviewValues(){
+var val=id=>document.getElementById(id).value,
+unit=val("ru"),
+q=Number(val("rq")),
+base=Number(val("rb")),
+k=Number(val("rk"));
+if(!Number.isFinite(q)||q<=0||q>1e4||"servings"===unit&&q>100)throw Error("Enter a valid amount: up to 100 servings or 10000 g.");
+if("grams"===unit&&(!Number.isFinite(base)||base<=0||base>1e4))throw Error("Enter the verified reference serving weight before using grams.");
+if(!Number.isFinite(k)||k<=0||k>1e4)throw Error("Enter valid reference calories.");
+var factor="grams"===unit?q/base:q,
+mv=["rp",
+"rc",
+"rf"].map(val),
+mac=null;
+if(mv.some(v=>""!==v)&&mv.some(v=>""===v))throw Error("Enter all three macros, or leave all blank as unknown.");
+if(mv.every(v=>""!==v)){
+var nums=mv.map(Number);
+if(nums.some(v=>!Number.isFinite(v)||v<0||v*factor>2e3))throw Error("Macros must be valid non-negative amounts, at most 2000 g after scaling.");
+mac=Object.fromEntries(["p",
+"c",
+"f"].map((n,
+i)=>[n,
+Math.round(nums[i]*factor*10)/10]))}
+if(Math.round(k*factor)<1||Math.round(k*factor)>1e4)throw Error("Scaled calories must be 1-10000.");
+return{
+k:Math.round(k*factor),
+mac:mac,
+q:q,
+unit:unit,
+micro:readMicro("r",
+factor)}
+}
+function calcReview(){
+if(document.getElementById("rt"))try{
+var v=reviewValues();
+document.getElementById("rt").textContent=v.k+" kcal"+(v.mac?" · P "+v.mac.p+"g · C "+v.mac.c+"g · F "+v.mac.f+"g":" · macros unknown")}
+catch(e){
+document.getElementById("rt").textContent=e.message}
+}
+function logReview(){
+try{
+var v=reviewValues();
+add(document.getElementById("rn").value+" ["+v.q+" "+v.unit+"]",
+v.k,
+v.mac,
+void 0,
+v.micro)}
+catch(e){
+alert(e.message)}
+}
+function extraPanel(){
+return"review"===extraMode?reviewPanel():"usda"===extraMode?'<div class=c><h3>Search online foods</h3><p class=help-line>Choose a database, search, then check the exact food and portion.</p><details class=help><summary>Data quality, privacy & search limits</summary><p class=note>FoodData Central: calories and macros per 100 g. Match raw/cooked, recipe and brand carefully. This public demo access allows only 30 requests/hour and 50/day per IP; it may be unavailable on shared networks. Search runs only when you tap, not while typing. The query is sent to the database you choose. No private key is stored. Open Food Facts is community label data, not guaranteed verified; match the exact product and pack. OFF allows 10 searches/minute; this app spaces searches at least 6 seconds.</p></details><label for=provider>Database</label><select id=provider><option value=usda>USDA reference data</option><option value=off>Open Food Facts packaged labels</option></select><label for=uq>Food name (English)</label><input id=uq type=search maxlength=100 placeholder="e.g. cooked rice, hard-boiled egg"><label for=ut>USDA food type (ignored for OFF)</label><select id=ut><option value=generic>Generic / reference (SR Legacy)</option><option value=branded>Branded foods</option></select><button id=ub onclick=searchUSDA()>Search database</button><p class=note id=um role=status aria-live=polite></p><div id=ures></div><p class=note><a href="https://fdc.nal.usda.gov/api-guide/" target=_blank rel=noopener>USDA source & limits</a> · Indian presets use NNWA / INDB recipes built from Indian composition data, not an official live IFCT API.</p></div>':""}
+function normalizeUSDA(f){
+var ns=f.foodNutrients||[],
+by=id=>ns.find(n=>n.nutrientId===id),
+en=by(1008)||by(2047)||by(2048),
+p=by(1003),
+c=by(1005),
+fat=by(1004);
+if("string"!=typeof f.description||!en||"KCAL"!==String(en.unitName).toUpperCase()||![en,
+p,
+c,
+fat].every(n=>n&&finite(n.value)&&n.value>=0)||en.value<=0)return null;
+var micro={
+}
+;
+return Object.entries({
+fiber:1079,
+sugar:2e3,
+sodium:1093,
+iron:1089,
+calcium:1087,
+potassium:1092}
+).forEach(([k,
+id])=>{
+var n=by(id);
+n&&finite(n.value)&&n.value>=0&&String(n.unitName).toLowerCase()===MICRO[k].unit&&(micro[k]=n.value)}
+),
+{
+name:f.description,
+micro:micro,
+k:en.value,
+mac:{
+p:p.value,
+c:c.value,
+f:fat.value}
+,
+grams:100,
+per100:!0,
+source:"https://fdc.nal.usda.gov/",
+note:"USDA FoodData Central ID "+f.fdcId+" · "+f.dataType+" · per 100 g. "+(f.brandOwner||"")+" Match the exact food and preparation. USDA total carbs may differ from Indian available-carbohydrate values."}
+}
+async function searchUSDA(){
+var q=document.getElementById("uq").value.trim(),
+msg=document.getElementById("um"),
+btn=document.getElementById("ub"),
+box=document.getElementById("ures"),
+type=document.getElementById("ut").value;
+if("off"===document.getElementById("provider").value)return searchOFF(q,
+msg,
+btn,
+box);
+if(q.length<2)msg.textContent="Enter at least 2 letters.";
+else{
+liveController&&liveController.abort();
+var ctl=liveController=new AbortController,
+id=++liveRequest;
+btn.disabled=!0,
+msg.textContent="Searching USDA...",
+box.textContent="",
+liveResults=[];
+var timer=setTimeout(()=>ctl.abort(),
+15e3);
+try{
+var params=new URLSearchParams({
+api_key:"DEMO_KEY",
+query:q,
+pageSize:"20"}
+);
+params.set("dataType",
+"branded"===type?"Branded":"SR Legacy");
+var r=await fetch("https://api.nal.usda.gov/fdc/v1/foods/search?"+params,
+{
+signal:ctl.signal}
+);
+if(429===r.status)throw Error("Demo search limit reached. Try later or use presets / Custom food. No food was added.");
+if(!r.ok)throw Error("USDA is unavailable ("+r.status+"). Use presets or Custom food.");
+var j=await r.json();
+if(id!==liveRequest||!box.isConnected)return;
+liveResults=(j.foods||[]).map(normalizeUSDA).filter(Boolean),
+msg.textContent=liveResults.length?"Results with complete calories + macros. Review before adding.":"No complete nutrition matches. Try another English name or Custom food.",
+box.innerHTML=liveResults.map((x,
+i)=>"<div class=r><span>"+esc(x.name)+"<br><small>"+x.k+" kcal / 100 g · P "+x.mac.p+"g / C "+x.mac.c+"g / F "+x.mac.f+"g<br>"+esc(x.note)+'</small></span><button class="x star" onclick="chooseUSDA('+i+')">Review</button></div>').join("")}
+catch(e){
+id===liveRequest&&msg.isConnected&&(msg.textContent="AbortError"===e.name?"Search timed out or was cancelled. Try again; no food was added.":e.message)}
+finally{
+clearTimeout(timer),
+btn.isConnected&&(btn.disabled=!1)}
+}
+}
+function chooseUSDA(i){
+var x=liveResults[i];
+x&&(openReview(x),
+document.getElementById("rq").value=100,
+calcReview())}
+function microFields(prefix,
+values={
+}
+){
+return"<details class=c><summary>Micronutrients · tap to edit</summary><p class=note>Enter source values for the same reference serving. Fiber/sugar are g; sodium, iron, calcium and potassium are mg. Missing values are not zero.</p>"+Object.entries(MICRO).map(([k,
+v])=>"<label for="+prefix+"mi"+k+">"+v.name+" ("+v.unit+")</label><input id="+prefix+"mi"+k+" type=number inputmode=decimal min=0 max="+v.max+' step=0.01 placeholder="Unknown" value="'+(finite(values[k])?values[k]:"")+'">').join("")+"</details>"}
+function readMicro(prefix,
+factor){
+var m={
+}
+;
+return Object.entries(MICRO).forEach(([k,
+v])=>{
+var e=document.getElementById(prefix+"mi"+k);
+if(e&&""!==e.value){
+var n=Number(e.value)*factor;
+if(!finite(n)||n<0||n>v.max)throw Error("Check "+v.name+" and its unit.");
+m[k]=Math.round(100*n)/100}
+}
+),
+m}
+function microSummary(day){
+var entries=D.m.filter(x=>x.d===day);
+return"<div class=c><h3>Micronutrients</h3><p class=note>Known subtotal only, not a complete daily total. Coverage below counts entries with a recorded value, including a stated zero. No medical target is assumed.</p><div class=\"metrics micro\">"+Object.entries(MICRO).map(([k,
+v])=>{
+var known=entries.filter(x=>x.micro&&finite(x.micro[k])),
+sum=known.reduce((a,
+x)=>a+x.micro[k],
+0);
+return"<div><strong>"+(known.length?Math.round(100*sum)/100+" "+v.unit:"Unknown")+"</strong><small>"+v.name+"</small><small>"+known.length+"/"+entries.length+" have data</small></div>"}
+).join("")+"</div></div>"}
+window.addEventListener("pagehide",
+stopScan),
+document.addEventListener("visibilitychange",
+()=>{
+document.hidden&&(scanning||scanStarting)&&stopScan()}
+);
+var lastOFFSearch=0;
+function normalizeOFF(p){
+var n=p.nutriments||{
+}
+,
+k=n["energy-kcal_100g"],
+mac={
+p:n.proteins_100g,
+c:n.carbohydrates_100g,
+f:n.fat_100g}
+;
+if(!finite(k)||k<=0||!Object.values(mac).every(v=>finite(v)&&v>=0))return null;
+var micro={
+}
+;
+return Object.entries({
+fiber:"fiber",
+sugar:"sugars",
+sodium:"sodium",
+iron:"iron",
+calcium:"calcium",
+potassium:"potassium"}
+).forEach(([key,
+nut])=>{
+var v=n[nut+"_100g"];
+finite(v)&&v>=0&&(micro[key]=Math.round(v*("mg"===MICRO[key].unit?1e3:1)*100)/100)}
+),
+{
+name:String(p.product_name||"Packaged food").slice(0,
+100),
+k:k,
+mac:mac,
+micro:micro,
+grams:100,
+per100:!0,
+source:"string"==typeof p.url&&/^https:\/\/world\.openfoodfacts\.org\/product\/[0-9]+\//.test(p.url)?p.url:"https://world.openfoodfacts.org/",
+note:"Open Food Facts community label data · "+(p.brands||"")+" · barcode "+(p.code||"")+" · per 100 g. Verify your exact pack; product data can be incomplete or out of date."}
+}
+async function searchOFF(q,
+msg,
+btn,
+box){
+if(q.length<2)msg.textContent="Enter at least 2 letters.";
+else if(Date.now()-lastOFFSearch<6e3)msg.textContent="Wait 6 seconds between Open Food Facts searches.";
+else{
+lastOFFSearch=Date.now(),
+liveController&&liveController.abort();
+var ctl=liveController=new AbortController,
+id=++liveRequest,
+timer=setTimeout(()=>ctl.abort(),
+2e4);
+btn.disabled=!0,
+msg.textContent="Searching Open Food Facts...",
+box.textContent="",
+liveResults=[];
+try{
+var params=new URLSearchParams({
+search_terms:q,
+search_simple:"1",
+action:"process",
+json:"1",
+page_size:"20",
+fields:"code,product_name,brands,nutriments,url"}
+),
+r=await fetch("https://world.openfoodfacts.org/cgi/search.pl?"+params,
+{
+signal:ctl.signal}
+);
+if(429===r.status)throw Error("Open Food Facts limit reached. Try later; no food added.");
+if(!r.ok)throw Error("Open Food Facts unavailable ("+r.status+"). Use USDA, barcode lookup or Custom food.");
+var j=await r.json();
+if(id!==liveRequest||!box.isConnected)return;
+liveResults=(j.products||[]).map(normalizeOFF).filter(Boolean),
+msg.textContent=liveResults.length?"Community label matches with complete macros. Verify the exact pack.":"No complete matches. Try barcode lookup, a different name or USDA.",
+box.innerHTML=liveResults.map((x,
+i)=>"<div class=r><span>"+esc(x.name)+"<br><small>"+x.k+" kcal / 100 g<br>"+esc(x.note)+'</small></span><button class="x star" onclick="chooseUSDA('+i+')">Review</button></div>').join("")}
+catch(e){
+msg.isConnected&&(msg.textContent="AbortError"===e.name?"Search timed out or cancelled. Use USDA or barcode lookup.":e instanceof TypeError?"Open Food Facts could not be reached. Use USDA or barcode lookup; no food added.":e.message)}
+finally{
+clearTimeout(timer),
+btn.isConnected&&(btn.disabled=!1)}
+}
+}
+var reportRange=7;
+function setReportRange(n){
+reportRange=30===n?30:7,
+R()}
+var gradN=0;
+function trendSVG(values,
+label,
+color){
+var max=Math.max(1,
+...values.map(x=>x??0)),
+step=300/Math.max(1,
+values.length-1),
+id="tg"+gradN++;
+function X(i){
+return Math.round(i*step*10)/10}
+function Y(v){
+return Math.round(10*(84-v/max*72))/10}
+var segs=[],
+cur=[];
+values.forEach((v,
+i)=>{
+null===v?(cur.length&&segs.push(cur),
+cur=[]):cur.push([X(i),
+Y(v)])}
+),
+cur.length&&segs.push(cur);
+var paths="",
+dots="";
+segs.forEach(p=>{
+if(p.length>1){
+var d=function(p){
+for(var d="M"+p[0][0]+" "+p[0][1],
+i=1;
+i<p.length;
+i++){
+var a=p[i-1],
+c=p[i],
+mx=(a[0]+c[0])/2;
+d+=" C"+mx+" "+a[1]+" "+mx+" "+c[1]+" "+c[0]+" "+c[1]}
+return d}
+(p);
+paths+='<path d="'+d+" L"+p.at(-1)[0]+" 84 L"+p[0][0]+' 84 Z" fill="url(#'+id+')" class=ta /><path d="'+d+'" fill=none stroke="'+color+'" stroke-width=2.5 stroke-linecap=round stroke-linejoin=round pathLength=1 class=tl />'}
+}
+),
+values.forEach((v,
+i)=>{
+null!==v&&(dots+="<circle cx="+X(i)+" cy="+Y(v)+" r="+(values.length>14?2:3.5)+' fill="'+color+'" class=td><title>'+esc(label)+" day "+(i+1)+": "+v+"</title></circle>")}
+);
+var grid=[.5,
+1].map(f=>"<line x1=0 x2=300 y1="+Y(max*f)+" y2="+Y(max*f)+' stroke=var(--bd) stroke-dasharray="3 4" />').join("");
+return'<svg viewBox="-6 0 312 92" role=img aria-label="'+esc(label)+" recorded trend, max "+max+'" class=chart><defs><linearGradient id='+id+' x1=0 y1=0 x2=0 y2=1><stop offset=0 stop-color="'+color+'" stop-opacity=.35 /><stop offset=1 stop-color="'+color+'" stop-opacity=0 /></linearGradient></defs>'+grid+"<line x1=0 y1=84 x2=300 y2=84 stroke=var(--bd) />"+paths+dots+"</svg>"}
+function reportPanel(){
+var dates=Array.from({
+length:reportRange}
+,
+(_,
+i)=>days(i-reportRange+1)),
+entries=D.m.filter(x=>dates.includes(x.d)),
+logged=dates.filter(d=>entries.some(x=>x.d===d)),
+cal=dates.map(d=>logged.includes(d)?tot(d):null),
+sum=entries.reduce((a,
+x)=>a+x.k,
+0),
+macroEntries=entries.filter(x=>x.mac),
+h='<div class="c rep"><h3>Nutrition analytics</h3><div class=f><button class="ch '+(7===reportRange?"active":"")+'" aria-pressed="'+(7===reportRange)+'" onclick=setReportRange(7)>7 days</button><button class="ch '+(30===reportRange?"active":"")+'" aria-pressed="'+(30===reportRange)+'" onclick=setReportRange(30)>30 days</button></div><p class=note>'+dates[0]+" to "+dates.at(-1)+" (IST) · "+logged.length+"/"+reportRange+" days logged. Gaps mean no log, not zero intake. Known nutrient totals may undercount meals with missing values.</p><div class=tiles><div><small>Recorded</small><strong>"+sum+"</strong><small>kcal</small></div><div><small>Per logged day</small><strong>"+(logged.length?Math.round(sum/logged.length):"-")+"</strong><small>kcal</small></div><div><small>Per calendar day</small><strong>"+Math.round(sum/reportRange)+"</strong><small>kcal</small></div></div><h3>Calories trend</h3>"+trendSVG(cal,
+"Calories",
+"#22c55e")+"<small>"+dates[0]+" → "+dates.at(-1)+" · scale 0-"+Math.max(1,
+...cal.map(v=>v||0))+" kcal</small><h3>Macro trends (recorded values)</h3><p class=note>"+macroEntries.length+"/"+entries.length+" entries have macros. Lines sum known values on each date, not complete intake.</p>";
+return[["p",
+"Protein",
+"#ff8a1f"],
+["c",
+"Carbs",
+"#22c55e"],
+["f",
+"Fat",
+"#a8a8a8"]].forEach(([k,
+label,
+color])=>{
+var v=dates.map(d=>{
+var e=macroEntries.filter(x=>x.d===d);
+return e.length?Math.round(10*e.reduce((a,
+x)=>a+x.mac[k],
+0))/10:null}
+),
+s=macroEntries.reduce((a,
+x)=>a+x.mac[k],
+0);
+h+="<h3>"+label+" · "+Math.round(10*s)/10+" g recorded</h3>"+trendSVG(v,
+label,
+color)+"<small>0-"+Math.max(1,
+...v.map(x=>x||0))+" g · "+(logged.length?Math.round(s/logged.length*10)/10:"Unknown")+" g / logged day (known subtotal)<br>"+dates[0]+" → "+dates.at(-1)+"</small>"}
+),
+h+="<h3>Nutrient report</h3>",
+Object.entries(MICRO).forEach(([k,
+v])=>{
+var known=entries.filter(x=>x.micro&&finite(x.micro[k])),
+sum=known.reduce((a,
+x)=>a+x.micro[k],
+0);
+h+="<div class=r><span>"+v.name+"<br><small>"+known.length+"/"+entries.length+" entries with data</small></span><span>"+(known.length?Math.round(100*sum)/100+" "+v.unit+" total<br><small>"+Math.round(sum/Math.max(1,
+logged.length)*100)/100+" "+v.unit+" / logged day</small>":"Unknown")+"</span></div>"}
+),
+h+="<details><summary>Daily data · inspect the chart values</summary>"+dates.map(d=>{
+var e=entries.filter(x=>x.d===d),
+known=e.filter(x=>x.mac),
+m=macros(d);
+return"<div class=r><span>"+d+"<br><small>"+e.length+" entries · "+known.length+" with macros</small></span><span>"+(e.length?tot(d)+" kcal<br><small>"+(known.length?"P "+Math.round(10*m.p)/10+" / C "+Math.round(10*m.c)/10+" / F "+Math.round(10*m.f)/10+" g":"Macros unknown")+"</small>":"No log")+"</span></div>"}
+).join("")+"</details><p class=note>Charts show recorded food values only, not medical advice or diet targets.</p></div>"}
+function ringSVG(pct,
+color){
+var C=2*Math.PI*34,
+off=C*(1-Math.max(0,
+Math.min(1,
+pct||0)));
+return'<svg width=84 height=84 viewBox="0 0 84 84" role="img"><circle cx=42 cy=42 r=34 fill=none stroke="var(--in)" stroke-width=9></circle><circle cx=42 cy=42 r=34 fill=none stroke="'+color+'" stroke-width=9 stroke-linecap=round stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 42 42)"></circle><text x=42 y=47 text-anchor=middle fill="var(--tx)" font-size=15 font-weight=700>'+Math.round(100*(pct||0))+"%</text></svg>"}
+function streak(){
+for(var n=0,
+start=tot(today())>0?0:-1,
+i=start;
+i>start-3660&&!(tot(days(i))<=0);
+i--)n++;
+return n}
+function R(){
+(scanning||scanStarting)&&stopScan(),
+document.documentElement.setAttribute("data-t",
+T),
+document.querySelector('meta[name="theme-color"]').content="dark"===T?"#0b1710":"#f4f8f5";
+for(var h="",
+now=today(),
+i=0;
+i<4;
+i++)document.getElementById("n"+i).className=i===P?"a":"";
+if(0===P){
+var t=tot(now),
+left=D.g-t,
+pc=Math.min(100,
+t/D.g*100),
+mac=macros(now),
+list=D.m.filter(x=>x.d===now),
+known=list.filter(x=>x.mac).length;
+h+="<button class=th onclick=tg()>"+("dark"===T?"Light":"Dark")+" mode</button><h2>Today</h2><small>"+now+' · IST</small><div class=c><small>Eaten</small><div class="big '+(left<0?"b":"g")+'">'+t+' kcal</div><div class=bar><i class="'+(left<0?"o":"")+'" style="width:'+pc+'%"></i></div><div class=r style="border:0"><small>Goal '+D.g+"</small><small>"+(left>=0?left+" kcal remaining":-left+" kcal above goal")+"</small></div><button onclick=go(1)>+ Log food</button></div>",
+D.m.length||(h+='<div class="c welcome"><h3>Start with your first meal</h3><p class=help-line>Search a food, check your portion, then add it to your day. Your goals can be changed in More.</p><button class=ch onclick=go(1)>Find a food</button></div>');
+var pg=pgv();
+h+='<div class=c><h3>Goal rings</h3><div class=f style="text-align:center"><div><small>Calories</small><br>'+ringSVG(t/D.g,
+"dark"===T?"#66d993":"#167b49")+"<br><small>"+t+" / "+D.g+" kcal</small></div><div><small>Protein</small><br>"+ringSVG(mac.p/pg,
+"dark"===T?"#b2e9c5":"#73ac83")+"<br><small>"+Math.round(mac.p)+" / "+pg+" g</small></div></div><p class=note>Protein counts recorded macros only. Preset recipes, USDA and label entries have macros; unknown values are not treated as zero.</p></div>";
+var recentT=D.m.slice().reverse().filter((x,
+i,
+a)=>a.findIndex(y=>y.n===x.n)===i).slice(0,
+5);
+recentT.length&&(h+='<div class=c><h3>Eat it again</h3><div class=f style="flex-wrap:wrap">'+recentT.map(x=>'<button class=ch style="flex:0 1 auto;min-height:44px" onclick="quickAdd(\''+x.i+'\')" aria-label="Add '+esc(x.n)+' again">'+esc(x.n.length>22?x.n.slice(0,
+21)+"…":x.n)+" · "+x.k+"</button>").join("")+"</div><small>One tap adds the same portion to today, in its original meal group.</small></div>"),
+(D.savedMeals||[]).length&&(h+="<div class=c><h3>Saved meals</h3>"+savedList()+"</div>"),
+h+="<div class=c><h3>Macros</h3><div class=metrics>"+[["p",
+"Protein"],
+["c",
+"Carbs"],
+["f",
+"Fat"]].map(a=>"<div><strong>"+Math.round(10*mac[a[0]])/10+"g</strong><small>"+a[1]+"</small></div>").join("")+"</div><p class=note>"+known+" of "+list.length+" entries have macros. Add label values in Custom; unrecorded macros are not counted.</p></div>",
+h+=microSummary(now),
+saveSource&&(h+="<div class=c><h3>Save "+esc(saveSource)+'</h3><label for=smname>Meal name</label><input id=smname maxlength=60 value="Usual '+esc(saveSource.toLowerCase())+'"><small>All foods in this group are saved with their current servings and any macros.</small><div class=f><button onclick=saveMeal()>Save meal</button><button class=ch onclick="saveSource=\'\';R()">Cancel</button></div></div>'),
+h+='<h2>Meals <small style="font-size:13px">'+streak()+' day logging streak</small></h2><p class=note>Swipe a food left to reveal Delete. Deleted foods can be undone.</p>';
+MEALS.forEach(m=>{
+var a=list.filter(x=>(x.meal||"Unsorted")===m);
+if(m==="Unsorted"&&!a.length)return;
+h+='<section class="c mealcard"><div class=mealhead><h3>'+m+' <small>'+a.reduce((n,
+x)=>n+x.k,
+0)+' kcal</small></h3><button class="x star" onclick="addToMeal(\''+m+'\')" aria-label="Add food to '+m+'">+ Add</button></div>';
+if(a.length){
+h+='<button class="ch meal-save" onclick="startSave(\''+m+'\')">Save meal</button>';
+a.forEach(x=>{
+h+='<div class=swipe-wrap data-entry="'+x.i+'"><button class=swipe-delete onclick="del('+x.i+')" aria-label="Delete '+esc(x.n)+'">Delete</button><div class="r swipe-row"><span>'+esc(x.n)+'<br><small>'+x.k+' kcal</small></span><button class="x visible-delete" onclick="del('+x.i+')" aria-label="Delete '+esc(x.n)+'">Delete</button></div></div>'}
+)}
+else h+='<p class=note>No foods yet</p>';
+h+='</section>'}
+);
+}
+if(1===P){
+if(h+='<h2>Log food</h2><div class="addbar"><div class=f><button class="'+(customMode||savedMode||barMode||extraMode?"":"active")+'" onclick="foodMode(false)">Foods</button><button class="'+(customMode?"active":"")+'" onclick="foodMode(true)">Manual</button><button class="'+(savedMode?"active":"")+'" onclick="foodMode(false,true)">Meals</button><button class="'+(barMode?"active":"")+'" onclick="foodMode(false,false,true)">Scan</button></div>',
+customMode||savedMode||barMode||extraMode||(h+='<label for=s>What did you eat?</label><input id=s type=search placeholder="Search roti, rice, eggs…" value="'+esc(Q)+'" oninput="sq(this.value)"><div class=f><button class="ch '+("all"===filter?"active":"")+'" data-filter=all onclick="setFilter(\'all\')">All foods</button><button class="ch '+("fav"===filter?"active":"")+'" data-filter=fav onclick="setFilter(\'fav\')">Favourites</button></div>'),
+h+='<div class=f><button class="ch" onclick="moreFood(\'usda\')">Can&#39;t find it? Search online</button></div></div><details class=c id=serving><summary>Logging to today · Breakfast · change</summary><div class=f><div><label for=date>Date (IST)</label><input id=date type=date value="'+now+'" max="'+now+'"></div><div><label for=meal>Meal</label><select id=meal>'+MEALS.slice(0,
+4).map(m=>"<option>"+m+"</option>").join("")+"</select></div></div><label for=q>Quantity (list serving multiplier)</label><input id=q type=number inputmode=decimal value=1 min=0.1 step=0.1><small>Choose the meal here before adding. List quantity starts at 1 serving; manual entries use the values you enter.</small></details>",
+h+="<div class=c id=customform "+(customMode?"":"hidden")+'><h3>Custom food</h3><label for=cn>Food name</label><input id=cn placeholder="Food name" maxlength=100><label for=ck>Calories for this serving</label><input id=ck type=number inputmode=numeric placeholder="Calories"><small>Optional macros for this serving (g)</small><div class=f>'+[["mp",
+"Protein"],
+["mc",
+"Carbs"],
+["mf",
+"Fat"]].map(a=>"<div><label for="+a[0]+">"+a[1]+"</label><input id="+a[0]+' type=number inputmode=decimal min=0 step=0.1 placeholder="g"></div>').join("")+"</div>"+microFields("c",
+{
+}
+)+"<button onclick=addC()>Add custom</button></div>",
+extraMode&&(h+=extraPanel()),
+barMode&&(h+='<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts opens nutrition review for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><label class=note for=bcphoto style="display:block;margin-top:12px">Or scan a barcode photo</label><input id=bcphoto type=file accept="image/*" onchange="scanPhoto(this)"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>'),
+savedMode&&(h+="<div class=c><h3>Saved meals</h3><p class=note>One tap logs today in its saved meal group. Open Serving settings to change date, group or quantity.</p>"+savedList()+"</div>"),
+!(customMode||savedMode||barMode||extraMode)){
+var recent=D.m.slice().reverse().filter((x,
+i,
+a)=>a.findIndex(y=>y.n===x.n)===i).slice(0,
+3);
+recent.length&&(h+='<details class="c quick-list"><summary>Recently eaten · one-tap add</summary><p class=help-line>Same portion, added to your selected meal.</p>'+recent.map(x=>"<div class=r><span>"+esc(x.n)+"<br><small>"+x.k+' kcal · same serving</small></span><button class="x star" onclick="repeat('+x.i+')">Add</button></div>').join("")+"</details>"),
+h+="<p class=help-line>Choose a food to check its portion. ☆ saves it to Favourites.</p><div class=c id=foodlist></div>"}
+h+="<details class=help><summary>About food estimates & sources</summary><p class=note>"+FOODS.length+' foods available. Food calories are rough averages. Portions, oil and recipes vary. Open any food to review macros and grams before logging. Missing macros stay unknown. USDA search uses per-100g data. For accurate macros, use your pack label or recipe. Added recipe servings can be smaller than home or restaurant portions; adjust quantity. <a href="https://nnwa.in/foods/dishes/" target="_blank" rel="noopener">Added food estimates: NNWA dish tables</a> · <a href="https://world.openfoodfacts.org/" target="_blank" rel="noopener">Packaged snacks: pack label values via Open Food Facts</a>.</p></details>'}
+if(2===P){
+h+="<h2>History</h2>"+reportPanel();
+var dates=Array.from({
+length:7}
+,
+(_,
+i)=>days(i-6)),
+vals=dates.map(tot),
+max=Math.max(D.g,
+...vals),
+sum=vals.reduce((a,
+b)=>a+b,
+0);
+h+="<div class=c><h3>Last 7 days</h3><small>"+sum+" kcal logged · "+Math.round(sum/7)+" per calendar day</small><div class=chart>"+dates.map((d,
+i)=>"<div class=col><b>"+vals[i]+'</b><i style="height:'+Math.round(vals[i]/max*100)+'px"></i><small>'+d.slice(5)+"</small></div>").join("")+"</div><p class=note>Blank days count as 0 logged calories, not 0 eaten.</p></div><div class=c>";
+var ds=[...new Set(D.m.map(x=>x.d))].sort().reverse();
+ds.length||(h+="<div class=empty><strong>Your food diary will appear here</strong><p>Log a food today to start your history and trends.</p><button class=ch onclick=go(1)>Log food</button></div>"),
+ds.forEach(d=>{
+h+="<details><summary class=r>"+d+" · "+tot(d)+" kcal</summary>",
+D.m.filter(x=>x.d===d).forEach(x=>h+="<div class=r><span>"+esc(x.n)+"<br><small>"+(x.meal||"Unsorted")+" · "+x.k+' kcal</small></span><button class=x onclick="del('+x.i+')">Delete</button></div>'),
+h+="</details>"}
+),
+h+="</div>"}
+if(3===P&&(h+="<h2>More</h2><div class=c><h3>Your goals</h3><button onclick=setG()>Calorie goal · "+D.g+" kcal</button><button onclick=setPG()>Protein goal · "+pgv()+" g"+(isAuto()?" (auto)":"")+"</button>"+(isAuto()?"":"<button onclick=autoProtein()>Use automatic protein goal</button>")+"<button onclick=setBW()>Body weight (optional) · "+(D.bw?D.bw+" kg":"not set")+"</button><p class=note>Automatic protein: about 1.8 g per kg if you enter body weight, otherwise 30% of your calorie goal. Changing the protein goal yourself turns auto off.</p>"+'<p class=note>Goals are editable logging targets, not medical recommendations.</p></div><div class=c><h3>Keep your data safe</h3><button onclick=download()>Download backup</button><button onclick=bk()>Backup (copy)</button><button onclick=rs()>Restore from text</button><label for=restore>Or restore a backup file</label><input id=restore type=file accept=".json,application/json" onchange="restoreFile(this)"><p class=note>Stored only on this browser, not synced. Back up before clearing site data or changing phones. Old backups still work.</p></div><div class=c><h3>About</h3><p class=note>Calories v3.4 · Dates use India Standard Time. Food values are estimates. Macros and micronutrients count source-backed or entered values; missing data stay unknown. This is a personal log, not diet or medical advice.</p></div>'),
+document.getElementById("app").innerHTML=h+(deletedEntries.length?'<div class=undo-bar role=status><span>Food deleted</span><button onclick=undoDelete()>Undo</button></div>':""),
+bindSwipes(),
+1===P){
+renderFood();
+const updateServing=()=>{
+const date=document.getElementById("date"),
+meal=document.getElementById("meal");
+document.querySelector("#serving summary").textContent="Logging to "+(date.value===today()?"today":date.value)+" · "+meal.value+" · change"}
+;
+document.getElementById("date").addEventListener("change",
+updateServing),
+document.getElementById("meal").addEventListener("change",
+updateServing),
+updateServing()}
+}
+function download(){
+var b=new Blob([JSON.stringify(D,
+null,
+2)],
+{
+type:"application/json"}
+),
+url=URL.createObjectURL(b),
+a=document.createElement("a");
+a.href=url,
+a.download="calories-"+today()+".json",
+a.click(),
+setTimeout(()=>URL.revokeObjectURL(url),
+1e3)}
+function bk(){
+var s=JSON.stringify(D);
+navigator.clipboard?navigator.clipboard.writeText(s).then(()=>notify("Backup copied"),
+()=>prompt("Copy backup",
+s)):prompt("Copy backup",
+s)}
+function restore(s){
+try{
+var j=JSON.parse(s);
+if(!ok(j))throw 1;
+if(j=withoutWeight(j),
+!confirm("Replace all current food, favourites and saved meals with this backup?"))return;
+try{
+localStorage.setItem("cal",
+JSON.stringify(j))}
+catch(e){
+return void alert("Could not save backup. Current data was not changed.")}
+D=j,
+lastSaved=JSON.stringify(j),
+loadFailed=!1,
+R(),
+notify("Backup restored")}
+catch(e){
+alert("Invalid backup. Current data was not changed.")}
+}
+function rs(){
+var s=prompt("Paste backup");
+s&&restore(s)}
+function restoreFile(el){
+var f=el.files[0];
+if(f)if(f.size>5e6)alert("Backup too large (max 5 MB)");
+else{
+var r=new FileReader;
+r.onload=()=>restore(r.result),
+r.onerror=()=>alert("Could not read backup"),
+r.readAsText(f)}
+}
+R();
+</script>
+</body>
+  </html>

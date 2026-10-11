@@ -1,0 +1,15 @@
+<!doctype html><html><head>
+<meta charset="utf-8" />
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover"
+/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="Calories" />
+<meta name="theme-color" content="#f4f8f5" />
+<link rel="apple-touch-icon" href="icons/3-apple-touch-icon.png" />
+<link rel="icon" type="image/png" href="icons/4-icon-192.png" />
+<link rel="manifest" href="manifest.webmanifest" />
+<title>Calories</title>
+<style>body{font:16px -apple-system,sans-serif;background:#f4f8f5;color:#143d27;padding:24px}a{color:#167b49}</style></head><body><p id="loading" role="status">Opening your food log...</p><script>Promise.all(["app-part1.txt","app-part2.txt","app-part3.txt"].map(function(p){return fetch("./"+p+"?v=20261011-undo-camera",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("load");return r.text()})})).then(function(parts){document.open();document.write(parts.join(""));document.close()}).catch(function(){document.getElementById("loading").innerHTML='Could not load your food log. Your saved meals have not been changed. <a href="./">Try again</a>'});</script></body></html>

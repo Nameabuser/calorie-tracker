@@ -1,46 +1,76 @@
-nt"}
-,
-width:{
-ideal:1280}
-,
-height:{
-ideal:720}
-}
-,
-audio:!1}
-);
+throw last}
+function waitFrames(v,ms){
+return new Promise(function(res){
+var t0=Date.now();
+!function chk(){
+if(v.videoWidth>0&&v.readyState>=2)return res(!0);
+if(Date.now()-t0>ms)return res(!1);
+setTimeout(chk,100)}()})}
+async function scanToggle(){
+if(scanning||scanStarting)return stopScan(),
+void camStatus("Scan stopped. You can still type the barcode number.");
+if(!(window.isSecureContext&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia))return void camStatus("Camera unavailable here. Open this page in Safari over HTTPS, scan a photo, or type the number.");
+var token=++scanSession;
+scanStarting=!0;
+var btn=document.getElementById("scanbtn");
+btn&&(btn.textContent="Cancel scan");
+camStatus("["+SCAN_BUILD+"] 1/4 Requesting camera. Allow access when asked.");
+try{
+var media=await openCamera();
 if(token!==scanSession)return void media.getTracks().forEach(t=>t.stop());
 stream=media;
 var v=document.getElementById("cam");
 if(!v)return void stopScan();
-v.playsInline=!0,
-v.muted=!0,
-v.autoplay=!0,
+var tr=media.getVideoTracks()[0],st=tr&&tr.getSettings?tr.getSettings():{};
+camStatus("["+SCAN_BUILD+"] 2/4 Camera opened ("+(st.width||"?")+"x"+(st.height||"?")+(tr&&tr.label?", "+tr.label:"")+"). Starting preview.");
+v.setAttribute("playsinline",""),v.setAttribute("webkit-playsinline",""),v.setAttribute("muted",""),
+v.playsInline=!0,v.muted=!0,v.autoplay=!0,
+v.style.minHeight="220px",
 v.srcObject=media,
 v.hidden=!1;
-await v.play();
+try{await v.play()}catch(pe){camStatus("["+SCAN_BUILD+"] Preview play() failed: "+pe.name+". Tap Cancel scan and try again.")}
 if(token!==scanSession)return void stopScan();
+var ok=await waitFrames(v,5e3);
+if(token!==scanSession)return void stopScan();
+if(!ok)return stopScan(),void camStatus("["+SCAN_BUILD+"] Camera opened but no video frames arrived (readyState "+v.readyState+", size "+v.videoWidth+"x"+v.videoHeight+"). Scan a barcode photo or type the number.");
+scanDetector=null,scanReader=null;
+if("BarcodeDetector"in window){
+try{scanDetector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e","code_128","code_39","itf"]})}catch(e){scanDetector=null}}
+if(!scanDetector){
+camStatus("["+SCAN_BUILD+"] 3/4 Camera ready ("+v.videoWidth+"x"+v.videoHeight+"). Loading barcode reader.");
 var z=await loadScanner();
 if(token!==scanSession)return void stopScan();
-scanning=!0,
-scanStarting=!1,
-btn.textContent="Stop scan",
-scanMessage("Hold the barcode steady, with all bars in view and good light. Move the phone back if it is blurry.");
-var controls=await newScanner(z).decodeFromStream(media,
-v,
-(result,
-error,
-controls)=>{
-token===scanSession?result&&(controls.stop(),
-scannedCode(result.getText())):controls.stop()}
-);
-token!==scanSession?controls.stop():scanControls=controls}
+scanReader=newScanner(z),scanCanvas=document.createElement("canvas")}
+scanning=!0,scanStarting=!1,scanFrames=0,
+btn&&(btn.textContent="Stop scan");
+camStatus("["+SCAN_BUILD+"] 4/4 Scanning ("+v.videoWidth+"x"+v.videoHeight+"). Hold the barcode steady with all bars in view and good light.");
+!function loop(){
+if(token!==scanSession)return;
+scanTimer=setTimeout(async function(){
+if(token!==scanSession)return;
+try{
+if(v.videoWidth>0){
+var code=null;
+if(scanDetector){
+var r=await scanDetector.detect(v);
+r&&r.length&&(code=r[0].rawValue)}
+else{
+var w=v.videoWidth,h=v.videoHeight,sc=Math.min(1,1280/w);
+scanCanvas.width=Math.round(w*sc),scanCanvas.height=Math.round(h*sc);
+scanCanvas.getContext("2d").drawImage(v,0,0,scanCanvas.width,scanCanvas.height);
+try{code=scanReader.decodeFromCanvas(scanCanvas).getText()}catch(de){code=null}}
+scanFrames++;
+if(token!==scanSession)return;
+if(code)return void scannedCode(code);
+scanFrames%10==0&&camStatus("["+SCAN_BUILD+"] Scanning... "+scanFrames+" frames checked. Hold steady, all bars in view.")}}
+catch(le){}
+loop()},
+180)}()}
 catch(e){
 if(token!==scanSession)return;
-stopScan(),
-scanMessage("NotAllowedError"===e.name||"SecurityError"===e.name?"Camera permission denied or unavailable. Allow camera access in Safari settings, scan a photo, or type the number.":"NotFoundError"===e.name?"No camera found. Scan a photo or type the number.":"scanner-load"===e.message?"Barcode scanner could not load. Check your connection, try again, or type the number.":"Camera could not start or play. Close other camera apps and try again, scan a photo, or type the number.")}
+stopScan();
+camStatus("["+SCAN_BUILD+"] Camera error: "+(e&&e.name||"Error")+(e&&e.message?" - "+e.message:"")+("NotAllowedError"===e.name?". Allow camera access for Safari in iPhone Settings, scan a photo, or type the number.":". Scan a barcode photo or type the number."))}
 }
-else scanMessage("Camera unavailable here. Open this page in Safari over HTTPS, scan a photo, or type the number.")}
 async function scanPhoto(el){
 var file=el.files&&el.files[0];
 if(file){
@@ -180,8 +210,11 @@ return"<div class=f>"+[["p",
 ["f",
 "Fat"]].map(([k,
 n])=>"<div><label for="+prefix+k+">"+n+" (g)</label><input id="+prefix+k+' type=number inputmode=decimal min=0 max=2000 step=0.1 value="'+(mac&&Number.isFinite(mac[k])?mac[k]:"")+'" placeholder="Unknown" oninput=calcReview()></div>').join("")+"</div>"}
+function typicalGrams(n){
+return/^(roti|chapati)\b/i.test(n)?40:/^phulka\b/i.test(n)?30:/^puri\b/i.test(n)?25:/^idli\b/i.test(n)?40:null}
 function openReview(item,
 quantity=1){
+item&&!item.per100&&!(item.grams>0)&&typicalGrams(item.name)&&(item.grams=typicalGrams(item.name));
 preserveServing(()=>{
 foodMode(!1),
 reviewItem=item,
@@ -194,9 +227,9 @@ quantity)),
 calcReview()}
 function reviewPanel(){
 var x=reviewItem;
-return x?"<div class=c><h3>Check your portion</h3><p class=help-line>"+esc(x.name)+"</p><p class=help-line>Estimates vary by recipe. Check source notes if unsure. Adjust your portion before logging.</p><div class=portion-step><label for=ru>Measure in</label><select id=ru onchange=calcReview()><option value=servings>Servings</option><option value=grams"+(x.per100?" selected":"")+'>Grams</option></select><label for=rq id=rql>Amount eaten</label><input id=rq type=number inputmode=decimal min=0.1 max=10000 step=0.1 value="'+(x.per100?100:1)+'" oninput=calcReview()><p id=rt role=status aria-live=polite></p></div><button onclick=logReview()>Add to my day</button><button class=ch onclick=foodMode(false)>Choose another food</button><details class=help><summary>Check source & accuracy notes</summary><p class=note>'+esc(x.note)+"</p>"+(x.source?'<p class=note><a href="'+esc(x.source)+'" target=_blank rel=noopener>Nutrition source</a></p>':"")+'</details><details class=help><summary>Edit name, calories & nutrition</summary><label for=rn>Food name</label><input id=rn maxlength=100 value="'+esc(x.name)+'"><label for=rk>Calories in reference serving</label><input id=rk type=number inputmode=decimal min=1 max=10000 value="'+x.k+'" oninput=calcReview()>'+macroFields("r",
+return x?"<div class=c><h3>Check your portion</h3><p class=help-line>"+esc(x.name)+"</p><p class=help-line>Estimates vary by recipe. Check source notes if unsure. Adjust your portion before logging.</p><style>.rbig{display:flex;align-items:baseline;gap:6px;margin:0 0 6px}.rbig b{font-size:40px;line-height:1;color:var(--tx)}.rbig small{font-size:16px;color:var(--mu);font-weight:700}.rpills{display:flex;gap:8px;flex-wrap:wrap;min-height:26px;margin-bottom:12px}.rpills span{background:var(--bd);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:700;color:var(--tx)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.chips .ch{text-align:center;padding:8px 14px;min-height:40px}.stepper{display:flex;align-items:center;gap:10px;margin:10px 0}.stepper button{width:52px;min-width:52px;padding:0;text-align:center;font-size:24px}.stepper input{flex:1;min-width:0;text-align:center;font-size:20px;font-weight:700;margin:0}</style><div class=portion-step><select id=ru style=display:none onchange=calcReview()><option value=servings>Servings</option><option value=grams"+(x.per100?" selected":"")+'>Grams</option></select><div class=rbig><b id=rkc>0</b><small>kcal</small></div><div class=rpills id=rpills></div><div class=chips><button class=ch id=ruc-servings onclick="setUnit(\'servings\')">Servings</button><button class=ch id=ruc-grams onclick="setUnit(\'grams\')">Grams</button></div><div class=stepper><button class=ch aria-label=Less onclick=stepQ(-1)>-</button><input id=rq type=number inputmode=decimal min=0.1 max=10000 step=0.1 aria-label="Amount eaten" value="'+(x.per100?100:1)+'" oninput=calcReview()><button class=ch aria-label=More onclick=stepQ(1)>+</button></div><div class=chips id=rquick></div><p id=rt role=status aria-live=polite></p></div><button onclick=logReview()>Add to my day</button><button class=ch onclick=foodMode(false)>Choose another food</button><details class=help><summary>Check source & accuracy notes</summary><p class=note>'+esc(x.note)+"</p>"+(x.source?'<p class=note><a href="'+esc(x.source)+'" target=_blank rel=noopener>Nutrition source</a></p>':"")+'</details><details class=help><summary>Edit name, calories & nutrition</summary><label for=rn>Food name</label><input id=rn maxlength=100 value="'+esc(x.name)+'"><label for=rk>Calories in reference serving</label><input id=rk type=number inputmode=decimal min=1 max=10000 value="'+x.k+'" oninput=calcReview()>'+macroFields("r",
 x.mac)+microFields("r",
-x.micro)+'<label for=rb>Reference serving weight (g)</label><input id=rb type=number inputmode=decimal min=0.1 max=10000 step=0.1 value="'+(x.grams||"")+'" placeholder="Enter verified grams" oninput=calcReview()><small>Per-100g data uses 100 g. Use a verified serving weight, not a guessed cooked weight.</small></details></div>':""}
+x.micro)+'<label for=rb>Reference serving weight (g)</label><input id=rb type=number inputmode=decimal min=0.1 max=10000 step=0.1 value="'+(x.grams||"")+'" placeholder="Grams in 1 serving" oninput=calcReview()><small>Per-100g data uses 100 g. Use a verified serving weight, not a guessed cooked weight.</small></details></div>':""}
 function reviewValues(){
 var val=id=>document.getElementById(id).value,
 unit=val("ru"),
@@ -204,7 +237,7 @@ q=Number(val("rq")),
 base=Number(val("rb")),
 k=Number(val("rk"));
 if(!Number.isFinite(q)||q<=0||q>1e4||"servings"===unit&&q>100)throw Error("Enter a valid amount: up to 100 servings or 10000 g.");
-if("grams"===unit&&(!Number.isFinite(base)||base<=0||base>1e4))throw Error("Enter the verified reference serving weight before using grams.");
+if("grams"===unit&&(!Number.isFinite(base)||base<=0||base>1e4)){var ge=Error("Enter how many grams 1 serving weighs in the Reference serving weight box below, or switch to Servings.");ge.grams=!0;throw ge};
 if(!Number.isFinite(k)||k<=0||k>1e4)throw Error("Enter valid reference calories.");
 var factor="grams"===unit?q/base:q,
 mv=["rp",
@@ -229,13 +262,35 @@ unit:unit,
 micro:readMicro("r",
 factor)}
 }
+function rnd(n,d){var m=Math.pow(10,d);return Math.round(n*m)/m}
+function setUnit(u){
+var sel=document.getElementById("ru"),q=document.getElementById("rq"),rb=document.getElementById("rb");
+if(!sel||!q||sel.value===u)return;
+var b=Number(rb&&rb.value),n=Number(q.value);
+if(b>0&&n>0)q.value=u==="grams"?rnd(n*b,1):Math.min(100,rnd(n/b,2));
+else if(u==="grams")q.value=100;
+else q.value=1;
+sel.value=u,calcReview()}
+function setQ(n){var q=document.getElementById("rq");q&&(q.value=n,calcReview())}
+function stepQ(d){
+var sel=document.getElementById("ru"),q=document.getElementById("rq");
+if(!sel||!q)return;
+var n=Number(q.value)||0,g="grams"===sel.value,st=g?(n>=100?25:10):.5;
+q.value=Math.max(g?1:.5,rnd(n+d*st,1)),calcReview()}
 function calcReview(){
-if(document.getElementById("rt"))try{
+if(document.getElementById("rt")){
+var sel=document.getElementById("ru"),u=sel?sel.value:"servings";
+["servings","grams"].forEach(function(k){var c=document.getElementById("ruc-"+k);c&&c.classList.toggle("active",k===u)});
+var qk=document.getElementById("rquick");
+if(qk&&qk.dataset.u!==u){qk.dataset.u=u,qk.innerHTML=("grams"===u?[50,100,150,200]:[.5,1,1.5,2]).map(function(n){return'<button class=ch onclick="setQ('+n+')">'+n+("grams"===u?" g":"")+"</button>"}).join("")}
+try{
 var v=reviewValues();
-document.getElementById("rt").textContent=v.k+" kcal"+(v.mac?" · P "+v.mac.p+"g · C "+v.mac.c+"g · F "+v.mac.f+"g":" · macros unknown")}
+document.getElementById("rkc").textContent=v.k;
+document.getElementById("rpills").innerHTML=v.mac?"<span>Protein "+v.mac.p+"g</span><span>Carbs "+v.mac.c+"g</span><span>Fat "+v.mac.f+"g</span>":"<span>Macros unknown</span>";
+document.getElementById("rt").textContent=""}
 catch(e){
-document.getElementById("rt").textContent=e.message}
-}
+document.getElementById("rkc").textContent="-",document.getElementById("rpills").innerHTML="",document.getElementById("rt").textContent=e.message}
+}}
 function logReview(){
 try{
 var v=reviewValues();
@@ -245,6 +300,7 @@ v.mac,
 void 0,
 v.micro)}
 catch(e){
+if(e.grams){var rbx=document.getElementById("rb"),dt=rbx&&rbx.closest("details");dt&&(dt.open=!0),rbx&&rbx.scrollIntoView({block:"center"}),rbx&&rbx.focus();return}
 alert(e.message)}
 }
 function extraPanel(){
@@ -655,7 +711,7 @@ h+="<div class=c id=customform "+(customMode?"":"hidden")+'><h3>Custom food</h3>
 }
 )+"<button onclick=addC()>Add custom</button></div>",
 extraMode&&(h+=extraPanel()),
-barMode&&(h+='<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts opens nutrition review for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><label class=note for=bcphoto style="display:block;margin-top:12px">Or scan a barcode photo</label><input id=bcphoto type=file accept="image/*" onchange="scanPhoto(this)"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>'),
+barMode&&(h+='<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts opens nutrition review for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay webkit-playsinline style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><p class=note id=camstatus role=status aria-live=polite></p><label class=note for=bcphoto style="display:block;margin-top:12px">Or scan a barcode photo</label><input id=bcphoto type=file accept="image/*" onchange="scanPhoto(this)"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>'),
 savedMode&&(h+="<div class=c><h3>Saved meals</h3><p class=note>One tap logs today in its saved meal group. Open Serving settings to change date, group or quantity.</p>"+savedList()+"</div>"),
 !(customMode||savedMode||barMode||extraMode)){
 var recent=D.m.slice().reverse().filter((x,

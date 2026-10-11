@@ -1,4 +1,3 @@
-d recipe. Carbs are available carbohydrate; home recipes and portions vary.",
 micro:{
 fiber:3.6,
 sugar:.9}
@@ -1212,7 +1211,7 @@ index:index}
 );
 R();
 clearTimeout(window.undoTimer);
-window.undoTimer=setTimeout(clearUndo,2000)}
+window.undoTimer=setTimeout(clearUndo,1000)}
 }
 function undoDelete(){
 var undo=deletedEntries[deletedEntries.length-1];
@@ -1431,6 +1430,7 @@ function stopScan(){
 scanSession++,
 scanning=!1,
 scanStarting=!1,
+clearTimeout(scanTimer),
 scanControls&&(scanControls.stop(),
 scanControls=null),
 stream&&(stream.getTracks().forEach(t=>t.stop()),
@@ -1448,17 +1448,11 @@ var bc=document.getElementById("bc");
 bc&&(bc.value=code,
 lookupBarcode())}
 else scanMessage("Could not read a food barcode. Try again or type its number.")}
-async function scanToggle(){
-if(scanning||scanStarting)return stopScan(),
-void scanMessage("Scan stopped. You can still type the barcode number.");
-if(window.isSecureContext&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
-var token=++scanSession;
-scanStarting=!0;
-var btn=document.getElementById("scanbtn");
-btn&&(btn.textContent="Cancel scan"),
-scanMessage("Opening camera. Allow camera access when asked.");
-try{
-var media=await navigator.mediaDevices.getUserMedia({
-video:{
-facingMode:{
-ideal:"environme
+var scanTimer=null,scanFrames=0,scanDetector=null,scanReader=null,scanCanvas=null;
+var SCAN_BUILD="cam-v3";
+function camStatus(t){var el=document.getElementById("camstatus");el&&(el.textContent=t),scanMessage(t)}
+async function openCamera(){
+var tries=[{video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}},audio:!1},{video:{facingMode:{ideal:"environment"}},audio:!1},{video:!0,audio:!1}],last;
+for(var i=0;i<tries.length;i++){
+try{return await navigator.mediaDevices.getUserMedia(tries[i])}
+catch(e){last=e;if("NotAllowedError"===e.name||"SecurityError"===e.name)throw e}}

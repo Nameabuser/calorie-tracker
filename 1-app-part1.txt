@@ -2417,4 +2417,4 @@ sugar:17.6}
 ,
 117:{
 source:"https://nnwa.in/foods/dishes/masala-arbi/",
-note:"NNWA / Indian Nutrient Databank standar
+note:"NNWA / Indian Nutrient Databank standard recipe. Carbs are available carbohydrate; home recipes and portions vary.",

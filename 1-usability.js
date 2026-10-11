@@ -61,7 +61,32 @@ window.renderFood=function(){
 window.openReview=function(item,quantity){baseOpenReview(item,quantity);var review=Array.from(document.querySelectorAll('.c')).find(e=>e.querySelector('h3')?.textContent==='Check your portion');if(review)review.scrollIntoView({block:'start',behavior:'auto'});};
 window.quickAdd=function(i){var x=D.m.find(y=>String(y.i)===String(i));if(x)add(x.n,x.k,x.mac?{...x.mac}:undefined,{d:today(),meal:defaultMeal()},x.micro?{...x.micro}:undefined);};
 var style=document.createElement('style');style.textContent='.nutrition-details>summary{font-weight:700;min-height:44px;cursor:pointer;padding:10px 0}.nutrition-details>.c{box-shadow:none;padding:12px 0;border:0}.quick-list>summary{font-weight:700;padding:8px 0}.quick-list[open]>summary{list-style:none}.addbar input[type=search]{min-height:52px;background:var(--cd);border:1px solid var(--bd);font-size:17px}.addbar label{display:block;font-weight:600;margin:0 0 5px}.addbar{position:relative;top:auto}.foodactions .pick{min-width:70px}.mealcard .meal-save{margin-top:8px}';document.head.append(style);
+var proteinRates={Lower:1.2,Medium:1.6,Higher:1.8};
+window.autoPG=function(g){
+ var goal=g||D.g, level=proteinRates[D.proteinLevel]?D.proteinLevel:'Higher';
+ var p=D.bw?proteinRates[level]*D.bw:.3*goal/4;
+ return Math.min(500,Math.max(10,Math.round(p)));
+};
+window.chooseProteinLevel=function(level){
+ if(!proteinRates[level])return;
+ D.proteinLevel=level;D.pm=false;D.pg=window.autoPG();sv();
+};
 var originalR=window.R;
-window.R=function(){originalR();var note=Array.from(document.querySelectorAll('.c small')).find(e=>e.textContent==='One tap adds the same portion to today, in its original meal group.');if(note)note.textContent='Same portion, added to '+defaultMeal().toLowerCase()+'.';};
+window.R=function(){
+ originalR();
+ var note=Array.from(document.querySelectorAll('.c small')).find(e=>e.textContent==='One tap adds the same portion to today, in its original meal group.');
+ if(note)note.textContent='Same portion, added to '+defaultMeal().toLowerCase()+'.';
+ if(P===3){
+  var card=Array.from(document.querySelectorAll('.c')).find(e=>e.querySelector('h3')?.textContent==='Your goals');
+  var protein=card&&card.querySelector('button[onclick^="setPG"]');
+  if(card&&protein){
+   var level=D.proteinLevel&&proteinRates[D.proteinLevel]?D.proteinLevel:'Higher';
+   var box=document.getElementById('protein-level-options');
+   if(!box){box=document.createElement('div');box.id='protein-level-options';box.className='protein-level-options';protein.after(box);}
+   box.innerHTML='<p class="note">Automatic protein level'+(D.bw?' · based on body weight':' · body weight not set')+'</p><div class="f">'+Object.keys(proteinRates).map(function(name){return '<button class="ch '+(name===level?'active':'')+'" aria-pressed="'+(name===level)+'" onclick="chooseProteinLevel(\''+name+'\')">'+name+' · '+proteinRates[name]+' g/kg</button>';}).join('')+'</div><p class="note">Lower 1.2 · Medium 1.6 · Higher 1.8 g/kg. Without body weight, the existing calorie-based estimate is used.</p>';
+  }
+ }
+};
+
 R();
 })();

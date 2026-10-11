@@ -114,24 +114,25 @@ camStatus("["+SCAN_BUILD+"] Camera error: "+(e&&e.name||"Error")+(e&&e.message?"
 }
 async function scanPhoto(el){
 var file=el.files&&el.files[0];
-if(file){
+if(!file)return;
 stopScan();
-var token=scanSession,
-url=URL.createObjectURL(file);
-scanMessage("Reading barcode photo on this device...");
+var token=scanSession,url=URL.createObjectURL(file);
+scanMessage("Reading barcode photo...");
 try{
+var im=new Image();im.src=url;await im.decode();
+if(token!==scanSession)return;
+var w=im.naturalWidth||im.width,h=im.naturalHeight||im.height,scale=Math.min(1,1280/Math.max(w,h));
+var photo=document.createElement("canvas");photo.width=Math.max(1,Math.round(w*scale));photo.height=Math.max(1,Math.round(h*scale));
+photo.getContext("2d",{willReadFrequently:!0}).drawImage(im,0,0,photo.width,photo.height);
 var engines=await Promise.all([loadScanner().catch(function(){return null}),loadStrongScanner().catch(function(){return null})]);
 if(token!==scanSession)return;
-var im=new Image();im.src=url;await im.decode();
-var code=await decodeBarcodeStill(im,engines[0]?newScanner(engines[0]):null,engines[1]);
+scanMessage("Reading barcode photo...");
+var code=await decodeBarcodeStill(photo,engines[0]?newScanner(engines[0]):null,engines[1]);
 if(!code)throw new Error("no-barcode");
-token===scanSession&&scannedCode(code)}
+if(token===scanSession)scannedCode(code)}
 catch(e){
-token===scanSession&&scanMessage("No clear barcode found. Try a sharper photo with all bars visible, or type the number.")}
-finally{
-URL.revokeObjectURL(url),
-el.value=""}
-}
+if(token===scanSession)scanMessage("No clear barcode found. Try a sharper photo with all bars visible, or type the number.")}
+finally{URL.revokeObjectURL(url);el.value=""}
 }
 function offMap(p){
 var n=p.nutriments||{
@@ -702,8 +703,8 @@ t/D.g*100),
 mac=macros(now),
 list=D.m.filter(x=>x.d===now),
 known=list.filter(x=>x.mac).length;
-h+="<button class=th onclick=tg()>"+("dark"===T?"Light":"Dark")+" mode</button><h2>Today</h2><small>"+now+' · IST</small><div class=c><small>Eaten</small><div class="big '+(left<0?"b":"g")+'">'+t+' kcal</div><div class=bar><i class="'+(left<0?"o":"")+'" style="width:'+pc+'%"></i></div><div class=r style="border:0"><small>Goal '+D.g+"</small><small>"+(left>=0?left+" kcal remaining":-left+" kcal above goal")+"</small></div><button onclick=go(1)>+ Log food</button></div>",
-D.m.length||(h+='<div class="c welcome"><h3>Start with your first meal</h3><p class=help-line>Search a food, check your portion, then add it to your day. Your goals can be changed in More.</p><button class=ch onclick=go(1)>Find a food</button></div>');
+h+="<button class=th onclick=tg()>"+("dark"===T?"Light":"Dark")+" mode</button><h2>Today</h2><small>"+now+' · IST</small><div class=c><small>Eaten</small><div class="big '+(left<0?"b":"g")+'">'+t+' kcal</div><div class=bar><i class="'+(left<0?"o":"")+'" style="width:'+pc+'%"></i></div><div class=r style="border:0"><small>Goal '+D.g+"</small><small>"+(left>=0?left+" kcal remaining":-left+" kcal above goal")+"</small></div><button onclick=go(1)>+ Log food</button></div>";
+
 var pg=pgv();
 h+='<div class=c><h3>Goal rings</h3><div class=f style="text-align:center"><div><small>Calories</small><br>'+ringSVG(t/D.g,
 "dark"===T?"#66d993":"#167b49")+"<br><small>"+t+" / "+D.g+" kcal</small></div><div><small>Protein</small><br>"+ringSVG(mac.p/pg,
@@ -754,7 +755,7 @@ h+="<div class=c id=customform "+(customMode?"":"hidden")+'><h3>Custom food</h3>
 }
 )+"<button onclick=addC()>Add custom</button></div>",
 extraMode&&(h+=extraPanel()),
-barMode&&(h+='<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts opens nutrition review for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay webkit-playsinline style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><p class=note id=camstatus role=status aria-live=polite></p><p class=note id=camdbg style="font:11px ui-monospace,monospace;color:#6b7f73;word-break:break-all"></p><label class=note for=bcphoto style="display:block;margin-top:12px">Or scan a barcode photo</label><input id=bcphoto type=file accept="image/*" onchange="scanPhoto(this)"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>'),
+barMode&&(h+='<div class=c><h3>Barcode</h3><p class=note>Scan a packaged food barcode or type its number. Open Food Facts opens nutrition review for you to check; some products are not listed.</p><label for=bc>Barcode number</label><input id=bc inputmode=numeric maxlength=14 placeholder="Number under the barcode, e.g. 8901063012279"><div class=f><button onclick=lookupBarcode()>Look up</button><button id=scanbtn class=ch onclick=scanToggle()>Scan with camera</button></div><video id=cam hidden playsinline muted autoplay webkit-playsinline style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#000;margin-top:12px"></video><p class=note id=camstatus role=status aria-live=polite></p><p class=note id=camdbg style="font:11px ui-monospace,monospace;color:#6b7f73;word-break:break-all"></p><button class=ch type=button style="margin-top:12px" onclick="document.getElementById(\'bcphoto\').click()">Scan from photo</button><input id=bcphoto type=file accept="image/*" onchange="scanPhoto(this)" style="display:none"><p class=note>Camera images stay on your device. Only the barcode number is sent for lookup. Review the food and serving size before adding.</p><p class=note id=bcmsg role=status aria-live=polite></p></div>'),
 savedMode&&(h+="<div class=c><h3>Saved meals</h3><p class=note>One tap logs today in its saved meal group. Open Serving settings to change date, group or quantity.</p>"+savedList()+"</div>"),
 !(customMode||savedMode||barMode||extraMode)){
 var recent=D.m.slice().reverse().filter((x,

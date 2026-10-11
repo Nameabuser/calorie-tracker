@@ -37,12 +37,14 @@ scanDetector=null,scanReader=null;
 if("BarcodeDetector"in window){
 try{scanDetector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e","code_128"]})}catch(e){scanDetector=null}}
 camStatus("["+SCAN_BUILD+"] 3/4 Camera ready ("+v.videoWidth+"x"+v.videoHeight+"). Loading barcode reader.");
-var z=await loadScanner();
+var engines=await Promise.all([loadScanner().catch(function(){return null}),loadStrongScanner().catch(function(){return null})]);
+var z=engines[0];scanWasm=engines[1];
+if(!z&&!scanWasm)throw new Error("Barcode readers could not load");
 if(token!==scanSession)return void stopScan();
-scanReader=newScanner(z),scanCanvas=document.createElement("canvas");
+scanReader=z?newScanner(z):null,scanCanvas=document.createElement("canvas");
 scanning=!0,scanStarting=!1,scanFrames=0;
-var lastErr="none",busy=!1,mode="";
-function dbg(){var el=document.getElementById("camdbg");el&&(el.textContent=SCAN_BUILD+" | frames "+scanFrames+" | "+v.videoWidth+"x"+v.videoHeight+" | "+mode+" | det "+(scanDetector?"native+zxing":"zxing")+" | last: "+lastErr+capInfo)}
+var lastErr="none",busy=!1,captureRequested=!1,mode="";
+function dbg(){var el=document.getElementById("camdbg");el&&(el.textContent=SCAN_BUILD+" | frames "+scanFrames+" | "+v.videoWidth+"x"+v.videoHeight+" | "+mode+" | det "+(scanWasm?"wasm":"zxing-1d")+" | last: "+lastErr+capInfo)}
 btn&&(btn.textContent="Stop scan");
 v.onclick=async function(ev){try{var t=stream&&stream.getVideoTracks()[0],c=t.getCapabilities?t.getCapabilities():{},adv=[];
 if(c.focusMode){var fm=c.focusMode.indexOf("single-shot")>-1?"single-shot":"continuous";adv.push({focusMode:fm})}
@@ -68,29 +70,36 @@ var old=document.getElementById("camzoom");old&&old.remove();
 v.parentNode.insertBefore(bar,v.nextSibling)}
 capInfo=" | zoom "+(zc?zmin+"-"+zmax+" @"+zcur:"n/a")+" | focus "+(caps.focusMode?caps.focusMode.join("/"):"n/a")+" | "+(trk.label||"?")}catch(fe){capInfo=" | caps err "+(fe&&fe.name)}
 camStatus("Point at barcode. Hold steady, fill the width. Tap the video to focus.");
-function draw(w,h,sx,sy,sw,sh,rot,inv,mw){
-var maxw=mw||1280,s=Math.min(1,maxw/(rot?sh:sw)),cw=Math.round((rot?sh:sw)*s),ch=Math.round((rot?sw:sh)*s);
-scanCanvas.width=cw,scanCanvas.height=ch;
-var cx=scanCanvas.getContext("2d",{willReadFrequently:!0});
-cx.save();
-if(rot){cx.translate(cw,0),cx.rotate(Math.PI/2),cx.drawImage(v,sx,sy,sw,sh,0,0,Math.round(sw*s),Math.round(sh*s))}
-else cx.drawImage(v,sx,sy,sw,sh,0,0,cw,ch);
-cx.restore();
-if(inv){var im=cx.getImageData(0,0,cw,ch),d=im.data;for(var i=0;i<d.length;i+=4){d[i]=255-d[i],d[i+1]=255-d[i+1],d[i+2]=255-d[i+2]}cx.putImageData(im,0,0)}}
+var capture=document.createElement("button");capture.id="camcapture";capture.type="button";capture.className="ch";capture.textContent="Capture & read";capture.style.marginTop="10px";
+v.parentNode.insertBefore(capture,document.getElementById("camstatus"));
+capture.onclick=async function(){
+if(captureRequested)return;captureRequested=!0;capture.disabled=!0;
+while(busy&&token===scanSession)await new Promise(function(r){setTimeout(r,30)});
+if(token!==scanSession)return;busy=!0;lastErr="reading full-resolution still";dbg();
+var src=v,url=null;
+try{
+// takePhoto is optional on Safari. Otherwise freeze the video's native pixels.
+if(window.ImageCapture&&tr)try{var blob=await new ImageCapture(tr).takePhoto();url=URL.createObjectURL(blob);src=new Image();src.src=url;await src.decode()}catch(ce){src=v}
+var frozen=barcodeCanvas(src,0,4096),code=await decodeBarcodeStill(frozen,scanReader,scanWasm);
+if(token!==scanSession)return;
+mode="capture "+frozen.width+"x"+frozen.height;lastErr=code?"read "+code:"no barcode in still";dbg();
+if(code)return void scannedCode(code);
+camStatus("No clear barcode in that still. Hold steady and try again, or choose a barcode photo.")
+}catch(ce){if(token===scanSession){lastErr="capture: "+(ce.message||ce.name);dbg()}}
+finally{if(url)URL.revokeObjectURL(url);busy=!1;captureRequested=!1;capture.disabled=!1}
+};
 function tick(){
 if(token!==scanSession)return;
-if(busy||!(v.videoWidth>0)){setTimeout(tick,100);return}
+if(busy||captureRequested||!(v.videoWidth>0)){setTimeout(tick,100);return}
 busy=!0;
 (async function(){
-var code=null,w=v.videoWidth,h=v.videoHeight,k=scanFrames%8;
+var code=null,k=scanFrames%9;
 try{
-if(scanDetector&&k%2==0&&k<6){mode="native full";var r=await scanDetector.detect(v);r&&r.length&&(code=r[0].rawValue)}
-if(!code){
-var plan=[["full",0,0,w,h,0,0],["mid-strip",0,Math.round(h*.25),w,Math.round(h*.5),0,0],["full",0,0,w,h,0,0],["tight-strip",Math.round(w*.1),Math.round(h*.35),Math.round(w*.8),Math.round(h*.3),0,0],["rotated",0,0,w,h,1,0],["inverted",0,0,w,h,0,1],["soft-480",0,0,w,h,0,0,480],["soft-640-strip",0,Math.round(h*.25),w,Math.round(h*.5),0,0,640]][k];
-mode=plan[0];
-draw(w,h,plan[1],plan[2],plan[3],plan[4],plan[5],plan[6],plan[7]);
-try{code=scanReader.decodeFromCanvas(scanCanvas).getText()}catch(de){lastErr=(de&&(de.name||de.message)||"err")+" ("+mode+")"}}
-}catch(le){lastErr="loop: "+(le&&(le.name||le.message))}
+if(scanDetector&&k%3===0){var r=await scanDetector.detect(v);var nh=r&&r.find(function(x){return foodCode(x.rawValue)});if(nh)code=nh.rawValue}
+if(!code){mode=["native-full","lower-half","center-strip","rotate-90","top-strip","upper-strip","middle-strip","lower-strip","bottom-strip"][k];
+scanCanvas=barcodeCanvas(v,k,1920);code=await decodeBarcodeCanvas(scanCanvas,scanReader,scanWasm)}
+lastErr=code?"read "+code:"no barcode yet";
+}catch(le){lastErr="decoder: "+(le&&(le.message||le.name))}
 scanFrames++;
 dbg();
 busy=!1;
@@ -111,10 +120,12 @@ var token=scanSession,
 url=URL.createObjectURL(file);
 scanMessage("Reading barcode photo on this device...");
 try{
-var z=await loadScanner();
+var engines=await Promise.all([loadScanner().catch(function(){return null}),loadStrongScanner().catch(function(){return null})]);
 if(token!==scanSession)return;
-var result=await newScanner(z).decodeFromImageUrl(url);
-token===scanSession&&scannedCode(result.getText())}
+var im=new Image();im.src=url;await im.decode();
+var code=await decodeBarcodeStill(im,engines[0]?newScanner(engines[0]):null,engines[1]);
+if(!code)throw new Error("no-barcode");
+token===scanSession&&scannedCode(code)}
 catch(e){
 token===scanSession&&scanMessage("No clear barcode found. Try a sharper photo with all bars visible, or type the number.")}
 finally{

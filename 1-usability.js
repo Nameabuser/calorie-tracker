@@ -99,7 +99,6 @@ window.R=function(){
   var card=Array.from(document.querySelectorAll('.c')).find(e=>e.querySelector('h3')?.textContent==='Your goals');
   if(card){
    card.querySelectorAll('p').forEach(e=>e.remove());
-   var options=document.getElementById('protein-level-options');if(options)options.remove();
    var weight=Array.from(card.querySelectorAll('button')).find(b=>b.textContent.includes('Body weight (optional)'));
    if(weight){var note=document.createElement('p');note.className='note';note.textContent='Auto protein uses your body weight. Goals are editable targets, not medical advice.';weight.after(note);}
   }
